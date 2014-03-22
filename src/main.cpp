@@ -2855,7 +2855,7 @@ bool LoadBlockIndex()
         pchMessageStart[1] = 'o';
         pchMessageStart[2] = 't';
         pchMessageStart[3] = 'o';
-        hashGenesisBlock = uint256("0xaca6423e9849aed1347fe86db37a1079d0447f08b9629fac211206724c1cff9f");
+        hashGenesisBlock = uint256("0x");
     }
 
     //
@@ -2904,14 +2904,6 @@ bool InitBlockIndex() {
             block.nNonce = 13094515;
         }
 
-        //// debug print
-        uint256 hash = block.GetHash();
-        printf("%s\n", hash.ToString().c_str());
-        printf("%s\n", hashGenesisBlock.ToString().c_str());
-        printf("%s\n", block.hashMerkleRoot.ToString().c_str());
-        assert(block.hashMerkleRoot == uint256("0xf65894fb52a1fd854dc15a689663edbe1c90eae930d801f2159ac6219a80ac99"));
-
-
         //printf("==== SEARCH FOR HASH ====");
         // Kept for future
         // If genesis block hash does not match, then generate new genesis hash.
@@ -2948,6 +2940,13 @@ bool InitBlockIndex() {
                       }
                   }
                }
+
+        //// debug print
+        uint256 hash = block.GetHash();
+        printf("%s\n", hash.ToString().c_str());
+        printf("%s\n", hashGenesisBlock.ToString().c_str());
+        printf("%s\n", block.hashMerkleRoot.ToString().c_str());
+        assert(block.hashMerkleRoot == uint256("0xf65894fb52a1fd854dc15a689663edbe1c90eae930d801f2159ac6219a80ac99"));
        
         
         block.print();

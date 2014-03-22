@@ -21,20 +21,16 @@ USE_UPNP:=-
 USE_IPV6:=1
 
 DEPSDIR?=/usr/local
-BOOST_SUFFIX?=-mgw48-mt-s-1_55
+BOOST_SUFFIX?=-mgw46-mt-sd-1_52
 
 INCLUDEPATHS= \
--I"c:/deps/boost" \
--I"c:/deps/db/build_unix" \
--I"c:/deps/ssl/include"
- 
+ -I"$(CURDIR)" \
+ -I"$(DEPSDIR)/include"
 
 LIBPATHS= \
--L"$(CURDIR)/leveldb" \
--L"c:/deps/boost/stage/lib" \
--L"c:/deps/db/build_unix" \
--L"c:/deps/ssl"
- 
+ -L"$(CURDIR)/leveldb" \
+ -L"$(DEPSDIR)/lib"
+
 LIBS= \
  -l leveldb \
  -l memenv \
