@@ -1,0 +1,12 @@
+Building Rotocoin
+
+See doc/readme-qt.rst for instructions on building Rotocoin-Qt,
+the intended-for-end-users, nice-graphical-interface, reference
+implementation of Rotocoin.
+
+See doc/build-*.txt for instructions on building rotocoind,
+the intended-for-services, no-graphical-interface, reference
+implementation of Rotocoin.
+
+Further build information and documentation is available at
+the official Rotocoin website, http://www.bitcoin.org

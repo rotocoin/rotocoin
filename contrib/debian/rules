@@ -1,0 +1,33 @@
+#!/usr/bin/make -f
+# -*- mode: makefile; coding: utf-8 -*-
+
+#DEB_MAKE_CHECK_TARGET = test_rotocoin
+#build/rotocoind::
+#	$(if $(filter nocheck,$(DEB_BUILD_OPTIONS)),,src/test_rotocoin)
+
+DEB_INSTALL_EXAMPLES_rotocoind += debian/examples/*
+DEB_INSTALL_MANPAGES_rotocoind += debian/manpages/*
+
+%:
+	dh --with bash-completion $@
+
+override_dh_auto_build:
+	cd src; $(MAKE) -f makefile.unix rotocoind
+	$(MAKE)
+
+override_dh_auto_clean:
+	if [ -f Makefile ]; then $(MAKE) clean; else rm -rf build/; rm -f rotocoin-qt; fi
+	cd src; $(MAKE) -f makefile.unix clean
+
+override_dh_auto_configure:
+	qmake rotocoin-qt.pro USE_QRCODE=1
+
+override_dh_auto_test:
+	cd src; $(MAKE) -f makefile.unix test_rotocoin
+	src/test_rotocoin
+
+# Ensure wrapper is set executable
+binary-post-install/rotocoind:
+	chmod +x $(cdbs_curdestdir)usr/bin/rotocoind
+binary-post-install/rotocoin-qt:
+	chmod +x $(cdbs_curdestdir)usr/bin/rotocoin-qt

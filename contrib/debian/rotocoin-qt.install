@@ -1,0 +1,6 @@
+rotocoin-qt usr/bin
+share/pixmaps/rotocoin32.xpm usr/share/pixmaps
+share/pixmaps/rotocoin16.xpm usr/share/pixmaps
+share/pixmaps/rotocoin128.png usr/share/pixmaps
+debian/rotocoin-qt.desktop usr/share/applications
+debian/rotocoin-qt.protocol usr/share/kde4/services/

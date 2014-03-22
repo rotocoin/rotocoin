@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Rotocoin
+Comment=Rotocoin P2P Cryptocurrency
+Exec=/usr/bin/rotocoin-qt %u
+Terminal=false
+Type=Application
+Icon=/usr/share/pixmaps/rotocoin128.png
+MimeType=x-scheme-handler/rotocoin;
+Categories=Office;
+Name[en_US]=rotocoin-qt.desktop
