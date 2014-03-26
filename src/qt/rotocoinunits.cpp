@@ -117,7 +117,11 @@ QString RotocoinUnits::format(int unit, qint64 n, bool fPlus)
         quotient_str.insert(0, '-');
     else if (fPlus && n > 0)
         quotient_str.insert(0, '+');
-    return quotient_str + QString(".") + remainder_str;
+    
+    if (unit != ilitris)
+        return quotient_str + QString(".") + remainder_str;
+    else
+        return quotient_str;
 }
 
 QString RotocoinUnits::formatWithUnit(int unit, qint64 amount, bool plussign)
