@@ -129,6 +129,62 @@ int main(int argc, char *argv[])
     Q_INIT_RESOURCE(rotocoin);
     QApplication app(argc, argv);
 
+    QString darkStyle = "* {   background: #191919;    color: #DDDDDD;    border: 1px solid #5A5A5A;}";
+    darkStyle +="QWidget::item:selected { background: #3D7848;}";
+    darkStyle +="QCheckBox, QRadioButton { border: none;}";
+    darkStyle +="QRadioButton::indicator, QCheckBox::indicator {    width: 13px;    height: 13px;}";
+    darkStyle +="QRadioButton::indicator::unchecked, QCheckBox::indicator::unchecked {    border: 1px solid #5A5A5A;    background: none;}";
+    darkStyle +="QRadioButton::indicator:unchecked:hover, QCheckBox::indicator:unchecked:hover {    border: 1px solid #DDDDDD;}";
+    darkStyle +="QRadioButton::indicator::checked, QCheckBox::indicator::checked {    border: 1px solid #5A5A5A;    background: #5A5A5A;}";
+    darkStyle +="QRadioButton::indicator:checked:hover, QCheckBox::indicator:checked:hover {    border: 1px solid #DDDDDD;    background: #DDDDDD;}";
+    darkStyle +="QGroupBox {    margin-top: 6px;}";
+    darkStyle +="QGroupBox::title {    top: -7px;    left: 7px;}";
+    darkStyle +="QScrollBar {    border: 1px solid #5A5A5A;    background: #191919;}";
+    darkStyle +="QScrollBar:horizontal {    height: 15px;    margin: 0px 0px 0px 32px;}";
+    darkStyle +="QScrollBar:vertical {    width: 15px;    margin: 32px 0px 0px 0px;}";
+    darkStyle +="QScrollBar::handle {    background: #353535;    border: 1px solid #5A5A5A;}";
+    darkStyle +="QScrollBar::handle:horizontal {    border-width: 0px 1px 0px 1px;}";
+    darkStyle +="QScrollBar::handle:vertical {    border-width: 1px 0px 1px 0px;}";
+    darkStyle +="QScrollBar::handle:horizontal {    min-width: 20px;}";
+    darkStyle +="QScrollBar::handle:vertical {    min-height: 20px;}";
+    darkStyle +="QScrollBar::add-line, QScrollBar::sub-line {    background:#353535;    border: 1px solid #5A5A5A;    subcontrol-origin: margin;}";
+    darkStyle +="QScrollBar::add-line {   position: absolute;}";
+    darkStyle +="QScrollBar::add-line:horizontal {    width: 15px;    subcontrol-position: left;    left: 15px;}";
+    darkStyle +="QScrollBar::add-line:vertical {    height: 15px;    subcontrol-position: top;    top: 15px;}";
+    darkStyle +="QScrollBar::sub-line:horizontal {    width: 15px;    subcontrol-position: top left;}";
+    darkStyle +="QScrollBar::sub-line:vertical {    height: 15px;    subcontrol-position: top;}";
+    darkStyle +="QScrollBar:left-arrow, QScrollBar::right-arrow, QScrollBar::up-arrow, QScrollBar::down-arrow {    border: 1px solid #5A5A5A;    width: 3px;    height: 3px;}";
+    darkStyle +="QScrollBar::add-page, QScrollBar::sub-page {    background: none;}";
+    darkStyle +="QAbstractButton:hover {    background: #353535;}";
+    darkStyle +="QAbstractButton:pressed {    background: #5A5A5A;}";
+    darkStyle +="QAbstractItemView {    show-decoration-selected: 1;    selection-background-color: #3D7848;    selection-color: #DDDDDD;    alternate-background-color: #353535;}";
+    darkStyle +="QHeaderView {    border: 1px solid #5A5A5A;}";
+    darkStyle +="QHeaderView::section {    background: #191919;    border: 1px solid #5A5A5A;    padding: 4px;}";
+    darkStyle +="QHeaderView::section:selected, QHeaderView::section::checked {    background: #353535;}";
+    darkStyle +="QTableView {    gridline-color: #5A5A5A;}";
+    darkStyle +="QTabBar {    margin-left: 2px;}";
+    darkStyle +="QTabBar::tab {    border-radius: 0px;    padding: 4px;    margin: 4px;}";
+    darkStyle +="QTabBar::tab:selected {    background: #353535;}";
+    darkStyle +="QComboBox::down-arrow {    border: 1px solid #5A5A5A;    background: #353535;}";
+    darkStyle +="QComboBox::drop-down {    border: 1px solid #5A5A5A;    background: #353535;}";
+    darkStyle +="QComboBox::down-arrow {    width: 3px;    height: 3px;    border: 1px solid #5A5A5A;}";
+    darkStyle +="QAbstractSpinBox {    padding-right: 15px;}";
+    darkStyle +="QAbstractSpinBox::up-button, QAbstractSpinBox::down-button {    border: 1px solid #5A5A5A;    background: #353535;    subcontrol-origin: border;}";
+    darkStyle +="QAbstractSpinBox::up-arrow, QAbstractSpinBox::down-arrow {    width: 3px;    height: 3px;    border: 1px solid #5A5A5A;}";
+    darkStyle +="QSlider {    border: none;}QSlider::groove:horizontal {   height: 5px;    margin: 4px 0px 4px 0px;}";
+    darkStyle +="QSlider::groove:vertical {    width: 5px;    margin: 0px 4px 0px 4px;}";
+    darkStyle +="QSlider::handle {    border: 1px solid #5A5A5A;    background: #353535;}";
+    darkStyle +="QSlider::handle:horizontal {    width: 15px;    margin: -4px 0px -4px 0px;}";
+    darkStyle +="QSlider::handle:vertical {   height: 15px;    margin: 0px -4px 0px -4px;}";
+    darkStyle +="QSlider::add-page:vertical, QSlider::sub-page:horizontal {    background: #3D7848;}";
+    darkStyle +="QSlider::sub-page:vertical, QSlider::add-page:horizontal {    background: #353535;}";
+    darkStyle +="QLabel {    border: none;}";
+    darkStyle +="QProgressBar {    text-align: center;}";
+    darkStyle +="QProgressBar::chunk {    width: 1px;    background-color: #3D7848;}";
+    darkStyle +="QMenu::separator {    background: #353535;}";
+app.setStyleSheet(darkStyle);
+
+
     // Register meta types used for QMetaObject::invokeMethod
     qRegisterMetaType< bool* >();
 

@@ -1,6 +1,9 @@
 Rotocoin integration/staging tree
 ================================
 
-RotoCoin
+RotoCoin the Great Wallet.
 
-Readme soon
+Changelog:
+
+26/03/14
+26/03/14 Added full forocoches troll branding
