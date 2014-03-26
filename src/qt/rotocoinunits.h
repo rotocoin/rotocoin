@@ -21,7 +21,8 @@ public:
     {
         Rt2,
         mRt2,
-        uRt2
+        uRt2,
+        ilitris
     };
 
     //! @name Static API

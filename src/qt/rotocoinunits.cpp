@@ -14,6 +14,7 @@ QList<RotocoinUnits::Unit> RotocoinUnits::availableUnits()
     unitlist.append(Rt2);
     unitlist.append(mRt2);
     unitlist.append(uRt2);
+    unitlist.append(ilitris);
     return unitlist;
 }
 
@@ -24,6 +25,7 @@ bool RotocoinUnits::valid(int unit)
     case Rt2:
     case mRt2:
     case uRt2:
+    case ilitris:
         return true;
     default:
         return false;
@@ -37,6 +39,7 @@ QString RotocoinUnits::name(int unit)
     case Rt2: return QString("Rt2");
     case mRt2: return QString("mRt2");
     case uRt2: return QString::fromUtf8("μRt2");
+    case ilitris: return QString::fromUtf8("ilitris");
     default: return QString("???");
     }
 }
@@ -46,8 +49,10 @@ QString RotocoinUnits::description(int unit)
     switch(unit)
     {
     case Rt2: return QString("Rotocoins");
-    case mRt2: return QString("Milli-Rotocoins (1 / 1,000)");
-    case uRt2: return QString("Micro-Rotocoins (1 / 1,000,000)");
+    case mRt2: return QString("Milli-Rotocoins (0.001 Rt2)");       // ( 1 / 1,000 )
+    case uRt2: return QString("Micro-Rotocoins (0.000001 Rt2)");    // ( 1 / 1,000,000 )
+    case ilitris: return QString("ilitris (0.00000001 Rt2)");       // ( 1 / 100,000,000 )
+
     default: return QString("???");
     }
 }
@@ -59,6 +64,7 @@ qint64 RotocoinUnits::factor(int unit)
     case Rt2:  return 100000000;
     case mRt2: return 100000;
     case uRt2: return 100;
+    case ilitris: return 1;
     default:   return 100000000;
     }
 }
@@ -67,9 +73,10 @@ int RotocoinUnits::amountDigits(int unit)
 {
     switch(unit)
     {
-    case Rt2: return 8; // 21,000,000 (# digits, without commas)
-    case mRt2: return 11; // 21,000,000,000
-    case uRt2: return 14; // 21,000,000,000,000
+    case Rt2: return 6; // 288,000 (# digits, without commas)
+    case mRt2: return 9; // 288,000,000
+    case uRt2: return 12; // 288,000,000,000
+    case ilitris: return 14; // 28,800,000,000,000
     default: return 0;
     }
 }
@@ -81,6 +88,7 @@ int RotocoinUnits::decimals(int unit)
     case Rt2: return 8;
     case mRt2: return 5;
     case uRt2: return 2;
+    case ilitris: return 0;
     default: return 0;
     }
 }
