@@ -3,8 +3,8 @@
 #include <QStringList>
 
 RotocoinUnits::RotocoinUnits(QObject *parent):
-        QAbstractListModel(parent),
-        unitlist(availableUnits())
+QAbstractListModel(parent),
+unitlist(availableUnits())
 {
 }
 
@@ -22,12 +22,12 @@ bool RotocoinUnits::valid(int unit)
 {
     switch(unit)
     {
-    case Rt2:
-    case mRt2:
-    case uRt2:
-    case ilitris:
+        case Rt2:
+        case mRt2:
+        case uRt2:
+        case ilitris:
         return true;
-    default:
+        default:
         return false;
     }
 }
@@ -36,11 +36,11 @@ QString RotocoinUnits::name(int unit)
 {
     switch(unit)
     {
-    case Rt2: return QString("Rt2");
-    case mRt2: return QString("mRt2");
-    case uRt2: return QString::fromUtf8("μRt2");
-    case ilitris: return QString::fromUtf8("ilitris");
-    default: return QString("???");
+        case Rt2: return QString("Rt2");
+        case mRt2: return QString("mRt2");
+        case uRt2: return QString::fromUtf8("μRt2");
+        case ilitris: return QString::fromUtf8("ilitris");
+        default: return QString("???");
     }
 }
 
@@ -48,24 +48,24 @@ QString RotocoinUnits::description(int unit)
 {
     switch(unit)
     {
-    case Rt2: return QString("Rotocoins");
+        case Rt2: return QString("Rotocoins");
     case mRt2: return QString("Milli-Rotocoins (0.001 Rt2)");       // ( 1 / 1,000 )
     case uRt2: return QString("Micro-Rotocoins (0.000001 Rt2)");    // ( 1 / 1,000,000 )
     case ilitris: return QString("ilitris (0.00000001 Rt2)");       // ( 1 / 100,000,000 )
 
     default: return QString("???");
-    }
+}
 }
 
 qint64 RotocoinUnits::factor(int unit)
 {
     switch(unit)
     {
-    case Rt2:  return 100000000;
-    case mRt2: return 100000;
-    case uRt2: return 100;
-    case ilitris: return 1;
-    default:   return 100000000;
+        case Rt2:  return 100000000;
+        case mRt2: return 100000;
+        case uRt2: return 100;
+        case ilitris: return 1;
+        default:   return 100000000;
     }
 }
 
@@ -78,18 +78,18 @@ int RotocoinUnits::amountDigits(int unit)
     case uRt2: return 12; // 288,000,000,000
     case ilitris: return 14; // 28,800,000,000,000
     default: return 0;
-    }
+}
 }
 
 int RotocoinUnits::decimals(int unit)
 {
     switch(unit)
     {
-    case Rt2: return 8;
-    case mRt2: return 5;
-    case uRt2: return 2;
-    case ilitris: return 0;
-    default: return 0;
+        case Rt2: return 8;
+        case mRt2: return 5;
+        case uRt2: return 2;
+        case ilitris: return 0;
+        default: return 0;
     }
 }
 
@@ -105,6 +105,13 @@ QString RotocoinUnits::format(int unit, qint64 n, bool fPlus)
     qint64 quotient = n_abs / coin;
     qint64 remainder = n_abs % coin;
     QString quotient_str = QString::number(quotient);
+
+    // Dirty hack - TODO: prettify
+    int qnum = quotient_str.size();
+    for (int i = qnum; i>0 ; i=i-3)
+        quotient_str.insert(i, " ");
+    
+
     QString remainder_str = QString::number(remainder).rightJustified(num_decimals, '0');
 
     // Right-trim excess zeros after the decimal point
@@ -180,12 +187,12 @@ QVariant RotocoinUnits::data(const QModelIndex &index, int role) const
         Unit unit = unitlist.at(row);
         switch(role)
         {
-        case Qt::EditRole:
-        case Qt::DisplayRole:
+            case Qt::EditRole:
+            case Qt::DisplayRole:
             return QVariant(name(unit));
-        case Qt::ToolTipRole:
+            case Qt::ToolTipRole:
             return QVariant(description(unit));
-        case UnitRole:
+            case UnitRole:
             return QVariant(static_cast<int>(unit));
         }
     }
