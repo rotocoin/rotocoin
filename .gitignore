@@ -83,3 +83,5 @@ qa/pull-tester/build-tests.sh
 
 !src/leveldb*/Makefile
 
+# Windows specific
+Thumbs.db

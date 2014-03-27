@@ -16,7 +16,7 @@ SplashScreen::SplashScreen(const QPixmap &pixmap, Qt::WindowFlags f) :
     int line2 = 13;
     int line3 = 26;
 
-    float fontFactor            = 1.0;
+    float fontFactor            = 2.0;
 
     // define text to place
     QString titleText       = QString(QApplication::applicationName()).replace(QString("-testnet"), QString(""), Qt::CaseSensitive); // cut of testnet, place it as single object further down

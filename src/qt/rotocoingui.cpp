@@ -69,7 +69,7 @@ RotocoinGUI::RotocoinGUI(QWidget *parent) :
     prevBlocks(0)
 {
     restoreWindowGeometry();
-    setWindowTitle(tr("Rotocoin [ Roto2 the Great edition] ") + " - " + tr("Wallet"));
+    setWindowTitle(tr("Rotocoin") + " - " + tr("The Great"));
 #ifndef Q_OS_MAC
     QApplication::setWindowIcon(QIcon(":icons/rotocoin"));
     setWindowIcon(QIcon(":icons/rotocoin"));
@@ -173,35 +173,35 @@ void RotocoinGUI::createActions()
 {
     QActionGroup *tabGroup = new QActionGroup(this);
 
-    overviewAction = new QAction(QIcon(":/icons/overview"), tr("&Overview"), this);
+    overviewAction = new QAction(QIcon(":/icons/overview"), tr("&Pole"), this);
     overviewAction->setStatusTip(tr("Show general overview of wallet"));
     overviewAction->setToolTip(overviewAction->statusTip());
     overviewAction->setCheckable(true);
     overviewAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_1));
     tabGroup->addAction(overviewAction);
 
-    sendCoinsAction = new QAction(QIcon(":/icons/send"), tr("&Send"), this);
+    sendCoinsAction = new QAction(QIcon(":/icons/send"), tr("&Give Some"), this);
     sendCoinsAction->setStatusTip(tr("Send coins to a Rotocoin address"));
     sendCoinsAction->setToolTip(sendCoinsAction->statusTip());
     sendCoinsAction->setCheckable(true);
     sendCoinsAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_2));
     tabGroup->addAction(sendCoinsAction);
 
-    receiveCoinsAction = new QAction(QIcon(":/icons/receiving_addresses"), tr("&Receive"), this);
+    receiveCoinsAction = new QAction(QIcon(":/icons/receiving_addresses"), tr("&Ding Ding"), this);
     receiveCoinsAction->setStatusTip(tr("Show the list of addresses for receiving payments"));
     receiveCoinsAction->setToolTip(receiveCoinsAction->statusTip());
     receiveCoinsAction->setCheckable(true);
     receiveCoinsAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_3));
     tabGroup->addAction(receiveCoinsAction);
 
-    historyAction = new QAction(QIcon(":/icons/history"), tr("&Transactions"), this);
+    historyAction = new QAction(QIcon(":/icons/history"), tr("&Deals"), this);
     historyAction->setStatusTip(tr("Browse transaction history"));
     historyAction->setToolTip(historyAction->statusTip());
     historyAction->setCheckable(true);
     historyAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_4));
     tabGroup->addAction(historyAction);
 
-    addressBookAction = new QAction(QIcon(":/icons/address-book"), tr("&Addresses"), this);
+    addressBookAction = new QAction(QIcon(":/icons/address-book"), tr("&Contacts"), this);
     addressBookAction->setStatusTip(tr("Edit the list of stored addresses and labels"));
     addressBookAction->setToolTip(addressBookAction->statusTip());
     addressBookAction->setCheckable(true);
@@ -209,11 +209,12 @@ void RotocoinGUI::createActions()
     tabGroup->addAction(addressBookAction);
 
     // RotoChat
-    rotoChatAction = new QAction(QIcon(":/icons/rotocoin"), tr("&RotoChat"), this);
+    rotoChatAction = new QAction(QIcon(":/icons/rotocoin"), tr("&Communicate!"), this);
     rotoChatAction->setStatusTip(tr("Talk with Rotocoin Community!"));
     rotoChatAction->setToolTip(rotoChatAction->statusTip());
     rotoChatAction->setCheckable(true);
     rotoChatAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_6));
+    //TODO: Add color here
     tabGroup->addAction(rotoChatAction);
 
     connect(overviewAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));

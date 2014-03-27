@@ -18,6 +18,7 @@
 #include <QLocalServer>
 #include <QLocalSocket>
 #include <QStringList>
+#include <QDesktopServices>
 #if QT_VERSION < 0x050000
 #include <QUrl>
 #endif
