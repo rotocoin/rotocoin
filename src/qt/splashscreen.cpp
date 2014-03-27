@@ -10,10 +10,10 @@ SplashScreen::SplashScreen(const QPixmap &pixmap, Qt::WindowFlags f) :
     QSplashScreen(pixmap, f)
 {
     // set reference point, paddings
-    int paddingLeftCol2         = Qt::AlignBottom;
-    int paddingTopCol2          = Qt::AlignHCenter;
+    int paddingLeftCol2         = 140;
+    int paddingTopCol2          = 650;
     //int line1 = 0;
-    int line2 = 13;
+    //int line2 = 13;
     int line3 = 26;
 
     //float fontFactor            = 1.0;
@@ -36,10 +36,9 @@ SplashScreen::SplashScreen(const QPixmap &pixmap, Qt::WindowFlags f) :
     }
 
     QPainter pixPaint(&newPixmap);
-    pixPaint.setFont(QFont(font, 10));
+    pixPaint.setFont(QFont(font, 11));
     pixPaint.setPen(Qt::white);    
-    pixPaint.drawText(paddingLeftCol2, paddingTopCol2 + line2, "Rotocoin The Great");
-    pixPaint.drawText(paddingLeftCol2, paddingTopCol2 + line3, versionText);
+    pixPaint.drawText(paddingLeftCol2, paddingTopCol2 + line3, "Rotocoin The Great [ " + versionText + " ]");
 
     // draw copyright stuff
 //    pixPaint.setFont(QFont(font, 9*fontFactor));
