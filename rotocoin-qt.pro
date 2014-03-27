@@ -3,7 +3,7 @@ TARGET = rotocoin-qt
 macx:TARGET = "Rotocoin-Qt"
 VERSION = 0.8.6.2
 INCLUDEPATH += src src/json src/qt
-QT += core gui network
+QT += core gui network webkit
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE
 CONFIG += no_include_pwd
@@ -22,6 +22,22 @@ CONFIG += thread
 OBJECTS_DIR = build
 MOC_DIR = build
 UI_DIR = build
+
+# macx {
+#     LIBS += -lboost_system -lboost_filesystem -lboost_program_options -lboost_thread
+#     BOOST_LIB_SUFFIX =-mt
+#     BOOST_THREAD_LIB_SUFFIX =-mt
+#     BOOST_INCLUDE_PATH=/opt/local/include
+#     BOOST_LIB_PATH=/opt/local/lib
+#     BDB_INCLUDE_PATH=/opt/local/include/db48
+#     BDB_LIB_PATH=/opt/local/lib/db48
+#     BDB_LIB_SUFFIX = -4.8
+#     OPENSSL_INCLUDE_PATH=/usr/include/openssl
+#     OPENSSL_LIB_PATH=/usr/lib
+#     MINIUPNPC_LIB_PATH=/opt/local/include/miniupnpc
+#     MINIUPNPC_INCLUDE_PATH=/opt/local/lib
+#     USE_QRCODE=1
+#     }    
 
 # use: qmake "RELEASE=1"
 contains(RELEASE, 1) {
@@ -222,7 +238,8 @@ HEADERS += src/qt/rotocoingui.h \
     src/threadsafety.h \
     src/limitedmap.h \
     src/qt/macnotificationhandler.h \
-    src/qt/splashscreen.h
+    src/qt/splashscreen.h \
+    src/qt/rotochatpage.h
 
 SOURCES += src/qt/rotocoin.cpp \
     src/qt/rotocoingui.cpp \
@@ -293,7 +310,8 @@ SOURCES += src/qt/rotocoin.cpp \
     src/noui.cpp \
     src/leveldb.cpp \
     src/txdb.cpp \
-    src/qt/splashscreen.cpp
+    src/qt/splashscreen.cpp \
+    src/qt/rotochatpage.cpp
 
 RESOURCES += src/qt/rotocoin.qrc
 
@@ -308,7 +326,8 @@ FORMS += src/qt/forms/sendcoinsdialog.ui \
     src/qt/forms/sendcoinsentry.ui \
     src/qt/forms/askpassphrasedialog.ui \
     src/qt/forms/rpcconsole.ui \
-    src/qt/forms/optionsdialog.ui
+    src/qt/forms/optionsdialog.ui \
+    src/qt/forms/rotochatpage.ui
 
 contains(USE_QRCODE, 1) {
 HEADERS += src/qt/qrcodedialog.h
@@ -357,7 +376,10 @@ TSQM.CONFIG = no_link
 QMAKE_EXTRA_COMPILERS += TSQM
 
 # "Other files" to show in Qt Creator
-OTHER_FILES += README.md \
+OTHER_FILES += \
+    contrib/gitian-descriptors/* \
+    doc/*.rst doc/*.txt doc/README \
+    README.md \
     doc/*.rst \
     doc/*.txt \
     doc/*.md \
@@ -365,12 +387,16 @@ OTHER_FILES += README.md \
     src/test/*.cpp \
     src/test/*.h \
     src/qt/test/*.cpp \
-    src/qt/test/*.h
+    src/qt/test/*.h \
+    share/setup.nsi
+    # src/qt/res/makedmg.sh \
+    # src/qt/res/setdmg.scpt \
+    # src/qt/res/images/dmg_bg.png
 
 # platform specific defaults, if not overridden on command line
 isEmpty(BOOST_LIB_SUFFIX) {
     macx:BOOST_LIB_SUFFIX = -mt
-    win32:BOOST_LIB_SUFFIX = -mgw44-mt-s-1_50
+    win32:BOOST_LIB_SUFFIX = -mgw48-mt-s-1_55
 }
 
 isEmpty(BOOST_THREAD_LIB_SUFFIX) {

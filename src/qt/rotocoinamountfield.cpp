@@ -8,6 +8,7 @@
 #include <QKeyEvent>
 #include <QDoubleSpinBox>
 #include <QApplication>
+#include <QLocale>
 #include <qmath.h> // for qPow()
 
 RotocoinAmountField::RotocoinAmountField(QWidget *parent):
@@ -45,8 +46,10 @@ void RotocoinAmountField::setText(const QString &text)
 {
     if (text.isEmpty())
         amount->clear();
-    else
-        amount->setValue(text.toDouble());
+    else {
+        QLocale locale;
+        amount->setValue(locale.toDouble(text));
+    }
 }
 
 void RotocoinAmountField::clear()
@@ -147,8 +150,14 @@ void RotocoinAmountField::unitChanged(int idx)
 
     if(currentUnit == RotocoinUnits::uRt2)
         amount->setSingleStep(0.01);
-    else
+    else if (currentUnit == RotocoinUnits::ilitris)
+    {
+        amount->setSingleStep(100);
+    }
+    else 
+    {
         amount->setSingleStep(0.001);
+    }
 
     if(valid)
     {

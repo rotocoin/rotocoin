@@ -5,8 +5,6 @@
  * The Bitcoin developers 2011-2012
  */
 
-#include <QApplication>
-
 #include "rotocoingui.h"
 
 #include "transactiontablemodel.h"
@@ -25,11 +23,13 @@
 #include "ui_interface.h"
 #include "wallet.h"
 #include "init.h"
+#include "rotochatpage.h"
 
 #ifdef Q_OS_MAC
 #include "macdockiconhandler.h"
 #endif
 
+#include <QApplication>
 #include <QMenuBar>
 #include <QMenu>
 #include <QIcon>
@@ -69,7 +69,7 @@ RotocoinGUI::RotocoinGUI(QWidget *parent) :
     prevBlocks(0)
 {
     restoreWindowGeometry();
-    setWindowTitle(tr("Rotocoin") + " - " + tr("Wallet"));
+    setWindowTitle(tr("Rotocoin [ Roto2 the Great edition] ") + " - " + tr("Wallet"));
 #ifndef Q_OS_MAC
     QApplication::setWindowIcon(QIcon(":icons/rotocoin"));
     setWindowIcon(QIcon(":icons/rotocoin"));
@@ -77,9 +77,16 @@ RotocoinGUI::RotocoinGUI(QWidget *parent) :
     setUnifiedTitleAndToolBarOnMac(true);
     QApplication::setAttribute(Qt::AA_DontShowIconsInMenus);
 #endif
-    // Create wallet frame and make it the central widget
+
+   // Create wallet frame and make it the central widget
     walletFrame = new WalletFrame(this);
     setCentralWidget(walletFrame);
+
+    //specify a new font.
+    //QFont newFont("Comic Sans, 10);
+    
+    //set font of application
+    //QApplication::setFont(newFont);
 
     // Accept D&D of URIs
     setAcceptDrops(true);
@@ -201,6 +208,14 @@ void RotocoinGUI::createActions()
     addressBookAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
     tabGroup->addAction(addressBookAction);
 
+    // RotoChat
+    rotoChatAction = new QAction(QIcon(":/icons/rotocoin"), tr("&RotoChat"), this);
+    rotoChatAction->setStatusTip(tr("Talk with Rotocoin Community!"));
+    rotoChatAction->setToolTip(rotoChatAction->statusTip());
+    rotoChatAction->setCheckable(true);
+    rotoChatAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_6));
+    tabGroup->addAction(rotoChatAction);
+
     connect(overviewAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(overviewAction, SIGNAL(triggered()), this, SLOT(gotoOverviewPage()));
     connect(sendCoinsAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
@@ -211,6 +226,7 @@ void RotocoinGUI::createActions()
     connect(historyAction, SIGNAL(triggered()), this, SLOT(gotoHistoryPage()));
     connect(addressBookAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(addressBookAction, SIGNAL(triggered()), this, SLOT(gotoAddressBookPage()));
+    connect(rotoChatAction, SIGNAL(triggered()), this, SLOT(gotoRotoChatPage()));
 
     quitAction = new QAction(QIcon(":/icons/quit"), tr("E&xit"), this);
     quitAction->setStatusTip(tr("Quit application"));
@@ -295,6 +311,7 @@ void RotocoinGUI::createToolBars()
     toolbar->addAction(receiveCoinsAction);
     toolbar->addAction(historyAction);
     toolbar->addAction(addressBookAction);
+    toolbar->addAction(rotoChatAction);
 }
 
 void RotocoinGUI::setClientModel(ClientModel *clientModel)
@@ -495,6 +512,11 @@ void RotocoinGUI::gotoReceiveCoinsPage()
 void RotocoinGUI::gotoSendCoinsPage(QString addr)
 {
     if (walletFrame) walletFrame->gotoSendCoinsPage(addr);
+}
+
+void RotocoinGUI::gotoRotoChatPage()
+{
+    if (walletFrame) walletFrame->gotoRotoChatPage();
 }
 
 void RotocoinGUI::gotoSignMessageTab(QString addr)

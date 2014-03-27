@@ -119,10 +119,17 @@ bool PaymentServer::eventFilter(QObject *object, QEvent *event)
         QFileOpenEvent* fileEvent = static_cast<QFileOpenEvent*>(event);
         if (!fileEvent->url().isEmpty())
         {
+
+            // Thanks shibes !!!!
+            QString url = fileEvent->url().toString();
+           if ( url.startsWith( "file:rotocoin:/R" ) ) {
+               url.replace( "file:rotocoin:/R", "rotocoin://R" );
+           }
+
             if (saveURIs) // Before main window is ready:
-                savedPaymentRequests.append(fileEvent->url().toString());
+                savedPaymentRequests.append(url);
             else
-                emit receivedURI(fileEvent->url().toString());
+                emit receivedURI(url);
             return true;
         }
     }

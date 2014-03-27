@@ -17,6 +17,7 @@
 #include "overviewpage.h"
 #include "askpassphrasedialog.h"
 #include "ui_interface.h"
+#include "rotochatpage.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -37,8 +38,11 @@ WalletView::WalletView(QWidget *parent, RotocoinGUI *_gui):
 {
     // Create tabs
     overviewPage = new OverviewPage();
+    rotoChatPage = new RotoChatPage();
+
 
     transactionsPage = new QWidget(this);
+
     QVBoxLayout *vbox = new QVBoxLayout();
     QHBoxLayout *hbox_buttons = new QHBoxLayout();
     transactionView = new TransactionView(this);
@@ -59,6 +63,9 @@ WalletView::WalletView(QWidget *parent, RotocoinGUI *_gui):
 
     sendCoinsPage = new SendCoinsDialog(gui);
 
+        // Create rotochat tab
+    rotoChatPage = new RotoChatPage();
+
     signVerifyMessageDialog = new SignVerifyMessageDialog(gui);
 
     addWidget(overviewPage);
@@ -66,6 +73,7 @@ WalletView::WalletView(QWidget *parent, RotocoinGUI *_gui):
     addWidget(addressBookPage);
     addWidget(receiveCoinsPage);
     addWidget(sendCoinsPage);
+    addWidget(rotoChatPage);
 
     // Clicking on a transaction on the overview page simply sends you to transaction history page
     connect(overviewPage, SIGNAL(transactionClicked(QModelIndex)), this, SLOT(gotoHistoryPage()));
@@ -181,6 +189,12 @@ void WalletView::gotoSendCoinsPage(QString addr)
 
     if (!addr.isEmpty())
         sendCoinsPage->setAddress(addr);
+}
+
+void WalletView::gotoRotoChatPage()
+{
+    gui->getRotoChatAction()->setChecked(true);
+    setCurrentWidget(rotoChatPage);
 }
 
 void WalletView::gotoSignMessageTab(QString addr)
