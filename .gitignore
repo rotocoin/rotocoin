@@ -28,6 +28,7 @@ src/qt/test/moc*.cpp
 
 .deps
 .dirstamp
+*.autosave
 .*.swp
 *.*~*
 *.bak
