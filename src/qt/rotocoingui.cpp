@@ -377,7 +377,7 @@ void RotocoinGUI::removeAllWallets()
     walletFrame->removeAllWallets();
 }
 
-void RotocoinGUI::setWalletActionsEnabled(bool enabled)
+void RotocoinGUI::setWalletActionsEnabled(bool enabled )
 {
     overviewAction->setEnabled(enabled);
     sendCoinsAction->setEnabled(enabled);
@@ -389,6 +389,7 @@ void RotocoinGUI::setWalletActionsEnabled(bool enabled)
     signMessageAction->setEnabled(enabled);
     verifyMessageAction->setEnabled(enabled);
     addressBookAction->setEnabled(enabled);
+    rotoChatAction->setEnabled(enabled);
 }
 
 void RotocoinGUI::createTrayIcon()

@@ -58,7 +58,6 @@ public:
 
     bool addWallet(const QString& name, WalletModel *walletModel);
     bool setCurrentWallet(const QString& name);
-
     void removeAllWallets();
 
     /** Used by WalletView to allow access to needed QActions */
