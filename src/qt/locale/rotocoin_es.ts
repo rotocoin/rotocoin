@@ -2934,7 +2934,7 @@ Por ejemplo: alertnotify=echo %%s | mail -s &quot;Litecoin Alert&quot; admin@foo
     <message>
         <location line="-57"/>
         <source>Done loading</source>
-        <translation>Generado pero no aceptado</translation>
+        <translation>Carga completa.</translation>
     </message>
     <message>
         <location line="+82"/>

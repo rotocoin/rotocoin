@@ -10,13 +10,13 @@ SplashScreen::SplashScreen(const QPixmap &pixmap, Qt::WindowFlags f) :
     QSplashScreen(pixmap, f)
 {
     // set reference point, paddings
-    int paddingLeftCol2         = 230;
-    int paddingTopCol2          = 376;
-    int line1 = 0;
+    int paddingLeftCol2         = Qt::AlignBottom;
+    int paddingTopCol2          = Qt::AlignHCenter;
+    //int line1 = 0;
     int line2 = 13;
     int line3 = 26;
 
-    float fontFactor            = 2.0;
+    //float fontFactor            = 1.0;
 
     // define text to place
     QString titleText       = QString(QApplication::applicationName()).replace(QString("-testnet"), QString(""), Qt::CaseSensitive); // cut of testnet, place it as single object further down
@@ -36,10 +36,10 @@ SplashScreen::SplashScreen(const QPixmap &pixmap, Qt::WindowFlags f) :
     }
 
     QPainter pixPaint(&newPixmap);
-    pixPaint.setPen(QColor(100,100,100));
-
-    pixPaint.setFont(QFont(font, 9*fontFactor));
-    pixPaint.drawText(paddingLeftCol2,paddingTopCol2+line3,versionText);
+    pixPaint.setFont(QFont(font, 10));
+    pixPaint.setPen(Qt::white);    
+    pixPaint.drawText(paddingLeftCol2, paddingTopCol2 + line2, "Rotocoin The Great");
+    pixPaint.drawText(paddingLeftCol2, paddingTopCol2 + line3, versionText);
 
     // draw copyright stuff
 //    pixPaint.setFont(QFont(font, 9*fontFactor));
