@@ -20,6 +20,7 @@ src/stamp-h1
 share/setup.nsi
 share/qt/Info.plist
 
+src/qt/*.autosave
 src/qt/*.moc
 src/qt/moc_*.cpp
 src/qt/forms/ui_*.h
@@ -50,7 +51,7 @@ src/qt/test/moc*.cpp
 
 # Compilation and Qt preprocessor part
 *.qm
-Makefile
+Makefile*
 rotocoin-qt
 Rotocoin-Qt.app
 
