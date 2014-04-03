@@ -14,9 +14,8 @@ packages:
 reference_datetime: "2011-01-30 00:00:00"
 remotes: []
 files:
-- "qt-everywhere-opensource-src-4.8.5.tar.gz"
-- "bitcoin-deps-win32-gitian-r10.zip"
-- "bitcoin-deps-win64-gitian-r10.zip"
+- "qt-everywhere-opensource-src-5.2.0.tar.gz"
+- "rotocoin-deps-win32-gitian-r9.zip"
 script: |
   # Defines
   export TZ=UTC
@@ -31,7 +30,7 @@ script: |
   #  For now luckily there is a test mode that forces a fixed seed.
   export QT_RCC_TEST=1
   # Integrity Check
-  echo "395ec72277c5786c65b8163ef5817fd03d0a1f524a6d47f53624baf8056f1081  qt-everywhere-opensource-src-4.8.5.tar.gz" | sha256sum -c
+  echo "395ec72277c5786c65b8163ef5817fd03d0a1f524a6d47f53624baf8056f1081  qt-everywhere-opensource-src-5.2.0.tar.gz" | sha256sum -c
 
   for BITS in 32 64; do # for architectures
     #
@@ -48,12 +47,12 @@ script: |
     #
     # Need mingw-compiled openssl from bitcoin-deps:
     cd $DEPSDIR
-    unzip $INDIR/bitcoin-deps-win${BITS}-gitian-r10.zip
+    unzip $INDIR/rotocoin-deps-win${BITS}-gitian-r9.zip
     #
     cd $BUILDDIR
     #
-    tar xzf $INDIR/qt-everywhere-opensource-src-4.8.5.tar.gz
-    cd qt-everywhere-opensource-src-4.8.5
+    tar xzf $INDIR/qt-everywhere-opensource-src-5.2.0.tar.gz
+    cd qt-everywhere-opensource-src-5.2.0
     SPECNAME="win32-g++"
     SPECFILE="qtbase/mkspecs/${SPECNAME}/qmake.conf"
     sed 's/qt_instdate=`date +%Y-%m-%d`/qt_instdate=2011-01-30/' -i qtbase/configure
@@ -86,7 +85,7 @@ script: |
     export LD_PRELOAD=/usr/lib/faketime/libfaketime.so.1
     export FAKETIME=$REFERENCE_DATETIME
     find -print0 | xargs -r0 touch # fix up timestamps before packaging
-    find | sort | zip -X@ $OUTDIR/qt-win${BITS}-4.8.5-gitian-r2.zip
+    find | sort | zip -X@ $OUTDIR/qt-win${BITS}-5.2.0-gitian-r2.zip
     unset LD_PRELOAD
     unset FAKETIME
   done # for BITS in

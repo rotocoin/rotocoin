@@ -2918,7 +2918,7 @@ bool InitBlockIndex() {
                   unsigned long int scrypt_scratpad_size_current_block = ((1 << (GetNfactor(block.nTime) + 1)) * 128 ) + 63;
                   char scratchpad[scrypt_scratpad_size_current_block];
 
-                  loop
+                  while(true)
                   {
                  // Generic scrypt
                       scrypt_N_1_1_256_sp_generic(BEGIN(block.nVersion), BEGIN(thash), scratchpad, GetNfactor(block.nTime));
@@ -4715,7 +4715,7 @@ void static RotocoinMiner(CWallet *pwallet)
     CReserveKey reservekey(pwallet);
     unsigned int nExtraNonce = 0;
 
-    try { loop {
+    try { while(true) {
         while (vNodes.empty())
             MilliSleep(1000);
 
@@ -4753,7 +4753,7 @@ void static RotocoinMiner(CWallet *pwallet)
         //
         int64 nStart = GetTime();
         uint256 hashTarget = CBigNum().SetCompact(pblock->nBits).getuint256();
-        loop
+        while(true)
         {
             unsigned int nHashesDone = 0;
 
@@ -4767,7 +4767,7 @@ void static RotocoinMiner(CWallet *pwallet)
             printf("scrypt_scratpad_size_current_block -> %ld", sizeof(scrypt_scratpad_size_current_block));
             printf("scratchpad -> %d", sizeof(scratchpad));*/
             
-            loop
+            while(true)
             {
 
                 // Generic scrypt

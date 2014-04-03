@@ -7,7 +7,7 @@ SetCompressor /SOLID lzma
 !define REGKEY "SOFTWARE\$(^Name)"
 !define VERSION 0.8.6.2
 !define COMPANY "Rotocoin project"
-!define URL http://www.bitcoin.org/
+!define URL http://roto2.me
 
 # MUI Symbol Definitions
 !define MUI_ICON "../share/pixmaps/rotocoin.ico"
