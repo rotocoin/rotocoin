@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
     Q_INIT_RESOURCE(rotocoin);
     QApplication app(argc, argv);
 
-    QString darkStyle = "* {   background: #191919;    color: #DDDDDD;    border: 1px solid #5A5A5A;}";
+    /*QString darkStyle = "* {   background: #191919;    color: #DDDDDD;    border: 1px solid #5A5A5A;}";
     darkStyle +="QWidget::item:selected { background: #3D7848;}";
     darkStyle +="QCheckBox, QRadioButton { border: none;}";
     darkStyle +="QRadioButton::indicator, QCheckBox::indicator {    width: 13px;    height: 13px;}";
@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
     darkStyle +="QProgressBar {    text-align: center;}";
     darkStyle +="QProgressBar::chunk {    width: 1px;    background-color: #3D7848;}";
     darkStyle +="QMenu::separator {    background: #353535;}";
-app.setStyleSheet(darkStyle);
+app.setStyleSheet(darkStyle);*/
 
 
     // Register meta types used for QMetaObject::invokeMethod

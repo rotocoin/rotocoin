@@ -6,7 +6,7 @@
 #include <QtWidgets>
 #include <QtGui>
 
-#define ROTOCHAT_URL "https://kiwiirc.com/client/irc.freenode.org:6697/?nick=rotocoin?&theme=cli#therotocoinproject"
+#define ROTOCHAT_URL "https://kiwiirc.com/client/irc.freenode.org:6697/?nick=rotocoin?#therotocoinproject"
 //#define ROTOCHAT_URL "https://kiwiirc.com/client/irc.freenode.org:6697/?nick=rotocoin?#therotocoinproject"
 
 RotoChatPage::RotoChatPage(QWidget *parent) 
@@ -47,17 +47,24 @@ void RotoChatPage::hideElements(bool ok)
 {
     if (ok)
     {
-        QWebFrame* frame = ui->webView->page()->currentFrame();// pasar por parametro
-        do
+        //QWebFrame* frame = ui->webView->page()->currentFrame();// pasar por parametro
+        QWebElement dom = ui->webView->page()->mainFrame()->documentElement();
+        dom.findFirst("tr.channel").setStyleProperty("display","none");
+        dom.findFirst("a.show_more").setStyleProperty("display","none");
+        dom.findFirst("a.kiwi_logo").setStyleProperty("display","none");
+        dom.findFirst("i.icon-upload-alt").setStyleProperty("display","none");
+        dom.findFirst("div.app_tools").setStyleProperty("display","none");
+        dom.findFirst("i.icon-signout.channel_part").setStyleProperty("display","none");
+        //dom.findFirst("li.active").setStyleProperty("display","none");
+
+        /*do
         {
-        frame->documentElement().findFirst("a.kiwi_logo").removeFromDocument();
-        frame->documentElement().findFirst("a.show_more").removeFromDocument();
-        frame->documentElement().findFirst("tr.channel").removeFromDocument();
-        //QTimer::singleShot(2000, this, SLOT(hideElements(bool)));
+
+        
         }
-        while(frame->documentElement().findFirst("a.kiwi_logo").isNull() == false && frame->documentElement().findFirst("a.show_more").isNull() == false && frame->documentElement().findFirst("tr.channel").isNull() == false);
-        //QTimer::singleShot(2000, this, SLOT(onPageLoadFinished()));
-        onPageLoadFinished();
+        while(frame->documentElement().findFirst("tr.channel").attribute("display")!="none");*/
+        QTimer::singleShot(2000, this, SLOT(onPageLoadFinished()));
+        //onPageLoadFinished();
         
     }
 
