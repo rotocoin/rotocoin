@@ -2,11 +2,7 @@
 #define ROTOCHATPAGE_H
 
 #include <QWidget>
-#if (QT_VERSION < 0x050000)
-#include <QWebView>
-#else
-#include <QtWebKitWidgets/QWebView>
-#endif
+//#include <QtWebKit>
 
 namespace Ui {
 class RotoChatPage;
@@ -26,8 +22,8 @@ public:
     QWidget *setupTabChain(QWidget *prev);
 
 private slots:
-//   void onPageLoadFinished();
-//	void hideElements(bool ok); 
+    void onPageLoadFinished();
+void hideElements(bool ok);
 
 private:
     Ui::RotoChatPage *ui;
