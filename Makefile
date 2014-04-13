@@ -12,13 +12,13 @@ MAKEFILE      = Makefile
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DQT_GUI -DBOOST_THREAD_USE_LIB -DBOOST_SPIRIT_THREADSAFE -DQT_GUI -DBOOST_THREAD_USE_LIB -DBOOST_SPIRIT_THREADSAFE -DUSE_UPNP=1 -DSTATICLIB -DUSE_IPV6=1 -DHAVE_BUILD_INFO -DLINUX -D_FILE_OFFSET_BITS=64 -DQT_NO_DEBUG -DQT_WEBKITWIDGETS_LIB -DQT_QUICK_LIB -DQT_OPENGL_LIB -DQT_PRINTSUPPORT_LIB -DQT_LOCATION_LIB -DQT_WEBKIT_LIB -DQT_QML_LIB -DQT_WIDGETS_LIB -DQT_POSITIONING_LIB -DQT_SENSORS_LIB -DQT_NETWORK_LIB -DQT_GUI_LIB -DQT_CORE_LIB
+DEFINES       = -DQT_GUI -DBOOST_THREAD_USE_LIB -DBOOST_SPIRIT_THREADSAFE -DQT_GUI -DBOOST_THREAD_USE_LIB -DBOOST_SPIRIT_THREADSAFE -DBUILD_IRC_CORE -DHAVE_UCHARDET -DBUILD_IRC_MODEL -DBUILD_IRC_UTIL -DUSE_UPNP=1 -DSTATICLIB -DUSE_IPV6=1 -DHAVE_BUILD_INFO -DLINUX -D_FILE_OFFSET_BITS=64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_NETWORK_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -m64 -pipe -O2 -D_REENTRANT -Wall -W -fPIE $(DEFINES)
 CXXFLAGS      = -m64 -pipe -fstack-protector-all -D_FORTIFY_SOURCE=2 -O2 -D_REENTRANT -fdiagnostics-show-option -Wall -Wextra -Wformat -Wformat-security -Wno-unused-parameter -Wstack-protector -fPIE $(DEFINES)
-INCPATH       = -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -Isrc -Isrc/json -Isrc/qt -Isrc/leveldb/include -Isrc/leveldb/helpers -I/usr/include/qt5 -I/usr/include/qt5/QtWebKitWidgets -I/usr/include/qt5/QtQuick -I/usr/include/qt5/QtOpenGL -I/usr/include/qt5/QtPrintSupport -I/usr/include/qt5/QtLocation -I/usr/include/qt5/QtWebKit -I/usr/include/qt5/QtQml -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtPositioning -I/usr/include/qt5/QtSensors -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtCore -Ibuild -Ibuild
+INCPATH       = -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -Isrc -Isrc/json -Isrc/qt -I../libcommuni/src/core -I../libcommuni/include/IrcCore -I../libcommuni/src/3rdparty/uchardet-0.0.1/src -I../libcommuni/src/model -I../libcommuni/include/IrcModel -I../libcommuni/src/util -I../libcommuni/include/IrcUtil -Isrc/leveldb/include -Isrc/leveldb/helpers -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtCore -Ibuild -Ibuild
 LINK          = g++
-LFLAGS        = -m64 -fstack-protector-all -Wl,-O1 -Wl,-rpath-link,/usr/lib/x86_64-linux-gnu
-LIBS          = $(SUBLIBS) -L/usr/X11R6/lib64 -lminiupnpc /home/emb/git/rotocoin/src/leveldb/libleveldb.a /home/emb/git/rotocoin/src/leveldb/libmemenv.a -lrt -lssl -lcrypto -ldb_cxx -lboost_system -lboost_filesystem -lboost_program_options -lboost_thread -lQt5WebKitWidgets -L/usr/lib/x86_64-linux-gnu -lQt5Quick -lQt5OpenGL -lQt5PrintSupport -lQt5Location -lQt5WebKit -lQt5Qml -lQt5Widgets -lQt5Positioning -lQt5Sensors -lQt5Network -lQt5Gui -lQt5Core -lpthread -lGL 
+LFLAGS        = -m64 -fstack-protector-all -Wl,-O1
+LIBS          = $(SUBLIBS) -L/usr/X11R6/lib64 -lminiupnpc /home/emb/git/rotocoin/src/leveldb/libleveldb.a /home/emb/git/rotocoin/src/leveldb/libmemenv.a -lrt -lssl -lcrypto -ldb_cxx -lboost_system -lboost_filesystem -lboost_program_options -lboost_thread -lQt5Widgets -L/usr/lib/x86_64-linux-gnu -lQt5Network -lQt5Gui -lQt5Core -lpthread -lGL 
 AR            = ar cqs
 RANLIB        = 
 QMAKE         = /usr/lib/x86_64-linux-gnu/qt5/bin/qmake
@@ -45,7 +45,55 @@ OBJECTS_DIR   = build/
 
 ####### Files
 
-SOURCES       = src/qt/rotocoin.cpp \
+SOURCES       = ../libcommuni/src/core/irc.cpp \
+		../libcommuni/src/core/irccommand.cpp \
+		../libcommuni/src/core/ircconnection.cpp \
+		../libcommuni/src/core/ircfilter.cpp \
+		../libcommuni/src/core/ircmessage.cpp \
+		../libcommuni/src/core/ircmessage_p.cpp \
+		../libcommuni/src/core/ircmessagebuilder.cpp \
+		../libcommuni/src/core/ircmessagedecoder.cpp \
+		../libcommuni/src/core/ircnetwork.cpp \
+		../libcommuni/src/core/ircprotocol.cpp \
+		../libcommuni/src/3rdparty/mozilla/rdf_utils.c \
+		../libcommuni/src/core/ircmessagedecoder_uchardet.cpp \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/CharDistribution.cpp \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/JpCntx.cpp \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/LangBulgarianModel.cpp \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/LangCyrillicModel.cpp \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/LangGreekModel.cpp \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/LangHungarianModel.cpp \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/LangHebrewModel.cpp \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/LangThaiModel.cpp \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsHebrewProber.cpp \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCharSetProber.cpp \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsBig5Prober.cpp \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEUCJPProber.cpp \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEUCKRProber.cpp \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEUCTWProber.cpp \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEscCharsetProber.cpp \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEscSM.cpp \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsGB2312Prober.cpp \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsMBCSGroupProber.cpp \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsMBCSSM.cpp \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsSBCSGroupProber.cpp \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsSBCharSetProber.cpp \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsSJISProber.cpp \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsUTF8Prober.cpp \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsLatin1Prober.cpp \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsUniversalDetector.cpp \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/uchardet.cpp \
+		../libcommuni/src/model/ircbuffer.cpp \
+		../libcommuni/src/model/ircbuffermodel.cpp \
+		../libcommuni/src/model/ircchannel.cpp \
+		../libcommuni/src/model/ircuser.cpp \
+		../libcommuni/src/model/ircusermodel.cpp \
+		../libcommuni/src/util/irccommandparser.cpp \
+		../libcommuni/src/util/irccompleter.cpp \
+		../libcommuni/src/util/irclagtimer.cpp \
+		../libcommuni/src/util/ircpalette.cpp \
+		../libcommuni/src/util/irctextformat.cpp \
+		src/qt/rotocoin.cpp \
 		src/qt/rotocoingui.cpp \
 		src/qt/transactiontablemodel.cpp \
 		src/qt/addresstablemodel.cpp \
@@ -115,7 +163,8 @@ SOURCES       = src/qt/rotocoin.cpp \
 		src/leveldb.cpp \
 		src/txdb.cpp \
 		src/qt/splashscreen.cpp \
-		src/qt/rotochatpage.cpp qrc_rotocoin.cpp \
+		src/qt/rotochatpage.cpp \
+		src/qt/ircmessageformatter.cpp qrc_rotocoin.cpp \
 		build/moc_rotocoingui.cpp \
 		build/moc_transactiontablemodel.cpp \
 		build/moc_addresstablemodel.cpp \
@@ -154,7 +203,55 @@ SOURCES       = src/qt/rotocoin.cpp \
 		build/moc_macnotificationhandler.cpp \
 		build/moc_splashscreen.cpp \
 		build/moc_rotochatpage.cpp
-OBJECTS       = build/rotocoin.o \
+OBJECTS       = build/irc.o \
+		build/irccommand.o \
+		build/ircconnection.o \
+		build/ircfilter.o \
+		build/ircmessage.o \
+		build/ircmessage_p.o \
+		build/ircmessagebuilder.o \
+		build/ircmessagedecoder.o \
+		build/ircnetwork.o \
+		build/ircprotocol.o \
+		build/rdf_utils.o \
+		build/ircmessagedecoder_uchardet.o \
+		build/CharDistribution.o \
+		build/JpCntx.o \
+		build/LangBulgarianModel.o \
+		build/LangCyrillicModel.o \
+		build/LangGreekModel.o \
+		build/LangHungarianModel.o \
+		build/LangHebrewModel.o \
+		build/LangThaiModel.o \
+		build/nsHebrewProber.o \
+		build/nsCharSetProber.o \
+		build/nsBig5Prober.o \
+		build/nsEUCJPProber.o \
+		build/nsEUCKRProber.o \
+		build/nsEUCTWProber.o \
+		build/nsEscCharsetProber.o \
+		build/nsEscSM.o \
+		build/nsGB2312Prober.o \
+		build/nsMBCSGroupProber.o \
+		build/nsMBCSSM.o \
+		build/nsSBCSGroupProber.o \
+		build/nsSBCharSetProber.o \
+		build/nsSJISProber.o \
+		build/nsUTF8Prober.o \
+		build/nsLatin1Prober.o \
+		build/nsUniversalDetector.o \
+		build/uchardet.o \
+		build/ircbuffer.o \
+		build/ircbuffermodel.o \
+		build/ircchannel.o \
+		build/ircuser.o \
+		build/ircusermodel.o \
+		build/irccommandparser.o \
+		build/irccompleter.o \
+		build/irclagtimer.o \
+		build/ircpalette.o \
+		build/irctextformat.o \
+		build/rotocoin.o \
 		build/rotocoingui.o \
 		build/transactiontablemodel.o \
 		build/addresstablemodel.o \
@@ -225,6 +322,7 @@ OBJECTS       = build/rotocoin.o \
 		build/txdb.o \
 		build/splashscreen.o \
 		build/rotochatpage.o \
+		build/ircmessageformatter.o \
 		build/qrc_rotocoin.o \
 		build/moc_rotocoingui.o \
 		build/moc_transactiontablemodel.o \
@@ -316,6 +414,12 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
+		../libcommuni/src/3rdparty/mozilla/mozilla.pri \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/uchardet.pri \
+		../libcommuni/src/core/core.pri \
+		../libcommuni/src/model/model.pri \
+		../libcommuni/src/util/util.pri \
+		../libcommuni/src/src.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/resolve_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_post.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
@@ -417,6 +521,12 @@ Makefile: rotocoin-qt.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qma
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
+		../libcommuni/src/3rdparty/mozilla/mozilla.pri \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/uchardet.pri \
+		../libcommuni/src/core/core.pri \
+		../libcommuni/src/model/model.pri \
+		../libcommuni/src/util/util.pri \
+		../libcommuni/src/src.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/resolve_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_post.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
@@ -433,19 +543,10 @@ Makefile: rotocoin-qt.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qma
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		rotocoin-qt.pro \
 		src/qt/rotocoin.qrc \
-		/usr/lib/x86_64-linux-gnu/libQt5WebKitWidgets.prl \
-		/usr/lib/x86_64-linux-gnu/libQt5WebKit.prl \
-		/usr/lib/x86_64-linux-gnu/libQt5Network.prl \
-		/usr/lib/x86_64-linux-gnu/libQt5Core.prl \
-		/usr/lib/x86_64-linux-gnu/libQt5Gui.prl \
 		/usr/lib/x86_64-linux-gnu/libQt5Widgets.prl \
-		/usr/lib/x86_64-linux-gnu/libQt5Quick.prl \
-		/usr/lib/x86_64-linux-gnu/libQt5Qml.prl \
-		/usr/lib/x86_64-linux-gnu/libQt5OpenGL.prl \
-		/usr/lib/x86_64-linux-gnu/libQt5PrintSupport.prl \
-		/usr/lib/x86_64-linux-gnu/libQt5Location.prl \
-		/usr/lib/x86_64-linux-gnu/libQt5Positioning.prl \
-		/usr/lib/x86_64-linux-gnu/libQt5Sensors.prl
+		/usr/lib/x86_64-linux-gnu/libQt5Gui.prl \
+		/usr/lib/x86_64-linux-gnu/libQt5Core.prl \
+		/usr/lib/x86_64-linux-gnu/libQt5Network.prl
 	$(QMAKE) -o Makefile rotocoin-qt.pro
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/shell-unix.conf:
@@ -499,6 +600,12 @@ Makefile: rotocoin-qt.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qma
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf:
+../libcommuni/src/3rdparty/mozilla/mozilla.pri:
+../libcommuni/src/3rdparty/uchardet-0.0.1/uchardet.pri:
+../libcommuni/src/core/core.pri:
+../libcommuni/src/model/model.pri:
+../libcommuni/src/util/util.pri:
+../libcommuni/src/src.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/resolve_config.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_post.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf:
@@ -515,19 +622,10 @@ Makefile: rotocoin-qt.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qma
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf:
 rotocoin-qt.pro:
 src/qt/rotocoin.qrc:
-/usr/lib/x86_64-linux-gnu/libQt5WebKitWidgets.prl:
-/usr/lib/x86_64-linux-gnu/libQt5WebKit.prl:
-/usr/lib/x86_64-linux-gnu/libQt5Network.prl:
-/usr/lib/x86_64-linux-gnu/libQt5Core.prl:
-/usr/lib/x86_64-linux-gnu/libQt5Gui.prl:
 /usr/lib/x86_64-linux-gnu/libQt5Widgets.prl:
-/usr/lib/x86_64-linux-gnu/libQt5Quick.prl:
-/usr/lib/x86_64-linux-gnu/libQt5Qml.prl:
-/usr/lib/x86_64-linux-gnu/libQt5OpenGL.prl:
-/usr/lib/x86_64-linux-gnu/libQt5PrintSupport.prl:
-/usr/lib/x86_64-linux-gnu/libQt5Location.prl:
-/usr/lib/x86_64-linux-gnu/libQt5Positioning.prl:
-/usr/lib/x86_64-linux-gnu/libQt5Sensors.prl:
+/usr/lib/x86_64-linux-gnu/libQt5Gui.prl:
+/usr/lib/x86_64-linux-gnu/libQt5Core.prl:
+/usr/lib/x86_64-linux-gnu/libQt5Network.prl:
 qmake: FORCE
 	@$(QMAKE) -o Makefile rotocoin-qt.pro
 
@@ -535,7 +633,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d build/rotocoin-qt0.8.6.2 || mkdir -p build/rotocoin-qt0.8.6.2
-	$(COPY_FILE) --parents $(SOURCES) $(DIST) build/rotocoin-qt0.8.6.2/ && $(COPY_FILE) --parents src/qt/locale/rotocoin_af_ZA.ts src/qt/locale/rotocoin_ar.ts src/qt/locale/rotocoin_bg.ts src/qt/locale/rotocoin_bs.ts src/qt/locale/rotocoin_ca.ts src/qt/locale/rotocoin_ca_ES.ts src/qt/locale/rotocoin_cs.ts src/qt/locale/rotocoin_cy.ts src/qt/locale/rotocoin_da.ts src/qt/locale/rotocoin_de.ts src/qt/locale/rotocoin_el_GR.ts src/qt/locale/rotocoin_en.ts src/qt/locale/rotocoin_eo.ts src/qt/locale/rotocoin_es.ts src/qt/locale/rotocoin_es_CL.ts src/qt/locale/rotocoin_et.ts src/qt/locale/rotocoin_eu_ES.ts src/qt/locale/rotocoin_fa.ts src/qt/locale/rotocoin_fa_IR.ts src/qt/locale/rotocoin_fi.ts src/qt/locale/rotocoin_fr.ts src/qt/locale/rotocoin_fr_CA.ts src/qt/locale/rotocoin_gu_IN.ts src/qt/locale/rotocoin_he.ts src/qt/locale/rotocoin_hi_IN.ts src/qt/locale/rotocoin_hr.ts src/qt/locale/rotocoin_hu.ts src/qt/locale/rotocoin_it.ts src/qt/locale/rotocoin_ja.ts src/qt/locale/rotocoin_la.ts src/qt/locale/rotocoin_lt.ts src/qt/locale/rotocoin_lv_LV.ts src/qt/locale/rotocoin_nb.ts src/qt/locale/rotocoin_nl.ts src/qt/locale/rotocoin_pl.ts src/qt/locale/rotocoin_pt_BR.ts src/qt/locale/rotocoin_pt_PT.ts src/qt/locale/rotocoin_ro_RO.ts src/qt/locale/rotocoin_ru.ts src/qt/locale/rotocoin_sk.ts src/qt/locale/rotocoin_sr.ts src/qt/locale/rotocoin_sv.ts src/qt/locale/rotocoin_th_TH.ts src/qt/locale/rotocoin_tr.ts src/qt/locale/rotocoin_uk.ts src/qt/locale/rotocoin_zh_CN.ts src/qt/locale/rotocoin_zh_TW.ts build/rotocoin-qt0.8.6.2/ && $(COPY_FILE) --parents src/qt/rotocoin.qrc build/rotocoin-qt0.8.6.2/ && $(COPY_FILE) --parents src/qt/rotocoingui.h src/qt/transactiontablemodel.h src/qt/addresstablemodel.h src/qt/optionsdialog.h src/qt/sendcoinsdialog.h src/qt/coincontroldialog.h src/qt/coincontroltreewidget.h src/qt/addressbookpage.h src/qt/signverifymessagedialog.h src/qt/aboutdialog.h src/qt/editaddressdialog.h src/qt/rotocoinaddressvalidator.h src/alert.h src/addrman.h src/base58.h src/bignum.h src/checkpoints.h src/coincontrol.h src/compat.h src/sync.h src/util.h src/hash.h src/uint256.h src/serialize.h src/main.h src/net.h src/key.h src/db.h src/walletdb.h src/script.h src/init.h src/bloom.h src/mruset.h src/checkqueue.h src/json/json_spirit_writer_template.h src/json/json_spirit_writer.h src/json/json_spirit_value.h src/json/json_spirit_utils.h src/json/json_spirit_stream_reader.h src/json/json_spirit_reader_template.h src/json/json_spirit_reader.h src/json/json_spirit_error_position.h src/json/json_spirit.h src/qt/clientmodel.h src/qt/guiutil.h src/qt/transactionrecord.h src/qt/guiconstants.h src/qt/optionsmodel.h src/qt/monitoreddatamapper.h src/qt/transactiondesc.h src/qt/transactiondescdialog.h src/qt/rotocoinamountfield.h src/wallet.h src/keystore.h src/qt/transactionfilterproxy.h src/qt/transactionview.h src/qt/walletmodel.h src/qt/walletview.h src/qt/walletstack.h src/qt/walletframe.h src/rotocoinrpc.h src/qt/overviewpage.h src/qt/csvmodelwriter.h src/crypter.h src/qt/sendcoinsentry.h src/qt/qvalidatedlineedit.h src/qt/rotocoinunits.h src/qt/qvaluecombobox.h src/qt/askpassphrasedialog.h src/protocol.h src/qt/notificator.h src/qt/paymentserver.h src/allocators.h src/ui_interface.h src/qt/rpcconsole.h src/scrypt.h src/version.h src/netbase.h src/clientversion.h src/txdb.h src/leveldb.h src/threadsafety.h src/limitedmap.h src/qt/macnotificationhandler.h src/qt/splashscreen.h src/qt/rotochatpage.h build/rotocoin-qt0.8.6.2/ && $(COPY_FILE) --parents src/qt/rotocoin.cpp src/qt/rotocoingui.cpp src/qt/transactiontablemodel.cpp src/qt/addresstablemodel.cpp src/qt/optionsdialog.cpp src/qt/sendcoinsdialog.cpp src/qt/coincontroldialog.cpp src/qt/coincontroltreewidget.cpp src/qt/addressbookpage.cpp src/qt/signverifymessagedialog.cpp src/qt/aboutdialog.cpp src/qt/editaddressdialog.cpp src/qt/rotocoinaddressvalidator.cpp src/alert.cpp src/version.cpp src/sync.cpp src/util.cpp src/hash.cpp src/netbase.cpp src/key.cpp src/script.cpp src/main.cpp src/init.cpp src/net.cpp src/bloom.cpp src/checkpoints.cpp src/addrman.cpp src/db.cpp src/walletdb.cpp src/qt/clientmodel.cpp src/qt/guiutil.cpp src/qt/transactionrecord.cpp src/qt/optionsmodel.cpp src/qt/monitoreddatamapper.cpp src/qt/transactiondesc.cpp src/qt/transactiondescdialog.cpp src/qt/rotocoinstrings.cpp src/qt/rotocoinamountfield.cpp src/wallet.cpp src/keystore.cpp src/qt/transactionfilterproxy.cpp src/qt/transactionview.cpp src/qt/walletmodel.cpp src/qt/walletview.cpp src/qt/walletstack.cpp src/qt/walletframe.cpp src/rotocoinrpc.cpp src/rpcdump.cpp src/rpcnet.cpp src/rpcmining.cpp src/rpcwallet.cpp src/rpcblockchain.cpp src/rpcrawtransaction.cpp src/qt/overviewpage.cpp src/qt/csvmodelwriter.cpp src/crypter.cpp src/qt/sendcoinsentry.cpp src/qt/qvalidatedlineedit.cpp src/qt/rotocoinunits.cpp src/qt/qvaluecombobox.cpp src/qt/askpassphrasedialog.cpp src/protocol.cpp src/qt/notificator.cpp src/qt/paymentserver.cpp src/qt/rpcconsole.cpp src/scrypt.cpp src/noui.cpp src/leveldb.cpp src/txdb.cpp src/qt/splashscreen.cpp src/qt/rotochatpage.cpp build/rotocoin-qt0.8.6.2/ && $(COPY_FILE) --parents src/qt/forms/sendcoinsdialog.ui src/qt/forms/coincontroldialog.ui src/qt/forms/addressbookpage.ui src/qt/forms/signverifymessagedialog.ui src/qt/forms/aboutdialog.ui src/qt/forms/editaddressdialog.ui src/qt/forms/transactiondescdialog.ui src/qt/forms/overviewpage.ui src/qt/forms/sendcoinsentry.ui src/qt/forms/askpassphrasedialog.ui src/qt/forms/rpcconsole.ui src/qt/forms/optionsdialog.ui src/qt/forms/rotochatpage.ui build/rotocoin-qt0.8.6.2/ && $(COPY_FILE) --parents src/qt/locale/rotocoin_af_ZA.ts src/qt/locale/rotocoin_ar.ts src/qt/locale/rotocoin_bg.ts src/qt/locale/rotocoin_bs.ts src/qt/locale/rotocoin_ca.ts src/qt/locale/rotocoin_ca_ES.ts src/qt/locale/rotocoin_cs.ts src/qt/locale/rotocoin_cy.ts src/qt/locale/rotocoin_da.ts src/qt/locale/rotocoin_de.ts src/qt/locale/rotocoin_el_GR.ts src/qt/locale/rotocoin_en.ts src/qt/locale/rotocoin_eo.ts src/qt/locale/rotocoin_es.ts src/qt/locale/rotocoin_es_CL.ts src/qt/locale/rotocoin_et.ts src/qt/locale/rotocoin_eu_ES.ts src/qt/locale/rotocoin_fa.ts src/qt/locale/rotocoin_fa_IR.ts src/qt/locale/rotocoin_fi.ts src/qt/locale/rotocoin_fr.ts src/qt/locale/rotocoin_fr_CA.ts src/qt/locale/rotocoin_gu_IN.ts src/qt/locale/rotocoin_he.ts src/qt/locale/rotocoin_hi_IN.ts src/qt/locale/rotocoin_hr.ts src/qt/locale/rotocoin_hu.ts src/qt/locale/rotocoin_it.ts src/qt/locale/rotocoin_ja.ts src/qt/locale/rotocoin_la.ts src/qt/locale/rotocoin_lt.ts src/qt/locale/rotocoin_lv_LV.ts src/qt/locale/rotocoin_nb.ts src/qt/locale/rotocoin_nl.ts src/qt/locale/rotocoin_pl.ts src/qt/locale/rotocoin_pt_BR.ts src/qt/locale/rotocoin_pt_PT.ts src/qt/locale/rotocoin_ro_RO.ts src/qt/locale/rotocoin_ru.ts src/qt/locale/rotocoin_sk.ts src/qt/locale/rotocoin_sr.ts src/qt/locale/rotocoin_sv.ts src/qt/locale/rotocoin_th_TH.ts src/qt/locale/rotocoin_tr.ts src/qt/locale/rotocoin_uk.ts src/qt/locale/rotocoin_zh_CN.ts src/qt/locale/rotocoin_zh_TW.ts build/rotocoin-qt0.8.6.2/ && (cd `dirname build/rotocoin-qt0.8.6.2` && $(TAR) rotocoin-qt0.8.6.2.tar rotocoin-qt0.8.6.2 && $(COMPRESS) rotocoin-qt0.8.6.2.tar) && $(MOVE) `dirname build/rotocoin-qt0.8.6.2`/rotocoin-qt0.8.6.2.tar.gz . && $(DEL_FILE) -r build/rotocoin-qt0.8.6.2
+	$(COPY_FILE) --parents $(SOURCES) $(DIST) build/rotocoin-qt0.8.6.2/ && $(COPY_FILE) --parents src/qt/locale/rotocoin_af_ZA.ts src/qt/locale/rotocoin_ar.ts src/qt/locale/rotocoin_bg.ts src/qt/locale/rotocoin_bs.ts src/qt/locale/rotocoin_ca.ts src/qt/locale/rotocoin_ca_ES.ts src/qt/locale/rotocoin_cs.ts src/qt/locale/rotocoin_cy.ts src/qt/locale/rotocoin_da.ts src/qt/locale/rotocoin_de.ts src/qt/locale/rotocoin_el_GR.ts src/qt/locale/rotocoin_en.ts src/qt/locale/rotocoin_eo.ts src/qt/locale/rotocoin_es.ts src/qt/locale/rotocoin_es_CL.ts src/qt/locale/rotocoin_et.ts src/qt/locale/rotocoin_eu_ES.ts src/qt/locale/rotocoin_fa.ts src/qt/locale/rotocoin_fa_IR.ts src/qt/locale/rotocoin_fi.ts src/qt/locale/rotocoin_fr.ts src/qt/locale/rotocoin_fr_CA.ts src/qt/locale/rotocoin_gu_IN.ts src/qt/locale/rotocoin_he.ts src/qt/locale/rotocoin_hi_IN.ts src/qt/locale/rotocoin_hr.ts src/qt/locale/rotocoin_hu.ts src/qt/locale/rotocoin_it.ts src/qt/locale/rotocoin_ja.ts src/qt/locale/rotocoin_la.ts src/qt/locale/rotocoin_lt.ts src/qt/locale/rotocoin_lv_LV.ts src/qt/locale/rotocoin_nb.ts src/qt/locale/rotocoin_nl.ts src/qt/locale/rotocoin_pl.ts src/qt/locale/rotocoin_pt_BR.ts src/qt/locale/rotocoin_pt_PT.ts src/qt/locale/rotocoin_ro_RO.ts src/qt/locale/rotocoin_ru.ts src/qt/locale/rotocoin_sk.ts src/qt/locale/rotocoin_sr.ts src/qt/locale/rotocoin_sv.ts src/qt/locale/rotocoin_th_TH.ts src/qt/locale/rotocoin_tr.ts src/qt/locale/rotocoin_uk.ts src/qt/locale/rotocoin_zh_CN.ts src/qt/locale/rotocoin_zh_TW.ts build/rotocoin-qt0.8.6.2/ && $(COPY_FILE) --parents src/qt/rotocoin.qrc build/rotocoin-qt0.8.6.2/ && $(COPY_FILE) --parents ../libcommuni/include/IrcCore/irc.h ../libcommuni/include/IrcCore/irccommand.h ../libcommuni/include/IrcCore/ircconnection.h ../libcommuni/include/IrcCore/irccore.h ../libcommuni/include/IrcCore/ircfilter.h ../libcommuni/include/IrcCore/ircglobal.h ../libcommuni/include/IrcCore/ircmessage.h ../libcommuni/include/IrcCore/ircnetwork.h ../libcommuni/include/IrcCore/ircprotocol.h ../libcommuni/include/IrcCore/ircconnection_p.h ../libcommuni/include/IrcCore/ircmessage_p.h ../libcommuni/include/IrcCore/ircmessagebuilder_p.h ../libcommuni/include/IrcCore/ircmessagedecoder_p.h ../libcommuni/include/IrcCore/ircnetwork_p.h ../libcommuni/src/3rdparty/uchardet-0.0.1/src/Big5Freq.tab ../libcommuni/src/3rdparty/uchardet-0.0.1/src/EUCKRFreq.tab ../libcommuni/src/3rdparty/uchardet-0.0.1/src/EUCTWFreq.tab ../libcommuni/src/3rdparty/uchardet-0.0.1/src/GB2312Freq.tab ../libcommuni/src/3rdparty/uchardet-0.0.1/src/JISFreq.tab ../libcommuni/src/3rdparty/uchardet-0.0.1/src/CharDistribution.h ../libcommuni/src/3rdparty/uchardet-0.0.1/src/JpCntx.h ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsBig5Prober.h ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCharSetProber.h ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCodingStateMachine.h ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nscore.h ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEscCharsetProber.h ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEUCJPProber.h ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEUCKRProber.h ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEUCTWProber.h ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsGB2312Prober.h ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsHebrewProber.h ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsLatin1Prober.h ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsMBCSGroupProber.h ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsPkgInt.h ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsSBCharSetProber.h ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsSBCSGroupProber.h ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsSJISProber.h ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsUniversalDetector.h ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsUTF8Prober.h ../libcommuni/src/3rdparty/uchardet-0.0.1/src/prmem.h ../libcommuni/src/3rdparty/uchardet-0.0.1/src/uchardet.h ../libcommuni/include/IrcModel/ircbuffer.h ../libcommuni/include/IrcModel/ircbuffermodel.h ../libcommuni/include/IrcModel/ircchannel.h ../libcommuni/include/IrcModel/ircmodel.h ../libcommuni/include/IrcModel/ircuser.h ../libcommuni/include/IrcModel/ircusermodel.h ../libcommuni/include/IrcModel/ircbuffer_p.h ../libcommuni/include/IrcModel/ircbuffermodel_p.h ../libcommuni/include/IrcModel/ircchannel_p.h ../libcommuni/include/IrcModel/ircuser_p.h ../libcommuni/include/IrcModel/ircusermodel_p.h ../libcommuni/include/IrcUtil/irccommandparser.h ../libcommuni/include/IrcUtil/irccompleter.h ../libcommuni/include/IrcUtil/irclagtimer.h ../libcommuni/include/IrcUtil/ircpalette.h ../libcommuni/include/IrcUtil/irctextformat.h ../libcommuni/include/IrcUtil/ircutil.h ../libcommuni/include/IrcUtil/irccommandparser_p.h ../libcommuni/include/IrcUtil/irclagtimer_p.h src/qt/rotocoingui.h src/qt/transactiontablemodel.h src/qt/addresstablemodel.h src/qt/optionsdialog.h src/qt/sendcoinsdialog.h src/qt/coincontroldialog.h src/qt/coincontroltreewidget.h src/qt/addressbookpage.h src/qt/signverifymessagedialog.h src/qt/aboutdialog.h src/qt/editaddressdialog.h src/qt/rotocoinaddressvalidator.h src/alert.h src/addrman.h src/base58.h src/bignum.h src/checkpoints.h src/coincontrol.h src/compat.h src/sync.h src/util.h src/hash.h src/uint256.h src/serialize.h src/main.h src/net.h src/key.h src/db.h src/walletdb.h src/script.h src/init.h src/bloom.h src/mruset.h src/checkqueue.h src/json/json_spirit_writer_template.h src/json/json_spirit_writer.h src/json/json_spirit_value.h src/json/json_spirit_utils.h src/json/json_spirit_stream_reader.h src/json/json_spirit_reader_template.h src/json/json_spirit_reader.h src/json/json_spirit_error_position.h src/json/json_spirit.h src/qt/clientmodel.h src/qt/guiutil.h src/qt/transactionrecord.h src/qt/guiconstants.h src/qt/optionsmodel.h src/qt/monitoreddatamapper.h src/qt/transactiondesc.h src/qt/transactiondescdialog.h src/qt/rotocoinamountfield.h src/wallet.h src/keystore.h src/qt/transactionfilterproxy.h src/qt/transactionview.h src/qt/walletmodel.h src/qt/walletview.h src/qt/walletstack.h src/qt/walletframe.h src/rotocoinrpc.h src/qt/overviewpage.h src/qt/csvmodelwriter.h src/crypter.h src/qt/sendcoinsentry.h src/qt/qvalidatedlineedit.h src/qt/rotocoinunits.h src/qt/qvaluecombobox.h src/qt/askpassphrasedialog.h src/protocol.h src/qt/notificator.h src/qt/paymentserver.h src/allocators.h src/ui_interface.h src/qt/rpcconsole.h src/scrypt.h src/version.h src/netbase.h src/clientversion.h src/txdb.h src/leveldb.h src/threadsafety.h src/limitedmap.h src/qt/macnotificationhandler.h src/qt/splashscreen.h src/qt/rotochatpage.h src/qt/ircmessageformatter.h build/rotocoin-qt0.8.6.2/ && $(COPY_FILE) --parents ../libcommuni/src/core/irc.cpp ../libcommuni/src/core/irccommand.cpp ../libcommuni/src/core/ircconnection.cpp ../libcommuni/src/core/ircfilter.cpp ../libcommuni/src/core/ircmessage.cpp ../libcommuni/src/core/ircmessage_p.cpp ../libcommuni/src/core/ircmessagebuilder.cpp ../libcommuni/src/core/ircmessagedecoder.cpp ../libcommuni/src/core/ircnetwork.cpp ../libcommuni/src/core/ircprotocol.cpp ../libcommuni/src/3rdparty/mozilla/rdf_utils.c ../libcommuni/src/core/ircmessagedecoder_uchardet.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/CharDistribution.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/JpCntx.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/LangBulgarianModel.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/LangCyrillicModel.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/LangGreekModel.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/LangHungarianModel.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/LangHebrewModel.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/LangThaiModel.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsHebrewProber.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCharSetProber.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsBig5Prober.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEUCJPProber.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEUCKRProber.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEUCTWProber.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEscCharsetProber.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEscSM.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsGB2312Prober.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsMBCSGroupProber.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsMBCSSM.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsSBCSGroupProber.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsSBCharSetProber.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsSJISProber.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsUTF8Prober.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsLatin1Prober.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsUniversalDetector.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/uchardet.cpp ../libcommuni/src/model/ircbuffer.cpp ../libcommuni/src/model/ircbuffermodel.cpp ../libcommuni/src/model/ircchannel.cpp ../libcommuni/src/model/ircuser.cpp ../libcommuni/src/model/ircusermodel.cpp ../libcommuni/src/util/irccommandparser.cpp ../libcommuni/src/util/irccompleter.cpp ../libcommuni/src/util/irclagtimer.cpp ../libcommuni/src/util/ircpalette.cpp ../libcommuni/src/util/irctextformat.cpp src/qt/rotocoin.cpp src/qt/rotocoingui.cpp src/qt/transactiontablemodel.cpp src/qt/addresstablemodel.cpp src/qt/optionsdialog.cpp src/qt/sendcoinsdialog.cpp src/qt/coincontroldialog.cpp src/qt/coincontroltreewidget.cpp src/qt/addressbookpage.cpp src/qt/signverifymessagedialog.cpp src/qt/aboutdialog.cpp src/qt/editaddressdialog.cpp src/qt/rotocoinaddressvalidator.cpp src/alert.cpp src/version.cpp src/sync.cpp src/util.cpp src/hash.cpp src/netbase.cpp src/key.cpp src/script.cpp src/main.cpp src/init.cpp src/net.cpp src/bloom.cpp src/checkpoints.cpp src/addrman.cpp src/db.cpp src/walletdb.cpp src/qt/clientmodel.cpp src/qt/guiutil.cpp src/qt/transactionrecord.cpp src/qt/optionsmodel.cpp src/qt/monitoreddatamapper.cpp src/qt/transactiondesc.cpp src/qt/transactiondescdialog.cpp src/qt/rotocoinstrings.cpp src/qt/rotocoinamountfield.cpp src/wallet.cpp src/keystore.cpp src/qt/transactionfilterproxy.cpp src/qt/transactionview.cpp src/qt/walletmodel.cpp src/qt/walletview.cpp src/qt/walletstack.cpp src/qt/walletframe.cpp src/rotocoinrpc.cpp src/rpcdump.cpp src/rpcnet.cpp src/rpcmining.cpp src/rpcwallet.cpp src/rpcblockchain.cpp src/rpcrawtransaction.cpp src/qt/overviewpage.cpp src/qt/csvmodelwriter.cpp src/crypter.cpp src/qt/sendcoinsentry.cpp src/qt/qvalidatedlineedit.cpp src/qt/rotocoinunits.cpp src/qt/qvaluecombobox.cpp src/qt/askpassphrasedialog.cpp src/protocol.cpp src/qt/notificator.cpp src/qt/paymentserver.cpp src/qt/rpcconsole.cpp src/scrypt.cpp src/noui.cpp src/leveldb.cpp src/txdb.cpp src/qt/splashscreen.cpp src/qt/rotochatpage.cpp src/qt/ircmessageformatter.cpp build/rotocoin-qt0.8.6.2/ && $(COPY_FILE) --parents src/qt/forms/sendcoinsdialog.ui src/qt/forms/coincontroldialog.ui src/qt/forms/addressbookpage.ui src/qt/forms/signverifymessagedialog.ui src/qt/forms/aboutdialog.ui src/qt/forms/editaddressdialog.ui src/qt/forms/transactiondescdialog.ui src/qt/forms/overviewpage.ui src/qt/forms/sendcoinsentry.ui src/qt/forms/askpassphrasedialog.ui src/qt/forms/rpcconsole.ui src/qt/forms/optionsdialog.ui src/qt/forms/rotochatpage.ui build/rotocoin-qt0.8.6.2/ && $(COPY_FILE) --parents src/qt/locale/rotocoin_af_ZA.ts src/qt/locale/rotocoin_ar.ts src/qt/locale/rotocoin_bg.ts src/qt/locale/rotocoin_bs.ts src/qt/locale/rotocoin_ca.ts src/qt/locale/rotocoin_ca_ES.ts src/qt/locale/rotocoin_cs.ts src/qt/locale/rotocoin_cy.ts src/qt/locale/rotocoin_da.ts src/qt/locale/rotocoin_de.ts src/qt/locale/rotocoin_el_GR.ts src/qt/locale/rotocoin_en.ts src/qt/locale/rotocoin_eo.ts src/qt/locale/rotocoin_es.ts src/qt/locale/rotocoin_es_CL.ts src/qt/locale/rotocoin_et.ts src/qt/locale/rotocoin_eu_ES.ts src/qt/locale/rotocoin_fa.ts src/qt/locale/rotocoin_fa_IR.ts src/qt/locale/rotocoin_fi.ts src/qt/locale/rotocoin_fr.ts src/qt/locale/rotocoin_fr_CA.ts src/qt/locale/rotocoin_gu_IN.ts src/qt/locale/rotocoin_he.ts src/qt/locale/rotocoin_hi_IN.ts src/qt/locale/rotocoin_hr.ts src/qt/locale/rotocoin_hu.ts src/qt/locale/rotocoin_it.ts src/qt/locale/rotocoin_ja.ts src/qt/locale/rotocoin_la.ts src/qt/locale/rotocoin_lt.ts src/qt/locale/rotocoin_lv_LV.ts src/qt/locale/rotocoin_nb.ts src/qt/locale/rotocoin_nl.ts src/qt/locale/rotocoin_pl.ts src/qt/locale/rotocoin_pt_BR.ts src/qt/locale/rotocoin_pt_PT.ts src/qt/locale/rotocoin_ro_RO.ts src/qt/locale/rotocoin_ru.ts src/qt/locale/rotocoin_sk.ts src/qt/locale/rotocoin_sr.ts src/qt/locale/rotocoin_sv.ts src/qt/locale/rotocoin_th_TH.ts src/qt/locale/rotocoin_tr.ts src/qt/locale/rotocoin_uk.ts src/qt/locale/rotocoin_zh_CN.ts src/qt/locale/rotocoin_zh_TW.ts build/rotocoin-qt0.8.6.2/ && (cd `dirname build/rotocoin-qt0.8.6.2` && $(TAR) rotocoin-qt0.8.6.2.tar rotocoin-qt0.8.6.2 && $(COMPRESS) rotocoin-qt0.8.6.2.tar) && $(MOVE) `dirname build/rotocoin-qt0.8.6.2`/rotocoin-qt0.8.6.2.tar.gz . && $(DEL_FILE) -r build/rotocoin-qt0.8.6.2
 
 
 clean:compiler_clean 
@@ -711,103 +809,1494 @@ compiler_rcc_make_all: qrc_rotocoin.cpp
 compiler_rcc_clean:
 	-$(DEL_FILE) qrc_rotocoin.cpp
 qrc_rotocoin.cpp: src/qt/rotocoin.qrc \
-		src/qt/res/icons/history.png \
-		src/qt/res/icons/export.png \
-		src/qt/res/icons/receive.png \
-		src/qt/res/icons/tx_input.png \
-		src/qt/res/icons/tx_mined.png \
-		src/qt/res/icons/transaction2.png \
-		src/qt/res/icons/toolbar_testnet.png \
-		src/qt/res/icons/key.png \
-		src/qt/res/icons/edit.png \
-		src/qt/res/icons/connect0_16.png \
-		src/qt/res/icons/transaction0.png \
-		src/qt/res/icons/connect1_16.png \
-		src/qt/res/icons/clock1.png \
-		src/qt/res/icons/connect2_16.png \
-		src/qt/res/icons/clock2.png \
-		src/qt/res/icons/connect3_16.png \
-		src/qt/res/icons/rotocoin.png \
-		src/qt/res/icons/clock3.png \
-		src/qt/res/icons/connect4_16.png \
-		src/qt/res/icons/clock4.png \
-		src/qt/res/icons/clock5.png \
-		src/qt/res/icons/filesave.png \
-		src/qt/res/icons/debugwindow.png \
-		src/qt/res/icons/editpaste.png \
-		src/qt/res/icons/address-book.png \
-		src/qt/res/icons/lock_open.png \
-		src/qt/res/icons/editcopy.png \
-		src/qt/res/icons/overview.png \
-		src/qt/res/icons/toolbar.png \
-		src/qt/res/icons/remove.png \
-		src/qt/res/icons/rotocoin_testnet.png \
-		src/qt/res/icons/send.png \
-		src/qt/res/icons/tx_inout.png \
-		src/qt/res/icons/qrcode.png \
-		src/qt/res/icons/tx_output.png \
-		src/qt/res/icons/quit.png \
-		src/qt/res/icons/lock_closed.png \
-		src/qt/res/icons/configure.png \
-		src/qt/res/icons/add.png \
-		src/qt/res/icons/synced.png \
-		src/qt/res/movies/update_spinner.mng \
 		src/qt/res/images/splash_testnet.png \
-		src/qt/res/images/wallet_bg.png \
 		src/qt/res/images/about.png \
+		src/qt/res/images/wallet_bg.png \
 		src/qt/res/images/splash.png \
-		src/qt/locale/rotocoin_el_GR.qm \
-		src/qt/locale/rotocoin_sr.qm \
-		src/qt/locale/rotocoin_lv_LV.qm \
-		src/qt/locale/rotocoin_sv.qm \
-		src/qt/locale/rotocoin_af_ZA.qm \
-		src/qt/locale/rotocoin_bs.qm \
-		src/qt/locale/rotocoin_pt_PT.qm \
-		src/qt/locale/rotocoin_ca_ES.qm \
-		src/qt/locale/rotocoin_zh_CN.qm \
-		src/qt/locale/rotocoin_zh_TW.qm \
-		src/qt/locale/rotocoin_ca.qm \
-		src/qt/locale/rotocoin_it.qm \
-		src/qt/locale/rotocoin_gu_IN.qm \
-		src/qt/locale/rotocoin_nb.qm \
-		src/qt/locale/rotocoin_en.qm \
-		src/qt/locale/rotocoin_tr.qm \
-		src/qt/locale/rotocoin_eo.qm \
-		src/qt/locale/rotocoin_la.qm \
-		src/qt/locale/rotocoin_pl.qm \
-		src/qt/locale/rotocoin_es.qm \
-		src/qt/locale/rotocoin_et.qm \
-		src/qt/locale/rotocoin_es_CL.qm \
-		src/qt/locale/rotocoin_ja.qm \
-		src/qt/locale/rotocoin_ru.qm \
-		src/qt/locale/rotocoin_nl.qm \
-		src/qt/locale/rotocoin_cs.qm \
-		src/qt/locale/rotocoin_ro_RO.qm \
-		src/qt/locale/rotocoin_hi_IN.qm \
-		src/qt/locale/rotocoin_fr_CA.qm \
-		src/qt/locale/rotocoin_ar.qm \
-		src/qt/locale/rotocoin_pt_BR.qm \
-		src/qt/locale/rotocoin_cy.qm \
-		src/qt/locale/rotocoin_he.qm \
 		src/qt/locale/rotocoin_fa.qm \
-		src/qt/locale/rotocoin_th_TH.qm \
-		src/qt/locale/rotocoin_fa_IR.qm \
+		src/qt/locale/rotocoin_eu_ES.qm \
 		src/qt/locale/rotocoin_lt.qm \
 		src/qt/locale/rotocoin_da.qm \
 		src/qt/locale/rotocoin_uk.qm \
 		src/qt/locale/rotocoin_fi.qm \
 		src/qt/locale/rotocoin_de.qm \
-		src/qt/locale/rotocoin_eu_ES.qm \
+		src/qt/locale/rotocoin_el_GR.qm \
 		src/qt/locale/rotocoin_sk.qm \
 		src/qt/locale/rotocoin_hr.qm \
+		src/qt/locale/rotocoin_lv_LV.qm \
 		src/qt/locale/rotocoin_hu.qm \
+		src/qt/locale/rotocoin_af_ZA.qm \
 		src/qt/locale/rotocoin_bg.qm \
-		src/qt/locale/rotocoin_fr.qm
+		src/qt/locale/rotocoin_fr.qm \
+		src/qt/locale/rotocoin_sr.qm \
+		src/qt/locale/rotocoin_pt_PT.qm \
+		src/qt/locale/rotocoin_sv.qm \
+		src/qt/locale/rotocoin_ca_ES.qm \
+		src/qt/locale/rotocoin_bs.qm \
+		src/qt/locale/rotocoin_zh_CN.qm \
+		src/qt/locale/rotocoin_zh_TW.qm \
+		src/qt/locale/rotocoin_gu_IN.qm \
+		src/qt/locale/rotocoin_ca.qm \
+		src/qt/locale/rotocoin_it.qm \
+		src/qt/locale/rotocoin_es_CL.qm \
+		src/qt/locale/rotocoin_nb.qm \
+		src/qt/locale/rotocoin_en.qm \
+		src/qt/locale/rotocoin_tr.qm \
+		src/qt/locale/rotocoin_eo.qm \
+		src/qt/locale/rotocoin_ro_RO.qm \
+		src/qt/locale/rotocoin_hi_IN.qm \
+		src/qt/locale/rotocoin_la.qm \
+		src/qt/locale/rotocoin_fr_CA.qm \
+		src/qt/locale/rotocoin_pl.qm \
+		src/qt/locale/rotocoin_pt_BR.qm \
+		src/qt/locale/rotocoin_es.qm \
+		src/qt/locale/rotocoin_et.qm \
+		src/qt/locale/rotocoin_ja.qm \
+		src/qt/locale/rotocoin_ru.qm \
+		src/qt/locale/rotocoin_nl.qm \
+		src/qt/locale/rotocoin_th_TH.qm \
+		src/qt/locale/rotocoin_cs.qm \
+		src/qt/locale/rotocoin_fa_IR.qm \
+		src/qt/locale/rotocoin_ar.qm \
+		src/qt/locale/rotocoin_cy.qm \
+		src/qt/locale/rotocoin_he.qm \
+		src/qt/res/icons/history.png \
+		src/qt/res/icons/filesave.png \
+		src/qt/res/icons/send.png \
+		src/qt/res/icons/editpaste.png \
+		src/qt/res/icons/synced.png \
+		src/qt/res/icons/rotocoin_testnet.png \
+		src/qt/res/icons/quit.png \
+		src/qt/res/icons/editcopy.png \
+		src/qt/res/icons/transaction0.png \
+		src/qt/res/icons/clock1.png \
+		src/qt/res/icons/debugwindow.png \
+		src/qt/res/icons/clock2.png \
+		src/qt/res/icons/clock3.png \
+		src/qt/res/icons/add.png \
+		src/qt/res/icons/clock4.png \
+		src/qt/res/icons/clock5.png \
+		src/qt/res/icons/export.png \
+		src/qt/res/icons/toolbar_testnet.png \
+		src/qt/res/icons/tx_inout.png \
+		src/qt/res/icons/tx_output.png \
+		src/qt/res/icons/connect0_16.png \
+		src/qt/res/icons/connect1_16.png \
+		src/qt/res/icons/key.png \
+		src/qt/res/icons/connect2_16.png \
+		src/qt/res/icons/connect3_16.png \
+		src/qt/res/icons/connect4_16.png \
+		src/qt/res/icons/rotocoin.png \
+		src/qt/res/icons/transaction2.png \
+		src/qt/res/icons/toolbar.png \
+		src/qt/res/icons/edit.png \
+		src/qt/res/icons/lock_open.png \
+		src/qt/res/icons/tx_input.png \
+		src/qt/res/icons/overview.png \
+		src/qt/res/icons/lock_closed.png \
+		src/qt/res/icons/tx_mined.png \
+		src/qt/res/icons/receive.png \
+		src/qt/res/icons/remove.png \
+		src/qt/res/icons/configure.png \
+		src/qt/res/icons/address-book.png \
+		src/qt/res/icons/qrcode.png \
+		src/qt/res/movies/update_spinner.mng
 	/usr/lib/x86_64-linux-gnu/qt5/bin/rcc -name rotocoin src/qt/rotocoin.qrc -o qrc_rotocoin.cpp
 
-compiler_moc_header_make_all: build/moc_rotocoingui.cpp build/moc_transactiontablemodel.cpp build/moc_addresstablemodel.cpp build/moc_optionsdialog.cpp build/moc_sendcoinsdialog.cpp build/moc_coincontroldialog.cpp build/moc_coincontroltreewidget.cpp build/moc_addressbookpage.cpp build/moc_signverifymessagedialog.cpp build/moc_aboutdialog.cpp build/moc_editaddressdialog.cpp build/moc_rotocoinaddressvalidator.cpp build/moc_clientmodel.cpp build/moc_guiutil.cpp build/moc_optionsmodel.cpp build/moc_monitoreddatamapper.cpp build/moc_transactiondesc.cpp build/moc_transactiondescdialog.cpp build/moc_rotocoinamountfield.cpp build/moc_transactionfilterproxy.cpp build/moc_transactionview.cpp build/moc_walletmodel.cpp build/moc_walletview.cpp build/moc_walletstack.cpp build/moc_walletframe.cpp build/moc_overviewpage.cpp build/moc_csvmodelwriter.cpp build/moc_sendcoinsentry.cpp build/moc_qvalidatedlineedit.cpp build/moc_rotocoinunits.cpp build/moc_qvaluecombobox.cpp build/moc_askpassphrasedialog.cpp build/moc_notificator.cpp build/moc_paymentserver.cpp build/moc_rpcconsole.cpp build/moc_macnotificationhandler.cpp build/moc_splashscreen.cpp build/moc_rotochatpage.cpp
+compiler_moc_header_make_all: build/moc_irc.cpp build/moc_irccommand.cpp build/moc_ircconnection.cpp build/moc_ircmessage.cpp build/moc_ircnetwork.cpp build/moc_ircprotocol.cpp build/moc_ircmessagebuilder_p.cpp build/moc_ircbuffer.cpp build/moc_ircbuffermodel.cpp build/moc_ircchannel.cpp build/moc_ircuser.cpp build/moc_ircusermodel.cpp build/moc_ircbuffermodel_p.cpp build/moc_irccommandparser.cpp build/moc_irccompleter.cpp build/moc_irclagtimer.cpp build/moc_ircpalette.cpp build/moc_irctextformat.cpp build/moc_irclagtimer_p.cpp build/moc_rotocoingui.cpp build/moc_transactiontablemodel.cpp build/moc_addresstablemodel.cpp build/moc_optionsdialog.cpp build/moc_sendcoinsdialog.cpp build/moc_coincontroldialog.cpp build/moc_coincontroltreewidget.cpp build/moc_addressbookpage.cpp build/moc_signverifymessagedialog.cpp build/moc_aboutdialog.cpp build/moc_editaddressdialog.cpp build/moc_rotocoinaddressvalidator.cpp build/moc_clientmodel.cpp build/moc_guiutil.cpp build/moc_optionsmodel.cpp build/moc_monitoreddatamapper.cpp build/moc_transactiondesc.cpp build/moc_transactiondescdialog.cpp build/moc_rotocoinamountfield.cpp build/moc_transactionfilterproxy.cpp build/moc_transactionview.cpp build/moc_walletmodel.cpp build/moc_walletview.cpp build/moc_walletstack.cpp build/moc_walletframe.cpp build/moc_overviewpage.cpp build/moc_csvmodelwriter.cpp build/moc_sendcoinsentry.cpp build/moc_qvalidatedlineedit.cpp build/moc_rotocoinunits.cpp build/moc_qvaluecombobox.cpp build/moc_askpassphrasedialog.cpp build/moc_notificator.cpp build/moc_paymentserver.cpp build/moc_rpcconsole.cpp build/moc_macnotificationhandler.cpp build/moc_splashscreen.cpp build/moc_rotochatpage.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) build/moc_rotocoingui.cpp build/moc_transactiontablemodel.cpp build/moc_addresstablemodel.cpp build/moc_optionsdialog.cpp build/moc_sendcoinsdialog.cpp build/moc_coincontroldialog.cpp build/moc_coincontroltreewidget.cpp build/moc_addressbookpage.cpp build/moc_signverifymessagedialog.cpp build/moc_aboutdialog.cpp build/moc_editaddressdialog.cpp build/moc_rotocoinaddressvalidator.cpp build/moc_clientmodel.cpp build/moc_guiutil.cpp build/moc_optionsmodel.cpp build/moc_monitoreddatamapper.cpp build/moc_transactiondesc.cpp build/moc_transactiondescdialog.cpp build/moc_rotocoinamountfield.cpp build/moc_transactionfilterproxy.cpp build/moc_transactionview.cpp build/moc_walletmodel.cpp build/moc_walletview.cpp build/moc_walletstack.cpp build/moc_walletframe.cpp build/moc_overviewpage.cpp build/moc_csvmodelwriter.cpp build/moc_sendcoinsentry.cpp build/moc_qvalidatedlineedit.cpp build/moc_rotocoinunits.cpp build/moc_qvaluecombobox.cpp build/moc_askpassphrasedialog.cpp build/moc_notificator.cpp build/moc_paymentserver.cpp build/moc_rpcconsole.cpp build/moc_macnotificationhandler.cpp build/moc_splashscreen.cpp build/moc_rotochatpage.cpp
+	-$(DEL_FILE) build/moc_irc.cpp build/moc_irccommand.cpp build/moc_ircconnection.cpp build/moc_ircmessage.cpp build/moc_ircnetwork.cpp build/moc_ircprotocol.cpp build/moc_ircmessagebuilder_p.cpp build/moc_ircbuffer.cpp build/moc_ircbuffermodel.cpp build/moc_ircchannel.cpp build/moc_ircuser.cpp build/moc_ircusermodel.cpp build/moc_ircbuffermodel_p.cpp build/moc_irccommandparser.cpp build/moc_irccompleter.cpp build/moc_irclagtimer.cpp build/moc_ircpalette.cpp build/moc_irctextformat.cpp build/moc_irclagtimer_p.cpp build/moc_rotocoingui.cpp build/moc_transactiontablemodel.cpp build/moc_addresstablemodel.cpp build/moc_optionsdialog.cpp build/moc_sendcoinsdialog.cpp build/moc_coincontroldialog.cpp build/moc_coincontroltreewidget.cpp build/moc_addressbookpage.cpp build/moc_signverifymessagedialog.cpp build/moc_aboutdialog.cpp build/moc_editaddressdialog.cpp build/moc_rotocoinaddressvalidator.cpp build/moc_clientmodel.cpp build/moc_guiutil.cpp build/moc_optionsmodel.cpp build/moc_monitoreddatamapper.cpp build/moc_transactiondesc.cpp build/moc_transactiondescdialog.cpp build/moc_rotocoinamountfield.cpp build/moc_transactionfilterproxy.cpp build/moc_transactionview.cpp build/moc_walletmodel.cpp build/moc_walletview.cpp build/moc_walletstack.cpp build/moc_walletframe.cpp build/moc_overviewpage.cpp build/moc_csvmodelwriter.cpp build/moc_sendcoinsentry.cpp build/moc_qvalidatedlineedit.cpp build/moc_rotocoinunits.cpp build/moc_qvaluecombobox.cpp build/moc_askpassphrasedialog.cpp build/moc_notificator.cpp build/moc_paymentserver.cpp build/moc_rpcconsole.cpp build/moc_macnotificationhandler.cpp build/moc_splashscreen.cpp build/moc_rotochatpage.cpp
+build/moc_irc.cpp: ../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		../libcommuni/include/IrcCore/irc.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../libcommuni/include/IrcCore/irc.h -o build/moc_irc.cpp
+
+build/moc_irccommand.cpp: ../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		../libcommuni/include/IrcCore/irccommand.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../libcommuni/include/IrcCore/irccommand.h -o build/moc_irccommand.cpp
+
+build/moc_ircconnection.cpp: ../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		../libcommuni/include/IrcCore/IrcMessage \
+		../libcommuni/include/IrcCore/ircmessage.h \
+		../libcommuni/include/IrcCore/Irc \
+		../libcommuni/include/IrcCore/irc.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		/usr/include/qt5/QtCore/qdatetime.h \
+		/usr/include/qt5/QtCore/qsharedpointer.h \
+		/usr/include/qt5/QtCore/qsharedpointer_impl.h \
+		../libcommuni/include/IrcCore/IrcNetwork \
+		../libcommuni/include/IrcCore/ircnetwork.h \
+		/usr/include/qt5/QtNetwork/qabstractsocket.h \
+		../libcommuni/include/IrcCore/ircconnection.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../libcommuni/include/IrcCore/ircconnection.h -o build/moc_ircconnection.cpp
+
+build/moc_ircmessage.cpp: ../libcommuni/include/IrcCore/Irc \
+		../libcommuni/include/IrcCore/irc.h \
+		../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		/usr/include/qt5/QtCore/qdatetime.h \
+		/usr/include/qt5/QtCore/qsharedpointer.h \
+		/usr/include/qt5/QtCore/qsharedpointer_impl.h \
+		../libcommuni/include/IrcCore/ircmessage.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../libcommuni/include/IrcCore/ircmessage.h -o build/moc_ircmessage.cpp
+
+build/moc_ircnetwork.cpp: ../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		../libcommuni/include/IrcCore/ircnetwork.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../libcommuni/include/IrcCore/ircnetwork.h -o build/moc_ircnetwork.cpp
+
+build/moc_ircprotocol.cpp: ../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		../libcommuni/include/IrcCore/IrcConnection \
+		../libcommuni/include/IrcCore/ircconnection.h \
+		../libcommuni/include/IrcCore/IrcMessage \
+		../libcommuni/include/IrcCore/ircmessage.h \
+		../libcommuni/include/IrcCore/Irc \
+		../libcommuni/include/IrcCore/irc.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		/usr/include/qt5/QtCore/qdatetime.h \
+		/usr/include/qt5/QtCore/qsharedpointer.h \
+		/usr/include/qt5/QtCore/qsharedpointer_impl.h \
+		../libcommuni/include/IrcCore/IrcNetwork \
+		../libcommuni/include/IrcCore/ircnetwork.h \
+		/usr/include/qt5/QtNetwork/qabstractsocket.h \
+		../libcommuni/include/IrcCore/ircprotocol.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../libcommuni/include/IrcCore/ircprotocol.h -o build/moc_ircprotocol.cpp
+
+build/moc_ircmessagebuilder_p.cpp: ../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		../libcommuni/include/IrcCore/ircmessagebuilder_p.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../libcommuni/include/IrcCore/ircmessagebuilder_p.h -o build/moc_ircmessagebuilder_p.cpp
+
+build/moc_ircbuffer.cpp: ../libcommuni/include/IrcCore/Irc \
+		../libcommuni/include/IrcCore/irc.h \
+		../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		../libcommuni/include/IrcModel/ircbuffer.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../libcommuni/include/IrcModel/ircbuffer.h -o build/moc_ircbuffer.cpp
+
+build/moc_ircbuffermodel.cpp: ../libcommuni/include/IrcCore/Irc \
+		../libcommuni/include/IrcCore/irc.h \
+		../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		/usr/include/qt5/QtCore/qabstractitemmodel.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		../libcommuni/include/IrcModel/ircbuffermodel.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../libcommuni/include/IrcModel/ircbuffermodel.h -o build/moc_ircbuffermodel.cpp
+
+build/moc_ircchannel.cpp: ../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		../libcommuni/include/IrcModel/IrcBuffer \
+		../libcommuni/include/IrcModel/ircbuffer.h \
+		../libcommuni/include/IrcCore/Irc \
+		../libcommuni/include/IrcCore/irc.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		../libcommuni/include/IrcModel/ircchannel.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../libcommuni/include/IrcModel/ircchannel.h -o build/moc_ircchannel.cpp
+
+build/moc_ircuser.cpp: ../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		../libcommuni/include/IrcModel/ircuser.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../libcommuni/include/IrcModel/ircuser.h -o build/moc_ircuser.cpp
+
+build/moc_ircusermodel.cpp: ../libcommuni/include/IrcCore/Irc \
+		../libcommuni/include/IrcCore/irc.h \
+		../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		/usr/include/qt5/QtCore/qabstractitemmodel.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		../libcommuni/include/IrcModel/ircusermodel.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../libcommuni/include/IrcModel/ircusermodel.h -o build/moc_ircusermodel.cpp
+
+build/moc_ircbuffermodel_p.cpp: ../libcommuni/include/IrcModel/ircbuffer.h \
+		../libcommuni/include/IrcCore/Irc \
+		../libcommuni/include/IrcCore/irc.h \
+		../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		../libcommuni/include/IrcCore/ircfilter.h \
+		../libcommuni/include/IrcModel/ircbuffermodel.h \
+		/usr/include/qt5/QtCore/qabstractitemmodel.h \
+		/usr/include/qt5/QtCore/qpointer.h \
+		/usr/include/qt5/QtCore/qsharedpointer.h \
+		/usr/include/qt5/QtCore/qsharedpointer_impl.h \
+		../libcommuni/include/IrcModel/ircbuffermodel_p.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../libcommuni/include/IrcModel/ircbuffermodel_p.h -o build/moc_ircbuffermodel_p.cpp
+
+build/moc_irccommandparser.cpp: ../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		../libcommuni/include/IrcCore/IrcCommand \
+		../libcommuni/include/IrcCore/irccommand.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		../libcommuni/include/IrcUtil/irccommandparser.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../libcommuni/include/IrcUtil/irccommandparser.h -o build/moc_irccommandparser.cpp
+
+build/moc_irccompleter.cpp: ../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		../libcommuni/include/IrcUtil/irccompleter.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../libcommuni/include/IrcUtil/irccompleter.h -o build/moc_irccompleter.cpp
+
+build/moc_irclagtimer.cpp: ../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		../libcommuni/include/IrcUtil/irclagtimer.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../libcommuni/include/IrcUtil/irclagtimer.h -o build/moc_irclagtimer.cpp
+
+build/moc_ircpalette.cpp: ../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		../libcommuni/include/IrcUtil/ircpalette.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../libcommuni/include/IrcUtil/ircpalette.h -o build/moc_ircpalette.cpp
+
+build/moc_irctextformat.cpp: ../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		../libcommuni/include/IrcUtil/irctextformat.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../libcommuni/include/IrcUtil/irctextformat.h -o build/moc_irctextformat.cpp
+
+build/moc_irclagtimer_p.cpp: ../libcommuni/include/IrcUtil/irclagtimer.h \
+		../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		../libcommuni/include/IrcCore/ircfilter.h \
+		/usr/include/qt5/QtCore/QTimer \
+		/usr/include/qt5/QtCore/qtimer.h \
+		/usr/include/qt5/QtCore/qbasictimer.h \
+		../libcommuni/include/IrcUtil/irclagtimer_p.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../libcommuni/include/IrcUtil/irclagtimer_p.h -o build/moc_irclagtimer_p.cpp
+
 build/moc_rotocoingui.cpp: /usr/include/qt5/QtWidgets/QMainWindow \
 		/usr/include/qt5/QtWidgets/qmainwindow.h \
 		/usr/include/qt5/QtWidgets/qwidget.h \
@@ -4456,7 +5945,9 @@ build/moc_splashscreen.cpp: /usr/include/qt5/QtWidgets/QSplashScreen \
 		src/qt/splashscreen.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include src/qt/splashscreen.h -o build/moc_splashscreen.cpp
 
-build/moc_rotochatpage.cpp: /usr/include/qt5/QtWidgets/QWidget \
+build/moc_rotochatpage.cpp: /usr/include/qt5/QtWidgets/QSplitter \
+		/usr/include/qt5/QtWidgets/qsplitter.h \
+		/usr/include/qt5/QtWidgets/qframe.h \
 		/usr/include/qt5/QtWidgets/qwidget.h \
 		/usr/include/qt5/QtGui/qwindowdefs.h \
 		/usr/include/qt5/QtCore/qglobal.h \
@@ -4564,28 +6055,7 @@ build/moc_rotochatpage.cpp: /usr/include/qt5/QtWidgets/QWidget \
 		/usr/include/qt5/QtCore/qfiledevice.h \
 		/usr/include/qt5/QtGui/qvector2d.h \
 		/usr/include/qt5/QtGui/qtouchdevice.h \
-		/usr/include/qt5/QtWebKitWidgets/QWebView \
-		/usr/include/qt5/QtWebKitWidgets/qwebview.h \
-		/usr/include/qt5/QtWebKit/qwebkitglobal.h \
-		/usr/include/qt5/QtWebKitWidgets/qwebpage.h \
-		/usr/include/qt5/QtWebKit/qwebsettings.h \
-		/usr/include/qt5/QtGui/qicon.h \
-		/usr/include/qt5/QtGui/qpainter.h \
-		/usr/include/qt5/QtGui/qtextoption.h \
-		/usr/include/qt5/QtGui/qpen.h \
-		/usr/include/qt5/QtNetwork/qnetworkaccessmanager.h \
-		/usr/include/qt5/QtCore/QObject \
-		/usr/include/qt5/QtNetwork/QSslConfiguration \
-		/usr/include/qt5/QtNetwork/qsslconfiguration.h \
-		/usr/include/qt5/QtNetwork/qsslsocket.h \
-		/usr/include/qt5/QtNetwork/qtcpsocket.h \
-		/usr/include/qt5/QtNetwork/qabstractsocket.h \
-		/usr/include/qt5/QtNetwork/qsslerror.h \
-		/usr/include/qt5/QtNetwork/qsslcertificate.h \
-		/usr/include/qt5/QtCore/qcryptographichash.h \
-		/usr/include/qt5/QtCore/qdatetime.h \
-		/usr/include/qt5/QtNetwork/qssl.h \
-		/usr/include/qt5/QtCore/QFlags \
+		/usr/include/qt5/QtCore/QHash \
 		src/qt/rotochatpage.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include src/qt/rotochatpage.h -o build/moc_rotochatpage.cpp
 
@@ -4702,53 +6172,6 @@ build/overviewpage.moc: src/qt/overviewpage.h \
 		/usr/include/qt5/QtGui/qvector2d.h \
 		/usr/include/qt5/QtGui/qtouchdevice.h \
 		build/ui_overviewpage.h \
-		/usr/include/qt5/QtCore/QVariant \
-		/usr/include/qt5/QtWidgets/QAction \
-		/usr/include/qt5/QtWidgets/qaction.h \
-		/usr/include/qt5/QtGui/qicon.h \
-		/usr/include/qt5/QtWidgets/qactiongroup.h \
-		/usr/include/qt5/QtWidgets/QApplication \
-		/usr/include/qt5/QtWidgets/qapplication.h \
-		/usr/include/qt5/QtCore/qcoreapplication.h \
-		/usr/include/qt5/QtCore/qeventloop.h \
-		/usr/include/qt5/QtWidgets/qdesktopwidget.h \
-		/usr/include/qt5/QtGui/qguiapplication.h \
-		/usr/include/qt5/QtGui/qinputmethod.h \
-		/usr/include/qt5/QtWidgets/QButtonGroup \
-		/usr/include/qt5/QtWidgets/qbuttongroup.h \
-		/usr/include/qt5/QtWidgets/QFormLayout \
-		/usr/include/qt5/QtWidgets/qformlayout.h \
-		/usr/include/qt5/QtWidgets/QLayout \
-		/usr/include/qt5/QtWidgets/qlayout.h \
-		/usr/include/qt5/QtWidgets/qlayoutitem.h \
-		/usr/include/qt5/QtWidgets/qboxlayout.h \
-		/usr/include/qt5/QtWidgets/qgridlayout.h \
-		/usr/include/qt5/QtWidgets/QFrame \
-		/usr/include/qt5/QtWidgets/qframe.h \
-		/usr/include/qt5/QtWidgets/QHBoxLayout \
-		/usr/include/qt5/QtWidgets/QHeaderView \
-		/usr/include/qt5/QtWidgets/qheaderview.h \
-		/usr/include/qt5/QtWidgets/qabstractitemview.h \
-		/usr/include/qt5/QtWidgets/qabstractscrollarea.h \
-		/usr/include/qt5/QtCore/qabstractitemmodel.h \
-		/usr/include/qt5/QtCore/qitemselectionmodel.h \
-		/usr/include/qt5/QtWidgets/qabstractitemdelegate.h \
-		/usr/include/qt5/QtWidgets/qstyleoption.h \
-		/usr/include/qt5/QtWidgets/qabstractspinbox.h \
-		/usr/include/qt5/QtGui/qvalidator.h \
-		/usr/include/qt5/QtCore/qregularexpression.h \
-		/usr/include/qt5/QtWidgets/qslider.h \
-		/usr/include/qt5/QtWidgets/qabstractslider.h \
-		/usr/include/qt5/QtWidgets/qstyle.h \
-		/usr/include/qt5/QtWidgets/qtabbar.h \
-		/usr/include/qt5/QtWidgets/qtabwidget.h \
-		/usr/include/qt5/QtWidgets/qrubberband.h \
-		/usr/include/qt5/QtWidgets/QLabel \
-		/usr/include/qt5/QtWidgets/qlabel.h \
-		/usr/include/qt5/QtWidgets/QListView \
-		/usr/include/qt5/QtWidgets/qlistview.h \
-		/usr/include/qt5/QtWidgets/QSpacerItem \
-		/usr/include/qt5/QtWidgets/QVBoxLayout \
 		src/qt/clientmodel.h \
 		/usr/include/qt5/QtCore/QObject \
 		src/qt/walletmodel.h \
@@ -4756,6 +6179,7 @@ build/overviewpage.moc: src/qt/overviewpage.h \
 		src/qt/rotocoinunits.h \
 		/usr/include/qt5/QtCore/QString \
 		/usr/include/qt5/QtCore/QAbstractListModel \
+		/usr/include/qt5/QtCore/qabstractitemmodel.h \
 		src/qt/optionsmodel.h \
 		src/qt/transactiontablemodel.h \
 		/usr/include/qt5/QtCore/QAbstractTableModel \
@@ -4772,6 +6196,19 @@ build/overviewpage.moc: src/qt/overviewpage.h \
 		/usr/include/qt5/QtWidgets/qdialog.h \
 		src/qt/guiconstants.h \
 		/usr/include/qt5/QtWidgets/QAbstractItemDelegate \
+		/usr/include/qt5/QtWidgets/qabstractitemdelegate.h \
+		/usr/include/qt5/QtWidgets/qstyleoption.h \
+		/usr/include/qt5/QtWidgets/qabstractspinbox.h \
+		/usr/include/qt5/QtGui/qvalidator.h \
+		/usr/include/qt5/QtCore/qregularexpression.h \
+		/usr/include/qt5/QtGui/qicon.h \
+		/usr/include/qt5/QtWidgets/qslider.h \
+		/usr/include/qt5/QtWidgets/qabstractslider.h \
+		/usr/include/qt5/QtWidgets/qstyle.h \
+		/usr/include/qt5/QtWidgets/qtabbar.h \
+		/usr/include/qt5/QtWidgets/qtabwidget.h \
+		/usr/include/qt5/QtWidgets/qrubberband.h \
+		/usr/include/qt5/QtWidgets/qframe.h \
 		/usr/include/qt5/QtGui/QPainter \
 		/usr/include/qt5/QtGui/qpainter.h \
 		/usr/include/qt5/QtGui/qtextoption.h \
@@ -4890,64 +6327,6 @@ build/rpcconsole.moc: src/qt/rpcconsole.h \
 		/usr/include/qt5/QtGui/qvector2d.h \
 		/usr/include/qt5/QtGui/qtouchdevice.h \
 		build/ui_rpcconsole.h \
-		/usr/include/qt5/QtCore/QVariant \
-		/usr/include/qt5/QtWidgets/QAction \
-		/usr/include/qt5/QtWidgets/qaction.h \
-		/usr/include/qt5/QtGui/qicon.h \
-		/usr/include/qt5/QtWidgets/qactiongroup.h \
-		/usr/include/qt5/QtWidgets/QApplication \
-		/usr/include/qt5/QtWidgets/qapplication.h \
-		/usr/include/qt5/QtCore/qcoreapplication.h \
-		/usr/include/qt5/QtCore/qeventloop.h \
-		/usr/include/qt5/QtWidgets/qdesktopwidget.h \
-		/usr/include/qt5/QtGui/qguiapplication.h \
-		/usr/include/qt5/QtGui/qinputmethod.h \
-		/usr/include/qt5/QtWidgets/QButtonGroup \
-		/usr/include/qt5/QtWidgets/qbuttongroup.h \
-		/usr/include/qt5/QtWidgets/QCheckBox \
-		/usr/include/qt5/QtWidgets/qcheckbox.h \
-		/usr/include/qt5/QtWidgets/qabstractbutton.h \
-		/usr/include/qt5/QtWidgets/QGridLayout \
-		/usr/include/qt5/QtWidgets/qgridlayout.h \
-		/usr/include/qt5/QtWidgets/qlayout.h \
-		/usr/include/qt5/QtWidgets/qlayoutitem.h \
-		/usr/include/qt5/QtWidgets/qboxlayout.h \
-		/usr/include/qt5/QtWidgets/QHBoxLayout \
-		/usr/include/qt5/QtWidgets/QHeaderView \
-		/usr/include/qt5/QtWidgets/qheaderview.h \
-		/usr/include/qt5/QtWidgets/qabstractitemview.h \
-		/usr/include/qt5/QtWidgets/qabstractscrollarea.h \
-		/usr/include/qt5/QtWidgets/qframe.h \
-		/usr/include/qt5/QtCore/qabstractitemmodel.h \
-		/usr/include/qt5/QtCore/qitemselectionmodel.h \
-		/usr/include/qt5/QtWidgets/qabstractitemdelegate.h \
-		/usr/include/qt5/QtWidgets/qstyleoption.h \
-		/usr/include/qt5/QtWidgets/qabstractspinbox.h \
-		/usr/include/qt5/QtGui/qvalidator.h \
-		/usr/include/qt5/QtCore/qregularexpression.h \
-		/usr/include/qt5/QtWidgets/qslider.h \
-		/usr/include/qt5/QtWidgets/qabstractslider.h \
-		/usr/include/qt5/QtWidgets/qstyle.h \
-		/usr/include/qt5/QtWidgets/qtabbar.h \
-		/usr/include/qt5/QtWidgets/qtabwidget.h \
-		/usr/include/qt5/QtWidgets/qrubberband.h \
-		/usr/include/qt5/QtWidgets/QLabel \
-		/usr/include/qt5/QtWidgets/qlabel.h \
-		/usr/include/qt5/QtWidgets/QLineEdit \
-		/usr/include/qt5/QtWidgets/qlineedit.h \
-		/usr/include/qt5/QtGui/qtextcursor.h \
-		/usr/include/qt5/QtGui/qtextformat.h \
-		/usr/include/qt5/QtGui/qpen.h \
-		/usr/include/qt5/QtGui/qtextoption.h \
-		/usr/include/qt5/QtWidgets/QPushButton \
-		/usr/include/qt5/QtWidgets/qpushbutton.h \
-		/usr/include/qt5/QtWidgets/QSpacerItem \
-		/usr/include/qt5/QtWidgets/QTabWidget \
-		/usr/include/qt5/QtWidgets/QTextEdit \
-		/usr/include/qt5/QtWidgets/qtextedit.h \
-		/usr/include/qt5/QtGui/qtextdocument.h \
-		/usr/include/qt5/QtWidgets/QVBoxLayout \
-		/usr/include/qt5/QtWidgets/QWidget \
 		src/qt/clientmodel.h \
 		/usr/include/qt5/QtCore/QObject \
 		src/rotocoinrpc.h \
@@ -4976,6 +6355,7 @@ build/rpcconsole.moc: src/qt/rpcconsole.h \
 		/usr/include/qt5/QtCore/QUrl \
 		/usr/include/qt5/QtWidgets/QScrollBar \
 		/usr/include/qt5/QtWidgets/qscrollbar.h \
+		/usr/include/qt5/QtWidgets/qabstractslider.h \
 		src/qt/rpcconsole.cpp
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include src/qt/rpcconsole.cpp -o build/rpcconsole.moc
 
@@ -5836,8 +7216,7 @@ build/ui_optionsdialog.h: src/qt/forms/optionsdialog.ui \
 		/usr/include/qt5/QtGui/qtextoption.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/uic src/qt/forms/optionsdialog.ui -o build/ui_optionsdialog.h
 
-build/ui_rotochatpage.h: src/qt/forms/rotochatpage.ui \
-		/usr/include/qt5/QtWebKitWidgets/QWebView
+build/ui_rotochatpage.h: src/qt/forms/rotochatpage.ui
 	/usr/lib/x86_64-linux-gnu/qt5/bin/uic src/qt/forms/rotochatpage.ui -o build/ui_rotochatpage.h
 
 compiler_yacc_decl_make_all:
@@ -5849,6 +7228,2116 @@ compiler_lex_clean:
 compiler_clean: compiler_TSQM_clean compiler_rcc_clean compiler_moc_header_clean compiler_moc_source_clean compiler_uic_clean 
 
 ####### Compile
+
+build/irc.o: ../libcommuni/src/core/irc.cpp ../libcommuni/include/IrcCore/irc.h \
+		../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		../libcommuni/include/IrcCore/irccommand.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		../libcommuni/include/IrcCore/ircconnection.h \
+		../libcommuni/include/IrcCore/IrcMessage \
+		../libcommuni/include/IrcCore/ircmessage.h \
+		../libcommuni/include/IrcCore/Irc \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		/usr/include/qt5/QtCore/qdatetime.h \
+		/usr/include/qt5/QtCore/qsharedpointer.h \
+		/usr/include/qt5/QtCore/qsharedpointer_impl.h \
+		../libcommuni/include/IrcCore/IrcNetwork \
+		../libcommuni/include/IrcCore/ircnetwork.h \
+		/usr/include/qt5/QtNetwork/qabstractsocket.h \
+		../libcommuni/include/IrcCore/ircmessage_p.h \
+		/usr/include/qt5/QtCore/QMetaEnum \
+		/usr/include/qt5/QtCore/qmetaobject.h \
+		/usr/include/qt5/QtCore/QDebug \
+		build/moc_irc.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/irc.o ../libcommuni/src/core/irc.cpp
+
+build/irccommand.o: ../libcommuni/src/core/irccommand.cpp ../libcommuni/include/IrcCore/irccommand.h \
+		../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		../libcommuni/include/IrcCore/ircmessage.h \
+		../libcommuni/include/IrcCore/Irc \
+		../libcommuni/include/IrcCore/irc.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		/usr/include/qt5/QtCore/qdatetime.h \
+		/usr/include/qt5/QtCore/qsharedpointer.h \
+		/usr/include/qt5/QtCore/qsharedpointer_impl.h \
+		/usr/include/qt5/QtCore/QTextCodec \
+		/usr/include/qt5/QtCore/qtextcodec.h \
+		/usr/include/qt5/QtCore/QMetaEnum \
+		/usr/include/qt5/QtCore/qmetaobject.h \
+		/usr/include/qt5/QtCore/QDebug \
+		build/moc_irccommand.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/irccommand.o ../libcommuni/src/core/irccommand.cpp
+
+build/ircconnection.o: ../libcommuni/src/core/ircconnection.cpp ../libcommuni/include/IrcCore/ircconnection.h \
+		../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		../libcommuni/include/IrcCore/IrcMessage \
+		../libcommuni/include/IrcCore/ircmessage.h \
+		../libcommuni/include/IrcCore/Irc \
+		../libcommuni/include/IrcCore/irc.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		/usr/include/qt5/QtCore/qdatetime.h \
+		/usr/include/qt5/QtCore/qsharedpointer.h \
+		/usr/include/qt5/QtCore/qsharedpointer_impl.h \
+		../libcommuni/include/IrcCore/IrcNetwork \
+		../libcommuni/include/IrcCore/ircnetwork.h \
+		/usr/include/qt5/QtNetwork/qabstractsocket.h \
+		../libcommuni/include/IrcCore/ircconnection_p.h \
+		/usr/include/qt5/QtCore/QList \
+		/usr/include/qt5/QtCore/QHash \
+		/usr/include/qt5/QtCore/QStack \
+		/usr/include/qt5/QtCore/qstack.h \
+		/usr/include/qt5/QtCore/QTimer \
+		/usr/include/qt5/QtCore/qtimer.h \
+		/usr/include/qt5/QtCore/qbasictimer.h \
+		/usr/include/qt5/QtCore/QString \
+		/usr/include/qt5/QtCore/QByteArray \
+		/usr/include/qt5/QtNetwork/QAbstractSocket \
+		../libcommuni/include/IrcCore/ircnetwork_p.h \
+		/usr/include/qt5/QtCore/QSet \
+		/usr/include/qt5/QtCore/QPointer \
+		/usr/include/qt5/QtCore/qpointer.h \
+		../libcommuni/include/IrcCore/ircprotocol.h \
+		../libcommuni/include/IrcCore/IrcConnection \
+		../libcommuni/include/IrcCore/irccommand.h \
+		../libcommuni/include/IrcCore/ircfilter.h \
+		/usr/include/qt5/QtCore/QLocale \
+		/usr/include/qt5/QtCore/QDateTime \
+		/usr/include/qt5/QtNetwork/QTcpSocket \
+		/usr/include/qt5/QtNetwork/qtcpsocket.h \
+		/usr/include/qt5/QtCore/QTextCodec \
+		/usr/include/qt5/QtCore/qtextcodec.h \
+		/usr/include/qt5/QtCore/QStringList \
+		/usr/include/qt5/QtCore/QMetaObject \
+		/usr/include/qt5/QtCore/QMetaMethod \
+		/usr/include/qt5/QtCore/qmetaobject.h \
+		/usr/include/qt5/QtCore/QMetaEnum \
+		/usr/include/qt5/QtNetwork/QSslSocket \
+		/usr/include/qt5/QtNetwork/qsslsocket.h \
+		/usr/include/qt5/QtNetwork/qsslerror.h \
+		/usr/include/qt5/QtNetwork/qsslcertificate.h \
+		/usr/include/qt5/QtCore/qcryptographichash.h \
+		/usr/include/qt5/QtNetwork/qssl.h \
+		/usr/include/qt5/QtCore/QFlags \
+		/usr/include/qt5/QtCore/QDataStream \
+		/usr/include/qt5/QtCore/QVariantMap \
+		build/moc_ircconnection.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/ircconnection.o ../libcommuni/src/core/ircconnection.cpp
+
+build/ircfilter.o: ../libcommuni/src/core/ircfilter.cpp ../libcommuni/include/IrcCore/ircfilter.h \
+		../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/ircfilter.o ../libcommuni/src/core/ircfilter.cpp
+
+build/ircmessage.o: ../libcommuni/src/core/ircmessage.cpp ../libcommuni/include/IrcCore/ircmessage.h \
+		../libcommuni/include/IrcCore/Irc \
+		../libcommuni/include/IrcCore/irc.h \
+		../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		/usr/include/qt5/QtCore/qdatetime.h \
+		/usr/include/qt5/QtCore/qsharedpointer.h \
+		/usr/include/qt5/QtCore/qsharedpointer_impl.h \
+		../libcommuni/include/IrcCore/ircmessage_p.h \
+		../libcommuni/include/IrcCore/ircconnection.h \
+		../libcommuni/include/IrcCore/IrcMessage \
+		../libcommuni/include/IrcCore/IrcNetwork \
+		../libcommuni/include/IrcCore/ircnetwork.h \
+		/usr/include/qt5/QtNetwork/qabstractsocket.h \
+		../libcommuni/include/IrcCore/ircconnection_p.h \
+		/usr/include/qt5/QtCore/QList \
+		/usr/include/qt5/QtCore/QHash \
+		/usr/include/qt5/QtCore/QStack \
+		/usr/include/qt5/QtCore/qstack.h \
+		/usr/include/qt5/QtCore/QTimer \
+		/usr/include/qt5/QtCore/qtimer.h \
+		/usr/include/qt5/QtCore/qbasictimer.h \
+		/usr/include/qt5/QtCore/QString \
+		/usr/include/qt5/QtCore/QByteArray \
+		/usr/include/qt5/QtNetwork/QAbstractSocket \
+		../libcommuni/include/IrcCore/irccommand.h \
+		/usr/include/qt5/QtCore/QMetaEnum \
+		/usr/include/qt5/QtCore/qmetaobject.h \
+		/usr/include/qt5/QtCore/QVariant \
+		/usr/include/qt5/QtCore/QDebug \
+		build/moc_ircmessage.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/ircmessage.o ../libcommuni/src/core/ircmessage.cpp
+
+build/ircmessage_p.o: ../libcommuni/src/core/ircmessage_p.cpp ../libcommuni/include/IrcCore/ircmessage_p.h \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		../libcommuni/include/IrcCore/ircmessage.h \
+		../libcommuni/include/IrcCore/Irc \
+		../libcommuni/include/IrcCore/irc.h \
+		../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qdatetime.h \
+		/usr/include/qt5/QtCore/qsharedpointer.h \
+		/usr/include/qt5/QtCore/qsharedpointer_impl.h \
+		../libcommuni/include/IrcCore/ircmessagedecoder_p.h \
+		/usr/include/qt5/QtCore/qtextcodec.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/ircmessage_p.o ../libcommuni/src/core/ircmessage_p.cpp
+
+build/ircmessagebuilder.o: ../libcommuni/src/core/ircmessagebuilder.cpp ../libcommuni/include/IrcCore/ircmessagebuilder_p.h \
+		../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		../libcommuni/include/IrcCore/ircmessage.h \
+		../libcommuni/include/IrcCore/Irc \
+		../libcommuni/include/IrcCore/irc.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		/usr/include/qt5/QtCore/qdatetime.h \
+		/usr/include/qt5/QtCore/qsharedpointer.h \
+		/usr/include/qt5/QtCore/qsharedpointer_impl.h \
+		build/moc_ircmessagebuilder_p.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/ircmessagebuilder.o ../libcommuni/src/core/ircmessagebuilder.cpp
+
+build/ircmessagedecoder.o: ../libcommuni/src/core/ircmessagedecoder.cpp ../libcommuni/include/IrcCore/ircmessagedecoder_p.h \
+		../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qtextcodec.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/QSet \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtCore/qpair.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/ircmessagedecoder.o ../libcommuni/src/core/ircmessagedecoder.cpp
+
+build/ircnetwork.o: ../libcommuni/src/core/ircnetwork.cpp ../libcommuni/include/IrcCore/ircnetwork.h \
+		../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		../libcommuni/include/IrcCore/ircnetwork_p.h \
+		/usr/include/qt5/QtCore/QSet \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtCore/QHash \
+		/usr/include/qt5/QtCore/QString \
+		/usr/include/qt5/QtCore/QPointer \
+		/usr/include/qt5/QtCore/qpointer.h \
+		/usr/include/qt5/QtCore/qsharedpointer.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qsharedpointer_impl.h \
+		../libcommuni/include/IrcCore/ircconnection_p.h \
+		../libcommuni/include/IrcCore/ircconnection.h \
+		../libcommuni/include/IrcCore/IrcMessage \
+		../libcommuni/include/IrcCore/ircmessage.h \
+		../libcommuni/include/IrcCore/Irc \
+		../libcommuni/include/IrcCore/irc.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		/usr/include/qt5/QtCore/qdatetime.h \
+		../libcommuni/include/IrcCore/IrcNetwork \
+		/usr/include/qt5/QtNetwork/qabstractsocket.h \
+		/usr/include/qt5/QtCore/QList \
+		/usr/include/qt5/QtCore/QStack \
+		/usr/include/qt5/QtCore/qstack.h \
+		/usr/include/qt5/QtCore/QTimer \
+		/usr/include/qt5/QtCore/qtimer.h \
+		/usr/include/qt5/QtCore/qbasictimer.h \
+		/usr/include/qt5/QtCore/QByteArray \
+		/usr/include/qt5/QtNetwork/QAbstractSocket \
+		../libcommuni/include/IrcCore/ircprotocol.h \
+		../libcommuni/include/IrcCore/IrcConnection \
+		../libcommuni/include/IrcCore/irccommand.h \
+		/usr/include/qt5/QtCore/QMetaEnum \
+		/usr/include/qt5/QtCore/qmetaobject.h \
+		build/moc_ircnetwork.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/ircnetwork.o ../libcommuni/src/core/ircnetwork.cpp
+
+build/ircprotocol.o: ../libcommuni/src/core/ircprotocol.cpp ../libcommuni/include/IrcCore/ircprotocol.h \
+		../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		../libcommuni/include/IrcCore/IrcConnection \
+		../libcommuni/include/IrcCore/ircconnection.h \
+		../libcommuni/include/IrcCore/IrcMessage \
+		../libcommuni/include/IrcCore/ircmessage.h \
+		../libcommuni/include/IrcCore/Irc \
+		../libcommuni/include/IrcCore/irc.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		/usr/include/qt5/QtCore/qdatetime.h \
+		/usr/include/qt5/QtCore/qsharedpointer.h \
+		/usr/include/qt5/QtCore/qsharedpointer_impl.h \
+		../libcommuni/include/IrcCore/IrcNetwork \
+		../libcommuni/include/IrcCore/ircnetwork.h \
+		/usr/include/qt5/QtNetwork/qabstractsocket.h \
+		../libcommuni/include/IrcCore/ircconnection_p.h \
+		/usr/include/qt5/QtCore/QList \
+		/usr/include/qt5/QtCore/QHash \
+		/usr/include/qt5/QtCore/QStack \
+		/usr/include/qt5/QtCore/qstack.h \
+		/usr/include/qt5/QtCore/QTimer \
+		/usr/include/qt5/QtCore/qtimer.h \
+		/usr/include/qt5/QtCore/qbasictimer.h \
+		/usr/include/qt5/QtCore/QString \
+		/usr/include/qt5/QtCore/QByteArray \
+		/usr/include/qt5/QtNetwork/QAbstractSocket \
+		../libcommuni/include/IrcCore/ircmessagebuilder_p.h \
+		../libcommuni/include/IrcCore/ircnetwork_p.h \
+		/usr/include/qt5/QtCore/QSet \
+		/usr/include/qt5/QtCore/QPointer \
+		/usr/include/qt5/QtCore/qpointer.h \
+		../libcommuni/include/IrcCore/irccommand.h \
+		/usr/include/qt5/QtCore/QDebug \
+		build/moc_ircprotocol.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/ircprotocol.o ../libcommuni/src/core/ircprotocol.cpp
+
+build/rdf_utils.o: ../libcommuni/src/3rdparty/mozilla/rdf_utils.c 
+	$(CC) -c $(CFLAGS) $(INCPATH) -o build/rdf_utils.o ../libcommuni/src/3rdparty/mozilla/rdf_utils.c
+
+build/ircmessagedecoder_uchardet.o: ../libcommuni/src/core/ircmessagedecoder_uchardet.cpp ../libcommuni/include/IrcCore/ircmessagedecoder_p.h \
+		../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qtextcodec.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/uchardet.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/ircmessagedecoder_uchardet.o ../libcommuni/src/core/ircmessagedecoder_uchardet.cpp
+
+build/CharDistribution.o: ../libcommuni/src/3rdparty/uchardet-0.0.1/src/CharDistribution.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/CharDistribution.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nscore.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/JISFreq.tab \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/Big5Freq.tab \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/EUCKRFreq.tab \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/EUCTWFreq.tab \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/GB2312Freq.tab
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/CharDistribution.o ../libcommuni/src/3rdparty/uchardet-0.0.1/src/CharDistribution.cpp
+
+build/JpCntx.o: ../libcommuni/src/3rdparty/uchardet-0.0.1/src/JpCntx.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nscore.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/JpCntx.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/JpCntx.o ../libcommuni/src/3rdparty/uchardet-0.0.1/src/JpCntx.cpp
+
+build/LangBulgarianModel.o: ../libcommuni/src/3rdparty/uchardet-0.0.1/src/LangBulgarianModel.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsSBCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nscore.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/LangBulgarianModel.o ../libcommuni/src/3rdparty/uchardet-0.0.1/src/LangBulgarianModel.cpp
+
+build/LangCyrillicModel.o: ../libcommuni/src/3rdparty/uchardet-0.0.1/src/LangCyrillicModel.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsSBCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nscore.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/LangCyrillicModel.o ../libcommuni/src/3rdparty/uchardet-0.0.1/src/LangCyrillicModel.cpp
+
+build/LangGreekModel.o: ../libcommuni/src/3rdparty/uchardet-0.0.1/src/LangGreekModel.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsSBCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nscore.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/LangGreekModel.o ../libcommuni/src/3rdparty/uchardet-0.0.1/src/LangGreekModel.cpp
+
+build/LangHungarianModel.o: ../libcommuni/src/3rdparty/uchardet-0.0.1/src/LangHungarianModel.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsSBCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nscore.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/LangHungarianModel.o ../libcommuni/src/3rdparty/uchardet-0.0.1/src/LangHungarianModel.cpp
+
+build/LangHebrewModel.o: ../libcommuni/src/3rdparty/uchardet-0.0.1/src/LangHebrewModel.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsSBCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nscore.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/LangHebrewModel.o ../libcommuni/src/3rdparty/uchardet-0.0.1/src/LangHebrewModel.cpp
+
+build/LangThaiModel.o: ../libcommuni/src/3rdparty/uchardet-0.0.1/src/LangThaiModel.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsSBCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nscore.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/LangThaiModel.o ../libcommuni/src/3rdparty/uchardet-0.0.1/src/LangThaiModel.cpp
+
+build/nsHebrewProber.o: ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsHebrewProber.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsHebrewProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsSBCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nscore.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/nsHebrewProber.o ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsHebrewProber.cpp
+
+build/nsCharSetProber.o: ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCharSetProber.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nscore.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/prmem.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/nsCharSetProber.o ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCharSetProber.cpp
+
+build/nsBig5Prober.o: ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsBig5Prober.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsBig5Prober.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nscore.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCodingStateMachine.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsPkgInt.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/CharDistribution.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/nsBig5Prober.o ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsBig5Prober.cpp
+
+build/nsEUCJPProber.o: ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEUCJPProber.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEUCJPProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nscore.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCodingStateMachine.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsPkgInt.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/JpCntx.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/CharDistribution.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/nsEUCJPProber.o ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEUCJPProber.cpp
+
+build/nsEUCKRProber.o: ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEUCKRProber.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEUCKRProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nscore.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCodingStateMachine.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsPkgInt.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/CharDistribution.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/nsEUCKRProber.o ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEUCKRProber.cpp
+
+build/nsEUCTWProber.o: ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEUCTWProber.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEUCTWProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nscore.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCodingStateMachine.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsPkgInt.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/CharDistribution.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/nsEUCTWProber.o ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEUCTWProber.cpp
+
+build/nsEscCharsetProber.o: ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEscCharsetProber.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEscCharsetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nscore.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCodingStateMachine.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsPkgInt.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsUniversalDetector.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/nsEscCharsetProber.o ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEscCharsetProber.cpp
+
+build/nsEscSM.o: ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEscSM.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCodingStateMachine.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsPkgInt.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nscore.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/nsEscSM.o ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEscSM.cpp
+
+build/nsGB2312Prober.o: ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsGB2312Prober.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsGB2312Prober.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nscore.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCodingStateMachine.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsPkgInt.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/CharDistribution.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/nsGB2312Prober.o ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsGB2312Prober.cpp
+
+build/nsMBCSGroupProber.o: ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsMBCSGroupProber.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsMBCSGroupProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsSJISProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nscore.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCodingStateMachine.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsPkgInt.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/JpCntx.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/CharDistribution.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsUTF8Prober.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEUCJPProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsGB2312Prober.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEUCKRProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsBig5Prober.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEUCTWProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsUniversalDetector.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/nsMBCSGroupProber.o ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsMBCSGroupProber.cpp
+
+build/nsMBCSSM.o: ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsMBCSSM.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCodingStateMachine.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsPkgInt.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nscore.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/nsMBCSSM.o ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsMBCSSM.cpp
+
+build/nsSBCSGroupProber.o: ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsSBCSGroupProber.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/prmem.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsSBCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nscore.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsSBCSGroupProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsHebrewProber.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/nsSBCSGroupProber.o ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsSBCSGroupProber.cpp
+
+build/nsSBCharSetProber.o: ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsSBCharSetProber.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsSBCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nscore.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/nsSBCharSetProber.o ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsSBCharSetProber.cpp
+
+build/nsSJISProber.o: ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsSJISProber.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsSJISProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nscore.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCodingStateMachine.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsPkgInt.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/JpCntx.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/CharDistribution.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/nsSJISProber.o ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsSJISProber.cpp
+
+build/nsUTF8Prober.o: ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsUTF8Prober.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsUTF8Prober.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nscore.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCodingStateMachine.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsPkgInt.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/nsUTF8Prober.o ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsUTF8Prober.cpp
+
+build/nsLatin1Prober.o: ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsLatin1Prober.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsLatin1Prober.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nscore.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/prmem.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/nsLatin1Prober.o ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsLatin1Prober.cpp
+
+build/nsUniversalDetector.o: ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsUniversalDetector.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nscore.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsUniversalDetector.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsMBCSGroupProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsSJISProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCharSetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsCodingStateMachine.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsPkgInt.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/JpCntx.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/CharDistribution.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsUTF8Prober.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEUCJPProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsGB2312Prober.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEUCKRProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsBig5Prober.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEUCTWProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsSBCSGroupProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsEscCharsetProber.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsLatin1Prober.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/nsUniversalDetector.o ../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsUniversalDetector.cpp
+
+build/uchardet.o: ../libcommuni/src/3rdparty/uchardet-0.0.1/src/uchardet.cpp ../libcommuni/src/3rdparty/uchardet-0.0.1/src/uchardet.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nscore.h \
+		../libcommuni/src/3rdparty/uchardet-0.0.1/src/nsUniversalDetector.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/uchardet.o ../libcommuni/src/3rdparty/uchardet-0.0.1/src/uchardet.cpp
+
+build/ircbuffer.o: ../libcommuni/src/model/ircbuffer.cpp ../libcommuni/include/IrcModel/ircbuffer.h \
+		../libcommuni/include/IrcCore/Irc \
+		../libcommuni/include/IrcCore/irc.h \
+		../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		../libcommuni/include/IrcModel/ircbuffer_p.h \
+		../libcommuni/include/IrcCore/ircmessage.h \
+		/usr/include/qt5/QtCore/qdatetime.h \
+		/usr/include/qt5/QtCore/qsharedpointer.h \
+		/usr/include/qt5/QtCore/qsharedpointer_impl.h \
+		../libcommuni/include/IrcModel/ircbuffermodel.h \
+		/usr/include/qt5/QtCore/qabstractitemmodel.h \
+		../libcommuni/include/IrcModel/ircbuffermodel_p.h \
+		../libcommuni/include/IrcCore/ircfilter.h \
+		/usr/include/qt5/QtCore/qpointer.h \
+		../libcommuni/include/IrcCore/ircconnection.h \
+		../libcommuni/include/IrcCore/IrcMessage \
+		../libcommuni/include/IrcCore/IrcNetwork \
+		../libcommuni/include/IrcCore/ircnetwork.h \
+		/usr/include/qt5/QtNetwork/qabstractsocket.h \
+		../libcommuni/include/IrcModel/ircchannel.h \
+		../libcommuni/include/IrcModel/IrcBuffer \
+		build/moc_ircbuffer.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/ircbuffer.o ../libcommuni/src/model/ircbuffer.cpp
+
+build/ircbuffermodel.o: ../libcommuni/src/model/ircbuffermodel.cpp ../libcommuni/include/IrcModel/ircbuffermodel.h \
+		../libcommuni/include/IrcCore/Irc \
+		../libcommuni/include/IrcCore/irc.h \
+		../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		/usr/include/qt5/QtCore/qabstractitemmodel.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		../libcommuni/include/IrcModel/ircbuffermodel_p.h \
+		../libcommuni/include/IrcModel/ircbuffer.h \
+		../libcommuni/include/IrcCore/ircfilter.h \
+		/usr/include/qt5/QtCore/qpointer.h \
+		/usr/include/qt5/QtCore/qsharedpointer.h \
+		/usr/include/qt5/QtCore/qsharedpointer_impl.h \
+		../libcommuni/include/IrcModel/ircchannel_p.h \
+		../libcommuni/include/IrcModel/ircchannel.h \
+		../libcommuni/include/IrcModel/IrcBuffer \
+		../libcommuni/include/IrcCore/ircnetwork.h \
+		../libcommuni/include/IrcModel/ircbuffer_p.h \
+		../libcommuni/include/IrcCore/ircmessage.h \
+		/usr/include/qt5/QtCore/qdatetime.h \
+		../libcommuni/include/IrcCore/irccommand.h \
+		../libcommuni/include/IrcCore/ircconnection.h \
+		../libcommuni/include/IrcCore/IrcMessage \
+		../libcommuni/include/IrcCore/IrcNetwork \
+		/usr/include/qt5/QtNetwork/qabstractsocket.h \
+		/usr/include/qt5/QtCore/qmetaobject.h \
+		build/moc_ircbuffermodel.cpp \
+		build/moc_ircbuffermodel_p.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/ircbuffermodel.o ../libcommuni/src/model/ircbuffermodel.cpp
+
+build/ircchannel.o: ../libcommuni/src/model/ircchannel.cpp ../libcommuni/include/IrcModel/ircchannel.h \
+		../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		../libcommuni/include/IrcModel/IrcBuffer \
+		../libcommuni/include/IrcModel/ircbuffer.h \
+		../libcommuni/include/IrcCore/Irc \
+		../libcommuni/include/IrcCore/irc.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		../libcommuni/include/IrcModel/ircchannel_p.h \
+		../libcommuni/include/IrcCore/ircnetwork.h \
+		../libcommuni/include/IrcModel/ircbuffer_p.h \
+		../libcommuni/include/IrcCore/ircmessage.h \
+		/usr/include/qt5/QtCore/qdatetime.h \
+		/usr/include/qt5/QtCore/qsharedpointer.h \
+		/usr/include/qt5/QtCore/qsharedpointer_impl.h \
+		../libcommuni/include/IrcModel/ircusermodel.h \
+		/usr/include/qt5/QtCore/qabstractitemmodel.h \
+		../libcommuni/include/IrcModel/ircusermodel_p.h \
+		../libcommuni/include/IrcModel/ircuser.h \
+		/usr/include/qt5/QtCore/qpointer.h \
+		../libcommuni/include/IrcModel/ircbuffermodel.h \
+		../libcommuni/include/IrcModel/ircbuffermodel_p.h \
+		../libcommuni/include/IrcCore/ircfilter.h \
+		../libcommuni/include/IrcCore/ircconnection.h \
+		../libcommuni/include/IrcCore/IrcMessage \
+		../libcommuni/include/IrcCore/IrcNetwork \
+		/usr/include/qt5/QtNetwork/qabstractsocket.h \
+		../libcommuni/include/IrcCore/irccommand.h \
+		../libcommuni/include/IrcModel/ircuser_p.h \
+		build/moc_ircchannel.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/ircchannel.o ../libcommuni/src/model/ircchannel.cpp
+
+build/ircuser.o: ../libcommuni/src/model/ircuser.cpp ../libcommuni/include/IrcModel/ircuser.h \
+		../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		../libcommuni/include/IrcModel/ircuser_p.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		build/moc_ircuser.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/ircuser.o ../libcommuni/src/model/ircuser.cpp
+
+build/ircusermodel.o: ../libcommuni/src/model/ircusermodel.cpp ../libcommuni/include/IrcModel/ircusermodel.h \
+		../libcommuni/include/IrcCore/Irc \
+		../libcommuni/include/IrcCore/irc.h \
+		../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		/usr/include/qt5/QtCore/qabstractitemmodel.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		../libcommuni/include/IrcModel/ircusermodel_p.h \
+		../libcommuni/include/IrcModel/ircuser.h \
+		../libcommuni/include/IrcModel/ircchannel_p.h \
+		../libcommuni/include/IrcModel/ircchannel.h \
+		../libcommuni/include/IrcModel/IrcBuffer \
+		../libcommuni/include/IrcModel/ircbuffer.h \
+		../libcommuni/include/IrcCore/ircnetwork.h \
+		../libcommuni/include/IrcModel/ircbuffer_p.h \
+		../libcommuni/include/IrcCore/ircmessage.h \
+		/usr/include/qt5/QtCore/qdatetime.h \
+		/usr/include/qt5/QtCore/qsharedpointer.h \
+		/usr/include/qt5/QtCore/qsharedpointer_impl.h \
+		/usr/include/qt5/QtCore/qpointer.h \
+		../libcommuni/include/IrcModel/ircbuffermodel.h \
+		../libcommuni/include/IrcCore/ircconnection.h \
+		../libcommuni/include/IrcCore/IrcMessage \
+		../libcommuni/include/IrcCore/IrcNetwork \
+		/usr/include/qt5/QtNetwork/qabstractsocket.h \
+		build/moc_ircusermodel.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/ircusermodel.o ../libcommuni/src/model/ircusermodel.cpp
+
+build/irccommandparser.o: ../libcommuni/src/util/irccommandparser.cpp ../libcommuni/include/IrcUtil/irccommandparser.h \
+		../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		../libcommuni/include/IrcCore/IrcCommand \
+		../libcommuni/include/IrcCore/irccommand.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		../libcommuni/include/IrcUtil/irccommandparser_p.h \
+		/usr/include/qt5/QtCore/QList \
+		/usr/include/qt5/QtCore/QString \
+		/usr/include/qt5/QtCore/QMultiMap \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		/usr/include/qt5/QtCore/QStringList \
+		build/moc_irccommandparser.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/irccommandparser.o ../libcommuni/src/util/irccommandparser.cpp
+
+build/irccompleter.o: ../libcommuni/src/util/irccompleter.cpp ../libcommuni/include/IrcUtil/irccompleter.h \
+		../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		../libcommuni/include/IrcUtil/irccommandparser.h \
+		../libcommuni/include/IrcCore/IrcCommand \
+		../libcommuni/include/IrcCore/irccommand.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		../libcommuni/include/IrcUtil/irccommandparser_p.h \
+		/usr/include/qt5/QtCore/QList \
+		/usr/include/qt5/QtCore/QString \
+		/usr/include/qt5/QtCore/QMultiMap \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		/usr/include/qt5/QtCore/QStringList \
+		../libcommuni/include/IrcModel/ircbuffermodel.h \
+		../libcommuni/include/IrcCore/Irc \
+		../libcommuni/include/IrcCore/irc.h \
+		/usr/include/qt5/QtCore/qabstractitemmodel.h \
+		../libcommuni/include/IrcModel/ircusermodel.h \
+		../libcommuni/include/IrcCore/ircnetwork.h \
+		../libcommuni/include/IrcModel/ircchannel.h \
+		../libcommuni/include/IrcModel/IrcBuffer \
+		../libcommuni/include/IrcModel/ircbuffer.h \
+		../libcommuni/include/IrcModel/ircuser.h \
+		/usr/include/qt5/QtCore/QTextBoundaryFinder \
+		/usr/include/qt5/QtCore/qtextboundaryfinder.h \
+		/usr/include/qt5/QtCore/QPointer \
+		/usr/include/qt5/QtCore/qpointer.h \
+		/usr/include/qt5/QtCore/qsharedpointer.h \
+		/usr/include/qt5/QtCore/qsharedpointer_impl.h \
+		/usr/include/qt5/QtCore/QPair \
+		build/moc_irccompleter.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/irccompleter.o ../libcommuni/src/util/irccompleter.cpp
+
+build/irclagtimer.o: ../libcommuni/src/util/irclagtimer.cpp ../libcommuni/include/IrcUtil/irclagtimer.h \
+		../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		../libcommuni/include/IrcUtil/irclagtimer_p.h \
+		../libcommuni/include/IrcCore/ircfilter.h \
+		/usr/include/qt5/QtCore/QTimer \
+		/usr/include/qt5/QtCore/qtimer.h \
+		/usr/include/qt5/QtCore/qbasictimer.h \
+		../libcommuni/include/IrcCore/ircconnection.h \
+		../libcommuni/include/IrcCore/IrcMessage \
+		../libcommuni/include/IrcCore/ircmessage.h \
+		../libcommuni/include/IrcCore/Irc \
+		../libcommuni/include/IrcCore/irc.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		/usr/include/qt5/QtCore/qdatetime.h \
+		/usr/include/qt5/QtCore/qsharedpointer.h \
+		/usr/include/qt5/QtCore/qsharedpointer_impl.h \
+		../libcommuni/include/IrcCore/IrcNetwork \
+		../libcommuni/include/IrcCore/ircnetwork.h \
+		/usr/include/qt5/QtNetwork/qabstractsocket.h \
+		../libcommuni/include/IrcCore/irccommand.h \
+		/usr/include/qt5/QtCore/QDateTime \
+		build/moc_irclagtimer.cpp \
+		build/moc_irclagtimer_p.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/irclagtimer.o ../libcommuni/src/util/irclagtimer.cpp
+
+build/ircpalette.o: ../libcommuni/src/util/ircpalette.cpp ../libcommuni/include/IrcUtil/ircpalette.h \
+		../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		../libcommuni/include/IrcCore/irc.h \
+		build/moc_ircpalette.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/ircpalette.o ../libcommuni/src/util/ircpalette.cpp
+
+build/irctextformat.o: ../libcommuni/src/util/irctextformat.cpp ../libcommuni/include/IrcUtil/irctextformat.h \
+		../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		../libcommuni/include/IrcUtil/ircpalette.h \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		/usr/include/qt5/QtCore/QRegularExpression \
+		/usr/include/qt5/QtCore/qregularexpression.h \
+		/usr/include/qt5/QtCore/QStringList \
+		/usr/include/qt5/QtCore/QRegExp \
+		/usr/include/qt5/QtCore/QUrl \
+		/usr/include/qt5/QtCore/qurl.h \
+		/usr/include/qt5/QtCore/qurlquery.h \
+		../libcommuni/include/IrcCore/irc.h \
+		build/moc_irctextformat.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/irctextformat.o ../libcommuni/src/util/irctextformat.cpp
 
 build/rotocoin.o: src/qt/rotocoin.cpp /usr/include/qt5/QtWidgets/QApplication \
 		/usr/include/qt5/QtWidgets/qapplication.h \
@@ -6209,27 +9698,9 @@ build/rotocoingui.o: src/qt/rotocoingui.cpp src/qt/rotocoingui.h \
 		src/base58.h \
 		src/init.h \
 		src/qt/rotochatpage.h \
-		/usr/include/qt5/QtWidgets/QWidget \
-		/usr/include/qt5/QtWebKitWidgets/QWebView \
-		/usr/include/qt5/QtWebKitWidgets/qwebview.h \
-		/usr/include/qt5/QtWebKit/qwebkitglobal.h \
-		/usr/include/qt5/QtWebKitWidgets/qwebpage.h \
-		/usr/include/qt5/QtWebKit/qwebsettings.h \
-		/usr/include/qt5/QtGui/qpainter.h \
-		/usr/include/qt5/QtGui/qtextoption.h \
-		/usr/include/qt5/QtGui/qpen.h \
-		/usr/include/qt5/QtNetwork/qnetworkaccessmanager.h \
-		/usr/include/qt5/QtNetwork/QSslConfiguration \
-		/usr/include/qt5/QtNetwork/qsslconfiguration.h \
-		/usr/include/qt5/QtNetwork/qsslsocket.h \
-		/usr/include/qt5/QtNetwork/qtcpsocket.h \
-		/usr/include/qt5/QtNetwork/qabstractsocket.h \
-		/usr/include/qt5/QtNetwork/qsslerror.h \
-		/usr/include/qt5/QtNetwork/qsslcertificate.h \
-		/usr/include/qt5/QtCore/qcryptographichash.h \
-		/usr/include/qt5/QtCore/qdatetime.h \
-		/usr/include/qt5/QtNetwork/qssl.h \
-		/usr/include/qt5/QtCore/QFlags \
+		/usr/include/qt5/QtWidgets/QSplitter \
+		/usr/include/qt5/QtWidgets/qsplitter.h \
+		/usr/include/qt5/QtCore/QHash \
 		src/qt/macdockiconhandler.h \
 		/usr/include/qt5/QtWidgets/QApplication \
 		/usr/include/qt5/QtWidgets/qapplication.h \
@@ -6260,6 +9731,7 @@ build/rotocoingui.o: src/qt/rotocoingui.cpp src/qt/rotocoingui.h \
 		/usr/include/qt5/QtWidgets/QStackedWidget \
 		/usr/include/qt5/QtWidgets/qstackedwidget.h \
 		/usr/include/qt5/QtCore/QDateTime \
+		/usr/include/qt5/QtCore/qdatetime.h \
 		/usr/include/qt5/QtGui/QMovie \
 		/usr/include/qt5/QtGui/qmovie.h \
 		/usr/include/qt5/QtGui/qimagereader.h \
@@ -6724,68 +10196,10 @@ build/optionsdialog.o: src/qt/optionsdialog.cpp src/qt/optionsdialog.h \
 		/usr/include/qt5/QtGui/qvector2d.h \
 		/usr/include/qt5/QtGui/qtouchdevice.h \
 		build/ui_optionsdialog.h \
-		/usr/include/qt5/QtCore/QVariant \
-		/usr/include/qt5/QtWidgets/QAction \
-		/usr/include/qt5/QtWidgets/qaction.h \
-		/usr/include/qt5/QtGui/qicon.h \
-		/usr/include/qt5/QtWidgets/qactiongroup.h \
-		/usr/include/qt5/QtWidgets/QApplication \
-		/usr/include/qt5/QtWidgets/qapplication.h \
-		/usr/include/qt5/QtCore/qcoreapplication.h \
-		/usr/include/qt5/QtCore/qeventloop.h \
-		/usr/include/qt5/QtWidgets/qdesktopwidget.h \
-		/usr/include/qt5/QtGui/qguiapplication.h \
-		/usr/include/qt5/QtGui/qinputmethod.h \
-		/usr/include/qt5/QtWidgets/QButtonGroup \
-		/usr/include/qt5/QtWidgets/qbuttongroup.h \
-		/usr/include/qt5/QtWidgets/QCheckBox \
-		/usr/include/qt5/QtWidgets/qcheckbox.h \
-		/usr/include/qt5/QtWidgets/qabstractbutton.h \
-		/usr/include/qt5/QtWidgets/QHBoxLayout \
-		/usr/include/qt5/QtWidgets/qboxlayout.h \
-		/usr/include/qt5/QtWidgets/qlayout.h \
-		/usr/include/qt5/QtWidgets/qlayoutitem.h \
-		/usr/include/qt5/QtWidgets/qgridlayout.h \
-		/usr/include/qt5/QtWidgets/QHeaderView \
-		/usr/include/qt5/QtWidgets/qheaderview.h \
-		/usr/include/qt5/QtWidgets/qabstractitemview.h \
-		/usr/include/qt5/QtWidgets/qabstractscrollarea.h \
-		/usr/include/qt5/QtWidgets/qframe.h \
-		/usr/include/qt5/QtCore/qabstractitemmodel.h \
-		/usr/include/qt5/QtCore/qitemselectionmodel.h \
-		/usr/include/qt5/QtWidgets/qabstractitemdelegate.h \
-		/usr/include/qt5/QtWidgets/qstyleoption.h \
-		/usr/include/qt5/QtWidgets/qabstractspinbox.h \
-		/usr/include/qt5/QtGui/qvalidator.h \
-		/usr/include/qt5/QtCore/qregularexpression.h \
-		/usr/include/qt5/QtWidgets/qslider.h \
-		/usr/include/qt5/QtWidgets/qabstractslider.h \
-		/usr/include/qt5/QtWidgets/qstyle.h \
-		/usr/include/qt5/QtWidgets/qtabbar.h \
-		/usr/include/qt5/QtWidgets/qtabwidget.h \
-		/usr/include/qt5/QtWidgets/qrubberband.h \
-		/usr/include/qt5/QtWidgets/QLabel \
-		/usr/include/qt5/QtWidgets/qlabel.h \
-		/usr/include/qt5/QtWidgets/QLineEdit \
-		/usr/include/qt5/QtWidgets/qlineedit.h \
-		/usr/include/qt5/QtGui/qtextcursor.h \
-		/usr/include/qt5/QtGui/qtextformat.h \
-		/usr/include/qt5/QtGui/qpen.h \
-		/usr/include/qt5/QtGui/qtextoption.h \
-		/usr/include/qt5/QtWidgets/QPushButton \
-		/usr/include/qt5/QtWidgets/qpushbutton.h \
-		/usr/include/qt5/QtWidgets/QSpacerItem \
-		/usr/include/qt5/QtWidgets/QTabWidget \
-		/usr/include/qt5/QtWidgets/QVBoxLayout \
-		/usr/include/qt5/QtWidgets/QWidget \
-		src/qt/qvalidatedlineedit.h \
-		src/qt/qvaluecombobox.h \
-		/usr/include/qt5/QtWidgets/QComboBox \
-		/usr/include/qt5/QtWidgets/qcombobox.h \
-		src/qt/rotocoinamountfield.h \
 		src/qt/rotocoinunits.h \
 		/usr/include/qt5/QtCore/QString \
 		/usr/include/qt5/QtCore/QAbstractListModel \
+		/usr/include/qt5/QtCore/qabstractitemmodel.h \
 		src/qt/monitoreddatamapper.h \
 		/usr/include/qt5/QtWidgets/QDataWidgetMapper \
 		/usr/include/qt5/QtWidgets/qdatawidgetmapper.h \
@@ -6800,6 +10214,8 @@ build/optionsdialog.o: src/qt/optionsdialog.cpp src/qt/optionsdialog.h \
 		/usr/include/qt5/QtCore/qdir.h \
 		/usr/include/qt5/QtCore/qfileinfo.h \
 		/usr/include/qt5/QtGui/QIntValidator \
+		/usr/include/qt5/QtGui/qvalidator.h \
+		/usr/include/qt5/QtCore/qregularexpression.h \
 		/usr/include/qt5/QtCore/QLocale \
 		/usr/include/qt5/QtWidgets/QMessageBox \
 		/usr/include/qt5/QtWidgets/qmessagebox.h
@@ -6917,65 +10333,6 @@ build/sendcoinsdialog.o: src/qt/sendcoinsdialog.cpp src/qt/sendcoinsdialog.h \
 		/usr/include/qt5/QtGui/qtouchdevice.h \
 		/usr/include/qt5/QtCore/QString \
 		build/ui_sendcoinsdialog.h \
-		/usr/include/qt5/QtCore/QVariant \
-		/usr/include/qt5/QtWidgets/QAction \
-		/usr/include/qt5/QtWidgets/qaction.h \
-		/usr/include/qt5/QtGui/qicon.h \
-		/usr/include/qt5/QtWidgets/qactiongroup.h \
-		/usr/include/qt5/QtWidgets/QApplication \
-		/usr/include/qt5/QtWidgets/qapplication.h \
-		/usr/include/qt5/QtCore/qcoreapplication.h \
-		/usr/include/qt5/QtCore/qeventloop.h \
-		/usr/include/qt5/QtWidgets/qdesktopwidget.h \
-		/usr/include/qt5/QtGui/qguiapplication.h \
-		/usr/include/qt5/QtGui/qinputmethod.h \
-		/usr/include/qt5/QtWidgets/QButtonGroup \
-		/usr/include/qt5/QtWidgets/qbuttongroup.h \
-		/usr/include/qt5/QtWidgets/QCheckBox \
-		/usr/include/qt5/QtWidgets/qcheckbox.h \
-		/usr/include/qt5/QtWidgets/qabstractbutton.h \
-		/usr/include/qt5/QtWidgets/QFormLayout \
-		/usr/include/qt5/QtWidgets/qformlayout.h \
-		/usr/include/qt5/QtWidgets/QLayout \
-		/usr/include/qt5/QtWidgets/qlayout.h \
-		/usr/include/qt5/QtWidgets/qlayoutitem.h \
-		/usr/include/qt5/QtWidgets/qboxlayout.h \
-		/usr/include/qt5/QtWidgets/qgridlayout.h \
-		/usr/include/qt5/QtWidgets/QFrame \
-		/usr/include/qt5/QtWidgets/qframe.h \
-		/usr/include/qt5/QtWidgets/QHBoxLayout \
-		/usr/include/qt5/QtWidgets/QHeaderView \
-		/usr/include/qt5/QtWidgets/qheaderview.h \
-		/usr/include/qt5/QtWidgets/qabstractitemview.h \
-		/usr/include/qt5/QtWidgets/qabstractscrollarea.h \
-		/usr/include/qt5/QtCore/qabstractitemmodel.h \
-		/usr/include/qt5/QtCore/qitemselectionmodel.h \
-		/usr/include/qt5/QtWidgets/qabstractitemdelegate.h \
-		/usr/include/qt5/QtWidgets/qstyleoption.h \
-		/usr/include/qt5/QtWidgets/qabstractspinbox.h \
-		/usr/include/qt5/QtGui/qvalidator.h \
-		/usr/include/qt5/QtCore/qregularexpression.h \
-		/usr/include/qt5/QtWidgets/qslider.h \
-		/usr/include/qt5/QtWidgets/qabstractslider.h \
-		/usr/include/qt5/QtWidgets/qstyle.h \
-		/usr/include/qt5/QtWidgets/qtabbar.h \
-		/usr/include/qt5/QtWidgets/qtabwidget.h \
-		/usr/include/qt5/QtWidgets/qrubberband.h \
-		/usr/include/qt5/QtWidgets/QLabel \
-		/usr/include/qt5/QtWidgets/qlabel.h \
-		/usr/include/qt5/QtWidgets/QLineEdit \
-		/usr/include/qt5/QtWidgets/qlineedit.h \
-		/usr/include/qt5/QtGui/qtextcursor.h \
-		/usr/include/qt5/QtGui/qtextformat.h \
-		/usr/include/qt5/QtGui/qpen.h \
-		/usr/include/qt5/QtGui/qtextoption.h \
-		/usr/include/qt5/QtWidgets/QPushButton \
-		/usr/include/qt5/QtWidgets/qpushbutton.h \
-		/usr/include/qt5/QtWidgets/QScrollArea \
-		/usr/include/qt5/QtWidgets/qscrollarea.h \
-		/usr/include/qt5/QtWidgets/QSpacerItem \
-		/usr/include/qt5/QtWidgets/QVBoxLayout \
-		/usr/include/qt5/QtWidgets/QWidget \
 		src/init.h \
 		src/wallet.h \
 		src/main.h \
@@ -7010,12 +10367,15 @@ build/sendcoinsdialog.o: src/qt/sendcoinsdialog.cpp src/qt/sendcoinsdialog.h \
 		/usr/include/qt5/QtCore/QObject \
 		src/qt/addresstablemodel.h \
 		/usr/include/qt5/QtCore/QAbstractTableModel \
+		/usr/include/qt5/QtCore/qabstractitemmodel.h \
 		/usr/include/qt5/QtCore/QStringList \
 		src/qt/rotocoinunits.h \
 		/usr/include/qt5/QtCore/QAbstractListModel \
 		src/qt/addressbookpage.h \
 		src/qt/optionsmodel.h \
 		src/qt/sendcoinsentry.h \
+		/usr/include/qt5/QtWidgets/QFrame \
+		/usr/include/qt5/QtWidgets/qframe.h \
 		src/qt/guiutil.h \
 		/usr/include/qt5/QtWidgets/QMessageBox \
 		/usr/include/qt5/QtWidgets/qmessagebox.h \
@@ -7023,6 +10383,11 @@ build/sendcoinsdialog.o: src/qt/sendcoinsdialog.cpp src/qt/sendcoinsdialog.h \
 		src/coincontrol.h \
 		src/qt/coincontroldialog.h \
 		/usr/include/qt5/QtWidgets/QAbstractButton \
+		/usr/include/qt5/QtWidgets/qabstractbutton.h \
+		/usr/include/qt5/QtGui/qicon.h \
+		/usr/include/qt5/QtWidgets/QAction \
+		/usr/include/qt5/QtWidgets/qaction.h \
+		/usr/include/qt5/QtWidgets/qactiongroup.h \
 		/usr/include/qt5/QtCore/QList \
 		/usr/include/qt5/QtWidgets/QMenu \
 		/usr/include/qt5/QtWidgets/qmenu.h \
@@ -7030,6 +10395,20 @@ build/sendcoinsdialog.o: src/qt/sendcoinsdialog.cpp src/qt/sendcoinsdialog.h \
 		/usr/include/qt5/QtWidgets/QTreeWidgetItem \
 		/usr/include/qt5/QtWidgets/qtreewidget.h \
 		/usr/include/qt5/QtWidgets/qtreeview.h \
+		/usr/include/qt5/QtWidgets/qabstractitemview.h \
+		/usr/include/qt5/QtWidgets/qabstractscrollarea.h \
+		/usr/include/qt5/QtCore/qitemselectionmodel.h \
+		/usr/include/qt5/QtWidgets/qabstractitemdelegate.h \
+		/usr/include/qt5/QtWidgets/qstyleoption.h \
+		/usr/include/qt5/QtWidgets/qabstractspinbox.h \
+		/usr/include/qt5/QtGui/qvalidator.h \
+		/usr/include/qt5/QtCore/qregularexpression.h \
+		/usr/include/qt5/QtWidgets/qslider.h \
+		/usr/include/qt5/QtWidgets/qabstractslider.h \
+		/usr/include/qt5/QtWidgets/qstyle.h \
+		/usr/include/qt5/QtWidgets/qtabbar.h \
+		/usr/include/qt5/QtWidgets/qtabwidget.h \
+		/usr/include/qt5/QtWidgets/qrubberband.h \
 		/usr/include/qt5/QtWidgets/qtreewidgetitemiterator.h \
 		/usr/include/qt5/QtGui/QTextDocument \
 		/usr/include/qt5/QtGui/qtextdocument.h \
@@ -7181,41 +10560,6 @@ build/coincontroldialog.o: src/qt/coincontroldialog.cpp src/qt/coincontroldialog
 		/usr/include/qt5/QtWidgets/qrubberband.h \
 		/usr/include/qt5/QtWidgets/qtreewidgetitemiterator.h \
 		build/ui_coincontroldialog.h \
-		/usr/include/qt5/QtCore/QVariant \
-		/usr/include/qt5/QtWidgets/QApplication \
-		/usr/include/qt5/QtWidgets/qapplication.h \
-		/usr/include/qt5/QtCore/qcoreapplication.h \
-		/usr/include/qt5/QtCore/qeventloop.h \
-		/usr/include/qt5/QtWidgets/qdesktopwidget.h \
-		/usr/include/qt5/QtGui/qguiapplication.h \
-		/usr/include/qt5/QtGui/qinputmethod.h \
-		/usr/include/qt5/QtWidgets/QButtonGroup \
-		/usr/include/qt5/QtWidgets/qbuttongroup.h \
-		/usr/include/qt5/QtWidgets/QDialogButtonBox \
-		/usr/include/qt5/QtWidgets/qdialogbuttonbox.h \
-		/usr/include/qt5/QtWidgets/QFormLayout \
-		/usr/include/qt5/QtWidgets/qformlayout.h \
-		/usr/include/qt5/QtWidgets/QLayout \
-		/usr/include/qt5/QtWidgets/qlayout.h \
-		/usr/include/qt5/QtWidgets/qlayoutitem.h \
-		/usr/include/qt5/QtWidgets/qboxlayout.h \
-		/usr/include/qt5/QtWidgets/qgridlayout.h \
-		/usr/include/qt5/QtWidgets/QFrame \
-		/usr/include/qt5/QtWidgets/QHBoxLayout \
-		/usr/include/qt5/QtWidgets/QHeaderView \
-		/usr/include/qt5/QtWidgets/qheaderview.h \
-		/usr/include/qt5/QtWidgets/QLabel \
-		/usr/include/qt5/QtWidgets/qlabel.h \
-		/usr/include/qt5/QtWidgets/QPushButton \
-		/usr/include/qt5/QtWidgets/qpushbutton.h \
-		/usr/include/qt5/QtWidgets/QRadioButton \
-		/usr/include/qt5/QtWidgets/qradiobutton.h \
-		/usr/include/qt5/QtWidgets/QSpacerItem \
-		/usr/include/qt5/QtWidgets/QVBoxLayout \
-		/usr/include/qt5/QtWidgets/QWidget \
-		src/qt/coincontroltreewidget.h \
-		/usr/include/qt5/QtGui/QKeyEvent \
-		/usr/include/qt5/QtWidgets/QTreeWidget \
 		src/init.h \
 		src/wallet.h \
 		src/main.h \
@@ -7258,6 +10602,13 @@ build/coincontroldialog.o: src/qt/coincontroldialog.cpp src/qt/coincontroldialog
 		/usr/include/qt5/QtWidgets/QMessageBox \
 		/usr/include/qt5/QtWidgets/qmessagebox.h \
 		src/coincontrol.h \
+		/usr/include/qt5/QtWidgets/QApplication \
+		/usr/include/qt5/QtWidgets/qapplication.h \
+		/usr/include/qt5/QtCore/qcoreapplication.h \
+		/usr/include/qt5/QtCore/qeventloop.h \
+		/usr/include/qt5/QtWidgets/qdesktopwidget.h \
+		/usr/include/qt5/QtGui/qguiapplication.h \
+		/usr/include/qt5/QtGui/qinputmethod.h \
 		/usr/include/qt5/QtWidgets/QCheckBox \
 		/usr/include/qt5/QtWidgets/qcheckbox.h \
 		/usr/include/qt5/QtGui/QClipboard \
@@ -7266,8 +10617,11 @@ build/coincontroldialog.o: src/qt/coincontroldialog.cpp src/qt/coincontroldialog
 		/usr/include/qt5/QtGui/QCursor \
 		/usr/include/qt5/QtCore/QDateTime \
 		/usr/include/qt5/QtCore/qdatetime.h \
+		/usr/include/qt5/QtWidgets/QDialogButtonBox \
+		/usr/include/qt5/QtWidgets/qdialogbuttonbox.h \
 		/usr/include/qt5/QtCore/QFlags \
-		/usr/include/qt5/QtGui/QIcon
+		/usr/include/qt5/QtGui/QIcon \
+		/usr/include/qt5/QtWidgets/QTreeWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/coincontroldialog.o src/qt/coincontroldialog.cpp
 
 build/coincontroltreewidget.o: src/qt/coincontroltreewidget.cpp src/qt/coincontroltreewidget.h \
@@ -7527,63 +10881,17 @@ build/addressbookpage.o: src/qt/addressbookpage.cpp src/qt/addressbookpage.h \
 		/usr/include/qt5/QtGui/qvector2d.h \
 		/usr/include/qt5/QtGui/qtouchdevice.h \
 		build/ui_addressbookpage.h \
-		/usr/include/qt5/QtCore/QVariant \
-		/usr/include/qt5/QtWidgets/QAction \
-		/usr/include/qt5/QtWidgets/qaction.h \
-		/usr/include/qt5/QtGui/qicon.h \
-		/usr/include/qt5/QtWidgets/qactiongroup.h \
-		/usr/include/qt5/QtWidgets/QApplication \
-		/usr/include/qt5/QtWidgets/qapplication.h \
-		/usr/include/qt5/QtCore/qcoreapplication.h \
-		/usr/include/qt5/QtCore/qeventloop.h \
-		/usr/include/qt5/QtWidgets/qdesktopwidget.h \
-		/usr/include/qt5/QtGui/qguiapplication.h \
-		/usr/include/qt5/QtGui/qinputmethod.h \
-		/usr/include/qt5/QtWidgets/QButtonGroup \
-		/usr/include/qt5/QtWidgets/qbuttongroup.h \
-		/usr/include/qt5/QtWidgets/QDialogButtonBox \
-		/usr/include/qt5/QtWidgets/qdialogbuttonbox.h \
-		/usr/include/qt5/QtWidgets/QHBoxLayout \
-		/usr/include/qt5/QtWidgets/qboxlayout.h \
-		/usr/include/qt5/QtWidgets/qlayout.h \
-		/usr/include/qt5/QtWidgets/qlayoutitem.h \
-		/usr/include/qt5/QtWidgets/qgridlayout.h \
-		/usr/include/qt5/QtWidgets/QHeaderView \
-		/usr/include/qt5/QtWidgets/qheaderview.h \
-		/usr/include/qt5/QtWidgets/qabstractitemview.h \
-		/usr/include/qt5/QtWidgets/qabstractscrollarea.h \
-		/usr/include/qt5/QtWidgets/qframe.h \
-		/usr/include/qt5/QtCore/qabstractitemmodel.h \
-		/usr/include/qt5/QtCore/qitemselectionmodel.h \
-		/usr/include/qt5/QtWidgets/qabstractitemdelegate.h \
-		/usr/include/qt5/QtWidgets/qstyleoption.h \
-		/usr/include/qt5/QtWidgets/qabstractspinbox.h \
-		/usr/include/qt5/QtGui/qvalidator.h \
-		/usr/include/qt5/QtCore/qregularexpression.h \
-		/usr/include/qt5/QtWidgets/qslider.h \
-		/usr/include/qt5/QtWidgets/qabstractslider.h \
-		/usr/include/qt5/QtWidgets/qstyle.h \
-		/usr/include/qt5/QtWidgets/qtabbar.h \
-		/usr/include/qt5/QtWidgets/qtabwidget.h \
-		/usr/include/qt5/QtWidgets/qrubberband.h \
-		/usr/include/qt5/QtWidgets/QLabel \
-		/usr/include/qt5/QtWidgets/qlabel.h \
-		/usr/include/qt5/QtWidgets/QPushButton \
-		/usr/include/qt5/QtWidgets/qpushbutton.h \
-		/usr/include/qt5/QtWidgets/qabstractbutton.h \
-		/usr/include/qt5/QtWidgets/QSpacerItem \
-		/usr/include/qt5/QtWidgets/QTableView \
-		/usr/include/qt5/QtWidgets/qtableview.h \
-		/usr/include/qt5/QtWidgets/QVBoxLayout \
-		/usr/include/qt5/QtWidgets/QWidget \
 		src/qt/addresstablemodel.h \
 		/usr/include/qt5/QtCore/QAbstractTableModel \
+		/usr/include/qt5/QtCore/qabstractitemmodel.h \
 		/usr/include/qt5/QtCore/QStringList \
 		src/qt/optionsmodel.h \
 		/usr/include/qt5/QtCore/QAbstractListModel \
 		src/qt/rotocoingui.h \
 		/usr/include/qt5/QtWidgets/QMainWindow \
 		/usr/include/qt5/QtWidgets/qmainwindow.h \
+		/usr/include/qt5/QtWidgets/qtabwidget.h \
+		/usr/include/qt5/QtGui/qicon.h \
 		/usr/include/qt5/QtWidgets/QSystemTrayIcon \
 		/usr/include/qt5/QtWidgets/qsystemtrayicon.h \
 		/usr/include/qt5/QtCore/QMap \
@@ -7603,7 +10911,9 @@ build/addressbookpage.o: src/qt/addressbookpage.cpp src/qt/addressbookpage.h \
 		/usr/include/qt5/QtGui/QClipboard \
 		/usr/include/qt5/QtGui/qclipboard.h \
 		/usr/include/qt5/QtWidgets/QMenu \
-		/usr/include/qt5/QtWidgets/qmenu.h
+		/usr/include/qt5/QtWidgets/qmenu.h \
+		/usr/include/qt5/QtWidgets/qaction.h \
+		/usr/include/qt5/QtWidgets/qactiongroup.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/addressbookpage.o src/qt/addressbookpage.cpp
 
 build/signverifymessagedialog.o: src/qt/signverifymessagedialog.cpp src/qt/signverifymessagedialog.h \
@@ -7717,68 +11027,6 @@ build/signverifymessagedialog.o: src/qt/signverifymessagedialog.cpp src/qt/signv
 		/usr/include/qt5/QtGui/qvector2d.h \
 		/usr/include/qt5/QtGui/qtouchdevice.h \
 		build/ui_signverifymessagedialog.h \
-		/usr/include/qt5/QtCore/QVariant \
-		/usr/include/qt5/QtWidgets/QAction \
-		/usr/include/qt5/QtWidgets/qaction.h \
-		/usr/include/qt5/QtGui/qicon.h \
-		/usr/include/qt5/QtWidgets/qactiongroup.h \
-		/usr/include/qt5/QtWidgets/QApplication \
-		/usr/include/qt5/QtWidgets/qapplication.h \
-		/usr/include/qt5/QtCore/qcoreapplication.h \
-		/usr/include/qt5/QtCore/qeventloop.h \
-		/usr/include/qt5/QtWidgets/qdesktopwidget.h \
-		/usr/include/qt5/QtGui/qguiapplication.h \
-		/usr/include/qt5/QtGui/qinputmethod.h \
-		/usr/include/qt5/QtWidgets/QButtonGroup \
-		/usr/include/qt5/QtWidgets/qbuttongroup.h \
-		/usr/include/qt5/QtWidgets/QHBoxLayout \
-		/usr/include/qt5/QtWidgets/qboxlayout.h \
-		/usr/include/qt5/QtWidgets/qlayout.h \
-		/usr/include/qt5/QtWidgets/qlayoutitem.h \
-		/usr/include/qt5/QtWidgets/qgridlayout.h \
-		/usr/include/qt5/QtWidgets/QHeaderView \
-		/usr/include/qt5/QtWidgets/qheaderview.h \
-		/usr/include/qt5/QtWidgets/qabstractitemview.h \
-		/usr/include/qt5/QtWidgets/qabstractscrollarea.h \
-		/usr/include/qt5/QtWidgets/qframe.h \
-		/usr/include/qt5/QtCore/qabstractitemmodel.h \
-		/usr/include/qt5/QtCore/qitemselectionmodel.h \
-		/usr/include/qt5/QtWidgets/qabstractitemdelegate.h \
-		/usr/include/qt5/QtWidgets/qstyleoption.h \
-		/usr/include/qt5/QtWidgets/qabstractspinbox.h \
-		/usr/include/qt5/QtGui/qvalidator.h \
-		/usr/include/qt5/QtCore/qregularexpression.h \
-		/usr/include/qt5/QtWidgets/qslider.h \
-		/usr/include/qt5/QtWidgets/qabstractslider.h \
-		/usr/include/qt5/QtWidgets/qstyle.h \
-		/usr/include/qt5/QtWidgets/qtabbar.h \
-		/usr/include/qt5/QtWidgets/qtabwidget.h \
-		/usr/include/qt5/QtWidgets/qrubberband.h \
-		/usr/include/qt5/QtWidgets/QLabel \
-		/usr/include/qt5/QtWidgets/qlabel.h \
-		/usr/include/qt5/QtWidgets/QLineEdit \
-		/usr/include/qt5/QtWidgets/qlineedit.h \
-		/usr/include/qt5/QtGui/qtextcursor.h \
-		/usr/include/qt5/QtGui/qtextformat.h \
-		/usr/include/qt5/QtGui/qpen.h \
-		/usr/include/qt5/QtGui/qtextoption.h \
-		/usr/include/qt5/QtWidgets/QPlainTextEdit \
-		/usr/include/qt5/QtWidgets/qplaintextedit.h \
-		/usr/include/qt5/QtWidgets/qtextedit.h \
-		/usr/include/qt5/QtGui/qtextdocument.h \
-		/usr/include/qt5/QtGui/qabstracttextdocumentlayout.h \
-		/usr/include/qt5/QtGui/qtextlayout.h \
-		/usr/include/qt5/QtGui/qglyphrun.h \
-		/usr/include/qt5/QtGui/qrawfont.h \
-		/usr/include/qt5/QtGui/qfontdatabase.h \
-		/usr/include/qt5/QtWidgets/QPushButton \
-		/usr/include/qt5/QtWidgets/qpushbutton.h \
-		/usr/include/qt5/QtWidgets/qabstractbutton.h \
-		/usr/include/qt5/QtWidgets/QSpacerItem \
-		/usr/include/qt5/QtWidgets/QTabWidget \
-		/usr/include/qt5/QtWidgets/QVBoxLayout \
-		/usr/include/qt5/QtWidgets/QWidget \
-		src/qt/qvalidatedlineedit.h \
 		src/qt/addressbookpage.h \
 		src/base58.h \
 		src/bignum.h \
@@ -7817,6 +11065,7 @@ build/signverifymessagedialog.o: src/qt/signverifymessagedialog.cpp src/qt/signv
 		src/db.h \
 		src/qt/optionsmodel.h \
 		/usr/include/qt5/QtCore/QAbstractListModel \
+		/usr/include/qt5/QtCore/qabstractitemmodel.h \
 		src/qt/walletmodel.h \
 		/usr/include/qt5/QtGui/QClipboard \
 		/usr/include/qt5/QtGui/qclipboard.h
@@ -7933,49 +11182,6 @@ build/aboutdialog.o: src/qt/aboutdialog.cpp src/qt/aboutdialog.h \
 		/usr/include/qt5/QtGui/qvector2d.h \
 		/usr/include/qt5/QtGui/qtouchdevice.h \
 		build/ui_aboutdialog.h \
-		/usr/include/qt5/QtCore/QVariant \
-		/usr/include/qt5/QtWidgets/QAction \
-		/usr/include/qt5/QtWidgets/qaction.h \
-		/usr/include/qt5/QtGui/qicon.h \
-		/usr/include/qt5/QtWidgets/qactiongroup.h \
-		/usr/include/qt5/QtWidgets/QApplication \
-		/usr/include/qt5/QtWidgets/qapplication.h \
-		/usr/include/qt5/QtCore/qcoreapplication.h \
-		/usr/include/qt5/QtCore/qeventloop.h \
-		/usr/include/qt5/QtWidgets/qdesktopwidget.h \
-		/usr/include/qt5/QtGui/qguiapplication.h \
-		/usr/include/qt5/QtGui/qinputmethod.h \
-		/usr/include/qt5/QtWidgets/QButtonGroup \
-		/usr/include/qt5/QtWidgets/qbuttongroup.h \
-		/usr/include/qt5/QtWidgets/QDialogButtonBox \
-		/usr/include/qt5/QtWidgets/qdialogbuttonbox.h \
-		/usr/include/qt5/QtWidgets/QHBoxLayout \
-		/usr/include/qt5/QtWidgets/qboxlayout.h \
-		/usr/include/qt5/QtWidgets/qlayout.h \
-		/usr/include/qt5/QtWidgets/qlayoutitem.h \
-		/usr/include/qt5/QtWidgets/qgridlayout.h \
-		/usr/include/qt5/QtWidgets/QHeaderView \
-		/usr/include/qt5/QtWidgets/qheaderview.h \
-		/usr/include/qt5/QtWidgets/qabstractitemview.h \
-		/usr/include/qt5/QtWidgets/qabstractscrollarea.h \
-		/usr/include/qt5/QtWidgets/qframe.h \
-		/usr/include/qt5/QtCore/qabstractitemmodel.h \
-		/usr/include/qt5/QtCore/qitemselectionmodel.h \
-		/usr/include/qt5/QtWidgets/qabstractitemdelegate.h \
-		/usr/include/qt5/QtWidgets/qstyleoption.h \
-		/usr/include/qt5/QtWidgets/qabstractspinbox.h \
-		/usr/include/qt5/QtGui/qvalidator.h \
-		/usr/include/qt5/QtCore/qregularexpression.h \
-		/usr/include/qt5/QtWidgets/qslider.h \
-		/usr/include/qt5/QtWidgets/qabstractslider.h \
-		/usr/include/qt5/QtWidgets/qstyle.h \
-		/usr/include/qt5/QtWidgets/qtabbar.h \
-		/usr/include/qt5/QtWidgets/qtabwidget.h \
-		/usr/include/qt5/QtWidgets/qrubberband.h \
-		/usr/include/qt5/QtWidgets/QLabel \
-		/usr/include/qt5/QtWidgets/qlabel.h \
-		/usr/include/qt5/QtWidgets/QSpacerItem \
-		/usr/include/qt5/QtWidgets/QVBoxLayout \
 		src/qt/clientmodel.h \
 		/usr/include/qt5/QtCore/QObject \
 		src/clientversion.h \
@@ -8101,58 +11307,9 @@ build/editaddressdialog.o: src/qt/editaddressdialog.cpp src/qt/editaddressdialog
 		/usr/include/qt5/QtGui/qvector2d.h \
 		/usr/include/qt5/QtGui/qtouchdevice.h \
 		build/ui_editaddressdialog.h \
-		/usr/include/qt5/QtCore/QVariant \
-		/usr/include/qt5/QtWidgets/QAction \
-		/usr/include/qt5/QtWidgets/qaction.h \
-		/usr/include/qt5/QtGui/qicon.h \
-		/usr/include/qt5/QtWidgets/qactiongroup.h \
-		/usr/include/qt5/QtWidgets/QApplication \
-		/usr/include/qt5/QtWidgets/qapplication.h \
-		/usr/include/qt5/QtCore/qcoreapplication.h \
-		/usr/include/qt5/QtCore/qeventloop.h \
-		/usr/include/qt5/QtWidgets/qdesktopwidget.h \
-		/usr/include/qt5/QtGui/qguiapplication.h \
-		/usr/include/qt5/QtGui/qinputmethod.h \
-		/usr/include/qt5/QtWidgets/QButtonGroup \
-		/usr/include/qt5/QtWidgets/qbuttongroup.h \
-		/usr/include/qt5/QtWidgets/QDialogButtonBox \
-		/usr/include/qt5/QtWidgets/qdialogbuttonbox.h \
-		/usr/include/qt5/QtWidgets/QFormLayout \
-		/usr/include/qt5/QtWidgets/qformlayout.h \
-		/usr/include/qt5/QtWidgets/QLayout \
-		/usr/include/qt5/QtWidgets/qlayout.h \
-		/usr/include/qt5/QtWidgets/qlayoutitem.h \
-		/usr/include/qt5/QtWidgets/qboxlayout.h \
-		/usr/include/qt5/QtWidgets/qgridlayout.h \
-		/usr/include/qt5/QtWidgets/QHeaderView \
-		/usr/include/qt5/QtWidgets/qheaderview.h \
-		/usr/include/qt5/QtWidgets/qabstractitemview.h \
-		/usr/include/qt5/QtWidgets/qabstractscrollarea.h \
-		/usr/include/qt5/QtWidgets/qframe.h \
-		/usr/include/qt5/QtCore/qabstractitemmodel.h \
-		/usr/include/qt5/QtCore/qitemselectionmodel.h \
-		/usr/include/qt5/QtWidgets/qabstractitemdelegate.h \
-		/usr/include/qt5/QtWidgets/qstyleoption.h \
-		/usr/include/qt5/QtWidgets/qabstractspinbox.h \
-		/usr/include/qt5/QtGui/qvalidator.h \
-		/usr/include/qt5/QtCore/qregularexpression.h \
-		/usr/include/qt5/QtWidgets/qslider.h \
-		/usr/include/qt5/QtWidgets/qabstractslider.h \
-		/usr/include/qt5/QtWidgets/qstyle.h \
-		/usr/include/qt5/QtWidgets/qtabbar.h \
-		/usr/include/qt5/QtWidgets/qtabwidget.h \
-		/usr/include/qt5/QtWidgets/qrubberband.h \
-		/usr/include/qt5/QtWidgets/QLabel \
-		/usr/include/qt5/QtWidgets/qlabel.h \
-		/usr/include/qt5/QtWidgets/QLineEdit \
-		/usr/include/qt5/QtWidgets/qlineedit.h \
-		/usr/include/qt5/QtGui/qtextcursor.h \
-		/usr/include/qt5/QtGui/qtextformat.h \
-		/usr/include/qt5/QtGui/qpen.h \
-		/usr/include/qt5/QtGui/qtextoption.h \
-		/usr/include/qt5/QtWidgets/QVBoxLayout \
 		src/qt/addresstablemodel.h \
 		/usr/include/qt5/QtCore/QAbstractTableModel \
+		/usr/include/qt5/QtCore/qabstractitemmodel.h \
 		/usr/include/qt5/QtCore/QStringList \
 		src/qt/guiutil.h \
 		/usr/include/qt5/QtCore/QString \
@@ -9515,54 +12672,9 @@ build/transactiondescdialog.o: src/qt/transactiondescdialog.cpp src/qt/transacti
 		/usr/include/qt5/QtGui/qvector2d.h \
 		/usr/include/qt5/QtGui/qtouchdevice.h \
 		build/ui_transactiondescdialog.h \
-		/usr/include/qt5/QtCore/QVariant \
-		/usr/include/qt5/QtWidgets/QAction \
-		/usr/include/qt5/QtWidgets/qaction.h \
-		/usr/include/qt5/QtGui/qicon.h \
-		/usr/include/qt5/QtWidgets/qactiongroup.h \
-		/usr/include/qt5/QtWidgets/QApplication \
-		/usr/include/qt5/QtWidgets/qapplication.h \
-		/usr/include/qt5/QtCore/qcoreapplication.h \
-		/usr/include/qt5/QtCore/qeventloop.h \
-		/usr/include/qt5/QtWidgets/qdesktopwidget.h \
-		/usr/include/qt5/QtGui/qguiapplication.h \
-		/usr/include/qt5/QtGui/qinputmethod.h \
-		/usr/include/qt5/QtWidgets/QButtonGroup \
-		/usr/include/qt5/QtWidgets/qbuttongroup.h \
-		/usr/include/qt5/QtWidgets/QDialogButtonBox \
-		/usr/include/qt5/QtWidgets/qdialogbuttonbox.h \
-		/usr/include/qt5/QtWidgets/QHeaderView \
-		/usr/include/qt5/QtWidgets/qheaderview.h \
-		/usr/include/qt5/QtWidgets/qabstractitemview.h \
-		/usr/include/qt5/QtWidgets/qabstractscrollarea.h \
-		/usr/include/qt5/QtWidgets/qframe.h \
-		/usr/include/qt5/QtCore/qabstractitemmodel.h \
-		/usr/include/qt5/QtCore/qitemselectionmodel.h \
-		/usr/include/qt5/QtWidgets/qabstractitemdelegate.h \
-		/usr/include/qt5/QtWidgets/qstyleoption.h \
-		/usr/include/qt5/QtWidgets/qabstractspinbox.h \
-		/usr/include/qt5/QtGui/qvalidator.h \
-		/usr/include/qt5/QtCore/qregularexpression.h \
-		/usr/include/qt5/QtWidgets/qslider.h \
-		/usr/include/qt5/QtWidgets/qabstractslider.h \
-		/usr/include/qt5/QtWidgets/qstyle.h \
-		/usr/include/qt5/QtWidgets/qtabbar.h \
-		/usr/include/qt5/QtWidgets/qtabwidget.h \
-		/usr/include/qt5/QtWidgets/qrubberband.h \
-		/usr/include/qt5/QtWidgets/QTextEdit \
-		/usr/include/qt5/QtWidgets/qtextedit.h \
-		/usr/include/qt5/QtGui/qtextdocument.h \
-		/usr/include/qt5/QtGui/qtextoption.h \
-		/usr/include/qt5/QtGui/qtextcursor.h \
-		/usr/include/qt5/QtGui/qtextformat.h \
-		/usr/include/qt5/QtGui/qpen.h \
-		/usr/include/qt5/QtWidgets/QVBoxLayout \
-		/usr/include/qt5/QtWidgets/qboxlayout.h \
-		/usr/include/qt5/QtWidgets/qlayout.h \
-		/usr/include/qt5/QtWidgets/qlayoutitem.h \
-		/usr/include/qt5/QtWidgets/qgridlayout.h \
 		src/qt/transactiontablemodel.h \
 		/usr/include/qt5/QtCore/QAbstractTableModel \
+		/usr/include/qt5/QtCore/qabstractitemmodel.h \
 		/usr/include/qt5/QtCore/QStringList \
 		/usr/include/qt5/QtCore/QModelIndex
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/transactiondescdialog.o src/qt/transactiondescdialog.cpp
@@ -10345,26 +13457,9 @@ build/walletview.o: src/qt/walletview.cpp src/qt/walletview.h \
 		src/clientversion.h \
 		src/compat.h \
 		src/qt/rotochatpage.h \
-		/usr/include/qt5/QtWebKitWidgets/QWebView \
-		/usr/include/qt5/QtWebKitWidgets/qwebview.h \
-		/usr/include/qt5/QtWebKit/qwebkitglobal.h \
-		/usr/include/qt5/QtWebKitWidgets/qwebpage.h \
-		/usr/include/qt5/QtWebKit/qwebsettings.h \
-		/usr/include/qt5/QtGui/qpainter.h \
-		/usr/include/qt5/QtGui/qtextoption.h \
-		/usr/include/qt5/QtGui/qpen.h \
-		/usr/include/qt5/QtNetwork/qnetworkaccessmanager.h \
-		/usr/include/qt5/QtNetwork/QSslConfiguration \
-		/usr/include/qt5/QtNetwork/qsslconfiguration.h \
-		/usr/include/qt5/QtNetwork/qsslsocket.h \
-		/usr/include/qt5/QtNetwork/qtcpsocket.h \
-		/usr/include/qt5/QtNetwork/qabstractsocket.h \
-		/usr/include/qt5/QtNetwork/qsslerror.h \
-		/usr/include/qt5/QtNetwork/qsslcertificate.h \
-		/usr/include/qt5/QtCore/qcryptographichash.h \
-		/usr/include/qt5/QtCore/qdatetime.h \
-		/usr/include/qt5/QtNetwork/qssl.h \
-		/usr/include/qt5/QtCore/QFlags \
+		/usr/include/qt5/QtWidgets/QSplitter \
+		/usr/include/qt5/QtWidgets/qsplitter.h \
+		/usr/include/qt5/QtCore/QHash \
 		/usr/include/qt5/QtWidgets/QHBoxLayout \
 		/usr/include/qt5/QtWidgets/qboxlayout.h \
 		/usr/include/qt5/QtWidgets/qlayout.h \
@@ -11003,53 +14098,6 @@ build/overviewpage.o: src/qt/overviewpage.cpp src/qt/overviewpage.h \
 		/usr/include/qt5/QtGui/qvector2d.h \
 		/usr/include/qt5/QtGui/qtouchdevice.h \
 		build/ui_overviewpage.h \
-		/usr/include/qt5/QtCore/QVariant \
-		/usr/include/qt5/QtWidgets/QAction \
-		/usr/include/qt5/QtWidgets/qaction.h \
-		/usr/include/qt5/QtGui/qicon.h \
-		/usr/include/qt5/QtWidgets/qactiongroup.h \
-		/usr/include/qt5/QtWidgets/QApplication \
-		/usr/include/qt5/QtWidgets/qapplication.h \
-		/usr/include/qt5/QtCore/qcoreapplication.h \
-		/usr/include/qt5/QtCore/qeventloop.h \
-		/usr/include/qt5/QtWidgets/qdesktopwidget.h \
-		/usr/include/qt5/QtGui/qguiapplication.h \
-		/usr/include/qt5/QtGui/qinputmethod.h \
-		/usr/include/qt5/QtWidgets/QButtonGroup \
-		/usr/include/qt5/QtWidgets/qbuttongroup.h \
-		/usr/include/qt5/QtWidgets/QFormLayout \
-		/usr/include/qt5/QtWidgets/qformlayout.h \
-		/usr/include/qt5/QtWidgets/QLayout \
-		/usr/include/qt5/QtWidgets/qlayout.h \
-		/usr/include/qt5/QtWidgets/qlayoutitem.h \
-		/usr/include/qt5/QtWidgets/qboxlayout.h \
-		/usr/include/qt5/QtWidgets/qgridlayout.h \
-		/usr/include/qt5/QtWidgets/QFrame \
-		/usr/include/qt5/QtWidgets/qframe.h \
-		/usr/include/qt5/QtWidgets/QHBoxLayout \
-		/usr/include/qt5/QtWidgets/QHeaderView \
-		/usr/include/qt5/QtWidgets/qheaderview.h \
-		/usr/include/qt5/QtWidgets/qabstractitemview.h \
-		/usr/include/qt5/QtWidgets/qabstractscrollarea.h \
-		/usr/include/qt5/QtCore/qabstractitemmodel.h \
-		/usr/include/qt5/QtCore/qitemselectionmodel.h \
-		/usr/include/qt5/QtWidgets/qabstractitemdelegate.h \
-		/usr/include/qt5/QtWidgets/qstyleoption.h \
-		/usr/include/qt5/QtWidgets/qabstractspinbox.h \
-		/usr/include/qt5/QtGui/qvalidator.h \
-		/usr/include/qt5/QtCore/qregularexpression.h \
-		/usr/include/qt5/QtWidgets/qslider.h \
-		/usr/include/qt5/QtWidgets/qabstractslider.h \
-		/usr/include/qt5/QtWidgets/qstyle.h \
-		/usr/include/qt5/QtWidgets/qtabbar.h \
-		/usr/include/qt5/QtWidgets/qtabwidget.h \
-		/usr/include/qt5/QtWidgets/qrubberband.h \
-		/usr/include/qt5/QtWidgets/QLabel \
-		/usr/include/qt5/QtWidgets/qlabel.h \
-		/usr/include/qt5/QtWidgets/QListView \
-		/usr/include/qt5/QtWidgets/qlistview.h \
-		/usr/include/qt5/QtWidgets/QSpacerItem \
-		/usr/include/qt5/QtWidgets/QVBoxLayout \
 		src/qt/clientmodel.h \
 		/usr/include/qt5/QtCore/QObject \
 		src/qt/walletmodel.h \
@@ -11057,6 +14105,7 @@ build/overviewpage.o: src/qt/overviewpage.cpp src/qt/overviewpage.h \
 		src/qt/rotocoinunits.h \
 		/usr/include/qt5/QtCore/QString \
 		/usr/include/qt5/QtCore/QAbstractListModel \
+		/usr/include/qt5/QtCore/qabstractitemmodel.h \
 		src/qt/optionsmodel.h \
 		src/qt/transactiontablemodel.h \
 		/usr/include/qt5/QtCore/QAbstractTableModel \
@@ -11073,6 +14122,19 @@ build/overviewpage.o: src/qt/overviewpage.cpp src/qt/overviewpage.h \
 		/usr/include/qt5/QtWidgets/qdialog.h \
 		src/qt/guiconstants.h \
 		/usr/include/qt5/QtWidgets/QAbstractItemDelegate \
+		/usr/include/qt5/QtWidgets/qabstractitemdelegate.h \
+		/usr/include/qt5/QtWidgets/qstyleoption.h \
+		/usr/include/qt5/QtWidgets/qabstractspinbox.h \
+		/usr/include/qt5/QtGui/qvalidator.h \
+		/usr/include/qt5/QtCore/qregularexpression.h \
+		/usr/include/qt5/QtGui/qicon.h \
+		/usr/include/qt5/QtWidgets/qslider.h \
+		/usr/include/qt5/QtWidgets/qabstractslider.h \
+		/usr/include/qt5/QtWidgets/qstyle.h \
+		/usr/include/qt5/QtWidgets/qtabbar.h \
+		/usr/include/qt5/QtWidgets/qtabwidget.h \
+		/usr/include/qt5/QtWidgets/qrubberband.h \
+		/usr/include/qt5/QtWidgets/qframe.h \
 		/usr/include/qt5/QtGui/QPainter \
 		/usr/include/qt5/QtGui/qpainter.h \
 		/usr/include/qt5/QtGui/qtextoption.h \
@@ -11285,57 +14347,6 @@ build/sendcoinsentry.o: src/qt/sendcoinsentry.cpp src/qt/sendcoinsentry.h \
 		/usr/include/qt5/QtGui/qvector2d.h \
 		/usr/include/qt5/QtGui/qtouchdevice.h \
 		build/ui_sendcoinsentry.h \
-		/usr/include/qt5/QtCore/QVariant \
-		/usr/include/qt5/QtWidgets/QAction \
-		/usr/include/qt5/QtWidgets/qaction.h \
-		/usr/include/qt5/QtGui/qicon.h \
-		/usr/include/qt5/QtWidgets/qactiongroup.h \
-		/usr/include/qt5/QtWidgets/QApplication \
-		/usr/include/qt5/QtWidgets/qapplication.h \
-		/usr/include/qt5/QtCore/qcoreapplication.h \
-		/usr/include/qt5/QtCore/qeventloop.h \
-		/usr/include/qt5/QtWidgets/qdesktopwidget.h \
-		/usr/include/qt5/QtGui/qguiapplication.h \
-		/usr/include/qt5/QtGui/qinputmethod.h \
-		/usr/include/qt5/QtWidgets/QButtonGroup \
-		/usr/include/qt5/QtWidgets/qbuttongroup.h \
-		/usr/include/qt5/QtWidgets/QGridLayout \
-		/usr/include/qt5/QtWidgets/qgridlayout.h \
-		/usr/include/qt5/QtWidgets/qlayout.h \
-		/usr/include/qt5/QtWidgets/qlayoutitem.h \
-		/usr/include/qt5/QtWidgets/qboxlayout.h \
-		/usr/include/qt5/QtWidgets/QHBoxLayout \
-		/usr/include/qt5/QtWidgets/QHeaderView \
-		/usr/include/qt5/QtWidgets/qheaderview.h \
-		/usr/include/qt5/QtWidgets/qabstractitemview.h \
-		/usr/include/qt5/QtWidgets/qabstractscrollarea.h \
-		/usr/include/qt5/QtCore/qabstractitemmodel.h \
-		/usr/include/qt5/QtCore/qitemselectionmodel.h \
-		/usr/include/qt5/QtWidgets/qabstractitemdelegate.h \
-		/usr/include/qt5/QtWidgets/qstyleoption.h \
-		/usr/include/qt5/QtWidgets/qabstractspinbox.h \
-		/usr/include/qt5/QtGui/qvalidator.h \
-		/usr/include/qt5/QtCore/qregularexpression.h \
-		/usr/include/qt5/QtWidgets/qslider.h \
-		/usr/include/qt5/QtWidgets/qabstractslider.h \
-		/usr/include/qt5/QtWidgets/qstyle.h \
-		/usr/include/qt5/QtWidgets/qtabbar.h \
-		/usr/include/qt5/QtWidgets/qtabwidget.h \
-		/usr/include/qt5/QtWidgets/qrubberband.h \
-		/usr/include/qt5/QtWidgets/QLabel \
-		/usr/include/qt5/QtWidgets/qlabel.h \
-		/usr/include/qt5/QtWidgets/QToolButton \
-		/usr/include/qt5/QtWidgets/qtoolbutton.h \
-		/usr/include/qt5/QtWidgets/qabstractbutton.h \
-		src/qt/qvalidatedlineedit.h \
-		/usr/include/qt5/QtWidgets/QLineEdit \
-		/usr/include/qt5/QtWidgets/qlineedit.h \
-		/usr/include/qt5/QtGui/qtextcursor.h \
-		/usr/include/qt5/QtGui/qtextformat.h \
-		/usr/include/qt5/QtGui/qpen.h \
-		/usr/include/qt5/QtGui/qtextoption.h \
-		src/qt/rotocoinamountfield.h \
-		/usr/include/qt5/QtWidgets/QWidget \
 		src/qt/guiutil.h \
 		/usr/include/qt5/QtCore/QString \
 		/usr/include/qt5/QtCore/QObject \
@@ -11344,6 +14355,7 @@ build/sendcoinsentry.o: src/qt/sendcoinsentry.cpp src/qt/sendcoinsentry.h \
 		/usr/include/qt5/QtWidgets/qdialog.h \
 		src/qt/rotocoinunits.h \
 		/usr/include/qt5/QtCore/QAbstractListModel \
+		/usr/include/qt5/QtCore/qabstractitemmodel.h \
 		src/qt/addressbookpage.h \
 		/usr/include/qt5/QtWidgets/QDialog \
 		src/qt/walletmodel.h \
@@ -11352,6 +14364,13 @@ build/sendcoinsentry.o: src/qt/sendcoinsentry.cpp src/qt/sendcoinsentry.h \
 		src/qt/addresstablemodel.h \
 		/usr/include/qt5/QtCore/QAbstractTableModel \
 		/usr/include/qt5/QtCore/QStringList \
+		/usr/include/qt5/QtWidgets/QApplication \
+		/usr/include/qt5/QtWidgets/qapplication.h \
+		/usr/include/qt5/QtCore/qcoreapplication.h \
+		/usr/include/qt5/QtCore/qeventloop.h \
+		/usr/include/qt5/QtWidgets/qdesktopwidget.h \
+		/usr/include/qt5/QtGui/qguiapplication.h \
+		/usr/include/qt5/QtGui/qinputmethod.h \
 		/usr/include/qt5/QtGui/QClipboard \
 		/usr/include/qt5/QtGui/qclipboard.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/sendcoinsentry.o src/qt/sendcoinsentry.cpp
@@ -11792,56 +14811,6 @@ build/askpassphrasedialog.o: src/qt/askpassphrasedialog.cpp src/qt/askpassphrase
 		/usr/include/qt5/QtGui/qvector2d.h \
 		/usr/include/qt5/QtGui/qtouchdevice.h \
 		build/ui_askpassphrasedialog.h \
-		/usr/include/qt5/QtCore/QVariant \
-		/usr/include/qt5/QtWidgets/QAction \
-		/usr/include/qt5/QtWidgets/qaction.h \
-		/usr/include/qt5/QtGui/qicon.h \
-		/usr/include/qt5/QtWidgets/qactiongroup.h \
-		/usr/include/qt5/QtWidgets/QApplication \
-		/usr/include/qt5/QtWidgets/qapplication.h \
-		/usr/include/qt5/QtCore/qcoreapplication.h \
-		/usr/include/qt5/QtCore/qeventloop.h \
-		/usr/include/qt5/QtWidgets/qdesktopwidget.h \
-		/usr/include/qt5/QtGui/qguiapplication.h \
-		/usr/include/qt5/QtGui/qinputmethod.h \
-		/usr/include/qt5/QtWidgets/QButtonGroup \
-		/usr/include/qt5/QtWidgets/qbuttongroup.h \
-		/usr/include/qt5/QtWidgets/QDialogButtonBox \
-		/usr/include/qt5/QtWidgets/qdialogbuttonbox.h \
-		/usr/include/qt5/QtWidgets/QFormLayout \
-		/usr/include/qt5/QtWidgets/qformlayout.h \
-		/usr/include/qt5/QtWidgets/QLayout \
-		/usr/include/qt5/QtWidgets/qlayout.h \
-		/usr/include/qt5/QtWidgets/qlayoutitem.h \
-		/usr/include/qt5/QtWidgets/qboxlayout.h \
-		/usr/include/qt5/QtWidgets/qgridlayout.h \
-		/usr/include/qt5/QtWidgets/QHeaderView \
-		/usr/include/qt5/QtWidgets/qheaderview.h \
-		/usr/include/qt5/QtWidgets/qabstractitemview.h \
-		/usr/include/qt5/QtWidgets/qabstractscrollarea.h \
-		/usr/include/qt5/QtWidgets/qframe.h \
-		/usr/include/qt5/QtCore/qabstractitemmodel.h \
-		/usr/include/qt5/QtCore/qitemselectionmodel.h \
-		/usr/include/qt5/QtWidgets/qabstractitemdelegate.h \
-		/usr/include/qt5/QtWidgets/qstyleoption.h \
-		/usr/include/qt5/QtWidgets/qabstractspinbox.h \
-		/usr/include/qt5/QtGui/qvalidator.h \
-		/usr/include/qt5/QtCore/qregularexpression.h \
-		/usr/include/qt5/QtWidgets/qslider.h \
-		/usr/include/qt5/QtWidgets/qabstractslider.h \
-		/usr/include/qt5/QtWidgets/qstyle.h \
-		/usr/include/qt5/QtWidgets/qtabbar.h \
-		/usr/include/qt5/QtWidgets/qtabwidget.h \
-		/usr/include/qt5/QtWidgets/qrubberband.h \
-		/usr/include/qt5/QtWidgets/QLabel \
-		/usr/include/qt5/QtWidgets/qlabel.h \
-		/usr/include/qt5/QtWidgets/QLineEdit \
-		/usr/include/qt5/QtWidgets/qlineedit.h \
-		/usr/include/qt5/QtGui/qtextcursor.h \
-		/usr/include/qt5/QtGui/qtextformat.h \
-		/usr/include/qt5/QtGui/qpen.h \
-		/usr/include/qt5/QtGui/qtextoption.h \
-		/usr/include/qt5/QtWidgets/QVBoxLayout \
 		src/qt/guiconstants.h \
 		src/qt/walletmodel.h \
 		/usr/include/qt5/QtCore/QObject \
@@ -11851,6 +14820,7 @@ build/askpassphrasedialog.o: src/qt/askpassphrasedialog.cpp src/qt/askpassphrase
 		/usr/include/qt5/QtWidgets/QPushButton \
 		/usr/include/qt5/QtWidgets/qpushbutton.h \
 		/usr/include/qt5/QtWidgets/qabstractbutton.h \
+		/usr/include/qt5/QtGui/qicon.h \
 		/usr/include/qt5/QtGui/QKeyEvent
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/askpassphrasedialog.o src/qt/askpassphrasedialog.cpp
 
@@ -12276,64 +15246,6 @@ build/rpcconsole.o: src/qt/rpcconsole.cpp src/qt/rpcconsole.h \
 		/usr/include/qt5/QtGui/qvector2d.h \
 		/usr/include/qt5/QtGui/qtouchdevice.h \
 		build/ui_rpcconsole.h \
-		/usr/include/qt5/QtCore/QVariant \
-		/usr/include/qt5/QtWidgets/QAction \
-		/usr/include/qt5/QtWidgets/qaction.h \
-		/usr/include/qt5/QtGui/qicon.h \
-		/usr/include/qt5/QtWidgets/qactiongroup.h \
-		/usr/include/qt5/QtWidgets/QApplication \
-		/usr/include/qt5/QtWidgets/qapplication.h \
-		/usr/include/qt5/QtCore/qcoreapplication.h \
-		/usr/include/qt5/QtCore/qeventloop.h \
-		/usr/include/qt5/QtWidgets/qdesktopwidget.h \
-		/usr/include/qt5/QtGui/qguiapplication.h \
-		/usr/include/qt5/QtGui/qinputmethod.h \
-		/usr/include/qt5/QtWidgets/QButtonGroup \
-		/usr/include/qt5/QtWidgets/qbuttongroup.h \
-		/usr/include/qt5/QtWidgets/QCheckBox \
-		/usr/include/qt5/QtWidgets/qcheckbox.h \
-		/usr/include/qt5/QtWidgets/qabstractbutton.h \
-		/usr/include/qt5/QtWidgets/QGridLayout \
-		/usr/include/qt5/QtWidgets/qgridlayout.h \
-		/usr/include/qt5/QtWidgets/qlayout.h \
-		/usr/include/qt5/QtWidgets/qlayoutitem.h \
-		/usr/include/qt5/QtWidgets/qboxlayout.h \
-		/usr/include/qt5/QtWidgets/QHBoxLayout \
-		/usr/include/qt5/QtWidgets/QHeaderView \
-		/usr/include/qt5/QtWidgets/qheaderview.h \
-		/usr/include/qt5/QtWidgets/qabstractitemview.h \
-		/usr/include/qt5/QtWidgets/qabstractscrollarea.h \
-		/usr/include/qt5/QtWidgets/qframe.h \
-		/usr/include/qt5/QtCore/qabstractitemmodel.h \
-		/usr/include/qt5/QtCore/qitemselectionmodel.h \
-		/usr/include/qt5/QtWidgets/qabstractitemdelegate.h \
-		/usr/include/qt5/QtWidgets/qstyleoption.h \
-		/usr/include/qt5/QtWidgets/qabstractspinbox.h \
-		/usr/include/qt5/QtGui/qvalidator.h \
-		/usr/include/qt5/QtCore/qregularexpression.h \
-		/usr/include/qt5/QtWidgets/qslider.h \
-		/usr/include/qt5/QtWidgets/qabstractslider.h \
-		/usr/include/qt5/QtWidgets/qstyle.h \
-		/usr/include/qt5/QtWidgets/qtabbar.h \
-		/usr/include/qt5/QtWidgets/qtabwidget.h \
-		/usr/include/qt5/QtWidgets/qrubberband.h \
-		/usr/include/qt5/QtWidgets/QLabel \
-		/usr/include/qt5/QtWidgets/qlabel.h \
-		/usr/include/qt5/QtWidgets/QLineEdit \
-		/usr/include/qt5/QtWidgets/qlineedit.h \
-		/usr/include/qt5/QtGui/qtextcursor.h \
-		/usr/include/qt5/QtGui/qtextformat.h \
-		/usr/include/qt5/QtGui/qpen.h \
-		/usr/include/qt5/QtGui/qtextoption.h \
-		/usr/include/qt5/QtWidgets/QPushButton \
-		/usr/include/qt5/QtWidgets/qpushbutton.h \
-		/usr/include/qt5/QtWidgets/QSpacerItem \
-		/usr/include/qt5/QtWidgets/QTabWidget \
-		/usr/include/qt5/QtWidgets/QTextEdit \
-		/usr/include/qt5/QtWidgets/qtextedit.h \
-		/usr/include/qt5/QtGui/qtextdocument.h \
-		/usr/include/qt5/QtWidgets/QVBoxLayout \
-		/usr/include/qt5/QtWidgets/QWidget \
 		src/qt/clientmodel.h \
 		/usr/include/qt5/QtCore/QObject \
 		src/rotocoinrpc.h \
@@ -12362,6 +15274,7 @@ build/rpcconsole.o: src/qt/rpcconsole.cpp src/qt/rpcconsole.h \
 		/usr/include/qt5/QtCore/QUrl \
 		/usr/include/qt5/QtWidgets/QScrollBar \
 		/usr/include/qt5/QtWidgets/qscrollbar.h \
+		/usr/include/qt5/QtWidgets/qabstractslider.h \
 		build/rpcconsole.moc
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/rpcconsole.o src/qt/rpcconsole.cpp
 
@@ -12601,7 +15514,9 @@ build/splashscreen.o: src/qt/splashscreen.cpp src/qt/splashscreen.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/splashscreen.o src/qt/splashscreen.cpp
 
 build/rotochatpage.o: src/qt/rotochatpage.cpp src/qt/rotochatpage.h \
-		/usr/include/qt5/QtWidgets/QWidget \
+		/usr/include/qt5/QtWidgets/QSplitter \
+		/usr/include/qt5/QtWidgets/qsplitter.h \
+		/usr/include/qt5/QtWidgets/qframe.h \
 		/usr/include/qt5/QtWidgets/qwidget.h \
 		/usr/include/qt5/QtGui/qwindowdefs.h \
 		/usr/include/qt5/QtCore/qglobal.h \
@@ -12709,69 +15624,21 @@ build/rotochatpage.o: src/qt/rotochatpage.cpp src/qt/rotochatpage.h \
 		/usr/include/qt5/QtCore/qfiledevice.h \
 		/usr/include/qt5/QtGui/qvector2d.h \
 		/usr/include/qt5/QtGui/qtouchdevice.h \
-		/usr/include/qt5/QtWebKitWidgets/QWebView \
-		/usr/include/qt5/QtWebKitWidgets/qwebview.h \
-		/usr/include/qt5/QtWebKit/qwebkitglobal.h \
-		/usr/include/qt5/QtWebKitWidgets/qwebpage.h \
-		/usr/include/qt5/QtWebKit/qwebsettings.h \
-		/usr/include/qt5/QtGui/qicon.h \
-		/usr/include/qt5/QtGui/qpainter.h \
-		/usr/include/qt5/QtGui/qtextoption.h \
-		/usr/include/qt5/QtGui/qpen.h \
-		/usr/include/qt5/QtNetwork/qnetworkaccessmanager.h \
-		/usr/include/qt5/QtCore/QObject \
-		/usr/include/qt5/QtNetwork/QSslConfiguration \
-		/usr/include/qt5/QtNetwork/qsslconfiguration.h \
-		/usr/include/qt5/QtNetwork/qsslsocket.h \
-		/usr/include/qt5/QtNetwork/qtcpsocket.h \
-		/usr/include/qt5/QtNetwork/qabstractsocket.h \
-		/usr/include/qt5/QtNetwork/qsslerror.h \
-		/usr/include/qt5/QtNetwork/qsslcertificate.h \
-		/usr/include/qt5/QtCore/qcryptographichash.h \
+		/usr/include/qt5/QtCore/QHash \
+		src/qt/ircmessageformatter.h \
+		../libcommuni/include/IrcCore/IrcMessage \
+		../libcommuni/include/IrcCore/ircmessage.h \
+		../libcommuni/include/IrcCore/Irc \
+		../libcommuni/include/IrcCore/irc.h \
+		../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
 		/usr/include/qt5/QtCore/qdatetime.h \
-		/usr/include/qt5/QtNetwork/qssl.h \
-		/usr/include/qt5/QtCore/QFlags \
 		build/ui_rotochatpage.h \
-		/usr/include/qt5/QtCore/QVariant \
-		/usr/include/qt5/QtWidgets/QAction \
-		/usr/include/qt5/QtWidgets/qaction.h \
-		/usr/include/qt5/QtWidgets/qactiongroup.h \
-		/usr/include/qt5/QtWidgets/QApplication \
-		/usr/include/qt5/QtWidgets/qapplication.h \
-		/usr/include/qt5/QtCore/qcoreapplication.h \
-		/usr/include/qt5/QtCore/qeventloop.h \
-		/usr/include/qt5/QtWidgets/qdesktopwidget.h \
-		/usr/include/qt5/QtGui/qguiapplication.h \
-		/usr/include/qt5/QtGui/qinputmethod.h \
-		/usr/include/qt5/QtWidgets/QButtonGroup \
-		/usr/include/qt5/QtWidgets/qbuttongroup.h \
-		/usr/include/qt5/QtWidgets/QGridLayout \
-		/usr/include/qt5/QtWidgets/qgridlayout.h \
-		/usr/include/qt5/QtWidgets/qlayout.h \
-		/usr/include/qt5/QtWidgets/qlayoutitem.h \
-		/usr/include/qt5/QtWidgets/qboxlayout.h \
-		/usr/include/qt5/QtWidgets/QHeaderView \
-		/usr/include/qt5/QtWidgets/qheaderview.h \
-		/usr/include/qt5/QtWidgets/qabstractitemview.h \
-		/usr/include/qt5/QtWidgets/qabstractscrollarea.h \
-		/usr/include/qt5/QtWidgets/qframe.h \
-		/usr/include/qt5/QtCore/qabstractitemmodel.h \
-		/usr/include/qt5/QtCore/qitemselectionmodel.h \
-		/usr/include/qt5/QtWidgets/qabstractitemdelegate.h \
-		/usr/include/qt5/QtWidgets/qstyleoption.h \
-		/usr/include/qt5/QtWidgets/qabstractspinbox.h \
-		/usr/include/qt5/QtGui/qvalidator.h \
-		/usr/include/qt5/QtCore/qregularexpression.h \
-		/usr/include/qt5/QtWidgets/qslider.h \
-		/usr/include/qt5/QtWidgets/qabstractslider.h \
-		/usr/include/qt5/QtWidgets/qstyle.h \
-		/usr/include/qt5/QtWidgets/qtabbar.h \
-		/usr/include/qt5/QtWidgets/qtabwidget.h \
-		/usr/include/qt5/QtWidgets/qrubberband.h \
 		src/qt/walletmodel.h \
+		/usr/include/qt5/QtCore/QObject \
 		src/allocators.h \
-		/usr/include/qt5/QtWebKit/QtWebKit \
-		/usr/include/qt5/QtWebKit/QtWebKitDepends \
+		/usr/include/qt5/QtGui/QtGui \
+		/usr/include/qt5/QtGui/QtGuiDepends \
 		/usr/include/qt5/QtCore/QtCore \
 		/usr/include/qt5/QtCore/QtCoreDepends \
 		/usr/include/qt5/QtCore/qabstractanimation.h \
@@ -12803,8 +15670,10 @@ build/rotochatpage.o: src/qt/rotochatpage.cpp src/qt/rotochatpage.h \
 		/usr/include/qt5/QtCore/qtemporarydir.h \
 		/usr/include/qt5/QtCore/QScopedPointer \
 		/usr/include/qt5/QtCore/qtemporaryfile.h \
+		/usr/include/qt5/QtCore/qabstractitemmodel.h \
 		/usr/include/qt5/QtCore/qabstractproxymodel.h \
 		/usr/include/qt5/QtCore/qidentityproxymodel.h \
+		/usr/include/qt5/QtCore/qitemselectionmodel.h \
 		/usr/include/qt5/QtCore/qsortfilterproxymodel.h \
 		/usr/include/qt5/QtCore/qstringlistmodel.h \
 		/usr/include/qt5/QtCore/qjsonarray.h \
@@ -12812,8 +15681,10 @@ build/rotochatpage.o: src/qt/rotochatpage.cpp src/qt/rotochatpage.h \
 		/usr/include/qt5/QtCore/qjsondocument.h \
 		/usr/include/qt5/QtCore/qjsonobject.h \
 		/usr/include/qt5/QtCore/qabstracteventdispatcher.h \
+		/usr/include/qt5/QtCore/qeventloop.h \
 		/usr/include/qt5/QtCore/qabstractnativeeventfilter.h \
 		/usr/include/qt5/QtCore/qbasictimer.h \
+		/usr/include/qt5/QtCore/qcoreapplication.h \
 		/usr/include/qt5/QtCore/qmath.h \
 		/usr/include/qt5/QtCore/qmetaobject.h \
 		/usr/include/qt5/QtCore/qmimedata.h \
@@ -12862,10 +15733,12 @@ build/rotochatpage.o: src/qt/rotochatpage.cpp src/qt/rotochatpage.h \
 		/usr/include/qt5/QtCore/qcollator.h \
 		/usr/include/qt5/QtCore/qcommandlineoption.h \
 		/usr/include/qt5/QtCore/qcommandlineparser.h \
+		/usr/include/qt5/QtCore/qcryptographichash.h \
 		/usr/include/qt5/QtCore/qelapsedtimer.h \
 		/usr/include/qt5/QtCore/qlinkedlist.h \
 		/usr/include/qt5/QtCore/qmessageauthenticationcode.h \
 		/usr/include/qt5/QtCore/qqueue.h \
+		/usr/include/qt5/QtCore/qregularexpression.h \
 		/usr/include/qt5/QtCore/qscopedvaluerollback.h \
 		/usr/include/qt5/QtCore/qstack.h \
 		/usr/include/qt5/QtCore/qtextboundaryfinder.h \
@@ -12873,13 +15746,12 @@ build/rotochatpage.o: src/qt/rotochatpage.cpp src/qt/rotochatpage.h \
 		/usr/include/qt5/QtCore/qtimezone.h \
 		/usr/include/qt5/QtCore/qxmlstream.h \
 		/usr/include/qt5/QtCore/qtcoreversion.h \
-		/usr/include/qt5/QtGui/QtGui \
-		/usr/include/qt5/QtGui/QtGuiDepends \
 		/usr/include/qt5/QtGui/qaccessible.h \
 		/usr/include/qt5/QtGui/qaccessiblebridge.h \
 		/usr/include/qt5/QtGui/qaccessibleobject.h \
 		/usr/include/qt5/QtGui/qaccessibleplugin.h \
 		/usr/include/qt5/QtGui/qbitmap.h \
+		/usr/include/qt5/QtGui/qicon.h \
 		/usr/include/qt5/QtGui/qiconengine.h \
 		/usr/include/qt5/QtGui/qiconengineplugin.h \
 		/usr/include/qt5/QtGui/qimageiohandler.h \
@@ -12894,6 +15766,8 @@ build/rotochatpage.o: src/qt/rotochatpage.cpp src/qt/rotochatpage.h \
 		/usr/include/qt5/QtGui/qdrag.h \
 		/usr/include/qt5/QtGui/qgenericplugin.h \
 		/usr/include/qt5/QtGui/qgenericpluginfactory.h \
+		/usr/include/qt5/QtGui/qguiapplication.h \
+		/usr/include/qt5/QtGui/qinputmethod.h \
 		/usr/include/qt5/QtGui/qoffscreensurface.h \
 		/usr/include/qt5/QtGui/qsurface.h \
 		/usr/include/qt5/QtGui/qsurfaceformat.h \
@@ -12934,6 +15808,9 @@ build/rotochatpage.o: src/qt/rotochatpage.cpp src/qt/rotochatpage.h \
 		/usr/include/qt5/QtGui/qbackingstore.h \
 		/usr/include/qt5/QtGui/qpagedpaintdevice.h \
 		/usr/include/qt5/QtGui/qpaintengine.h \
+		/usr/include/qt5/QtGui/qpainter.h \
+		/usr/include/qt5/QtGui/qtextoption.h \
+		/usr/include/qt5/QtGui/qpen.h \
 		/usr/include/qt5/QtGui/qpdfwriter.h \
 		/usr/include/qt5/QtGui/qabstracttextdocumentlayout.h \
 		/usr/include/qt5/QtGui/qtextlayout.h \
@@ -12951,51 +15828,148 @@ build/rotochatpage.o: src/qt/rotochatpage.cpp src/qt/rotochatpage.h \
 		/usr/include/qt5/QtGui/qtextlist.h \
 		/usr/include/qt5/QtGui/qtexttable.h \
 		/usr/include/qt5/QtGui/qdesktopservices.h \
+		/usr/include/qt5/QtGui/qvalidator.h \
 		/usr/include/qt5/QtGui/qtguiversion.h \
-		/usr/include/qt5/QtNetwork/QtNetwork \
-		/usr/include/qt5/QtNetwork/QtNetworkDepends \
-		/usr/include/qt5/QtNetwork/qabstractnetworkcache.h \
-		/usr/include/qt5/QtNetwork/qnetworkrequest.h \
-		/usr/include/qt5/QtCore/QString \
-		/usr/include/qt5/QtCore/QUrl \
-		/usr/include/qt5/QtNetwork/qhttpmultipart.h \
-		/usr/include/qt5/QtCore/QByteArray \
-		/usr/include/qt5/QtCore/QIODevice \
-		/usr/include/qt5/QtNetwork/QNetworkRequest \
-		/usr/include/qt5/QtNetwork/qnetworkcookie.h \
-		/usr/include/qt5/QtCore/QMetaType \
-		/usr/include/qt5/QtNetwork/qnetworkcookiejar.h \
-		/usr/include/qt5/QtNetwork/qnetworkdiskcache.h \
-		/usr/include/qt5/QtNetwork/qnetworkreply.h \
-		/usr/include/qt5/QtNetwork/QNetworkAccessManager \
-		/usr/include/qt5/QtNetwork/qnetworkconfigmanager.h \
-		/usr/include/qt5/QtNetwork/qnetworkconfiguration.h \
-		/usr/include/qt5/QtNetwork/qnetworksession.h \
-		/usr/include/qt5/QtNetwork/qnetworkinterface.h \
-		/usr/include/qt5/QtNetwork/qhostaddress.h \
-		/usr/include/qt5/QtNetwork/qauthenticator.h \
-		/usr/include/qt5/QtNetwork/qdnslookup.h \
-		/usr/include/qt5/QtNetwork/qhostinfo.h \
-		/usr/include/qt5/QtNetwork/qnetworkproxy.h \
-		/usr/include/qt5/QtNetwork/qlocalserver.h \
-		/usr/include/qt5/QtNetwork/qlocalsocket.h \
-		/usr/include/qt5/QtNetwork/qtcpserver.h \
-		/usr/include/qt5/QtNetwork/qudpsocket.h \
-		/usr/include/qt5/QtNetwork/qsslcertificateextension.h \
-		/usr/include/qt5/QtNetwork/qsslcipher.h \
-		/usr/include/qt5/QtNetwork/qsslkey.h \
-		/usr/include/qt5/QtNetwork/qtnetworkversion.h \
-		/usr/include/qt5/QtWebKit/qwebdatabase.h \
-		/usr/include/qt5/QtWebKit/qwebelement.h \
-		/usr/include/qt5/QtWebKit/qwebhistory.h \
-		/usr/include/qt5/QtWebKit/qwebhistoryinterface.h \
-		/usr/include/qt5/QtWebKit/qwebkitplatformplugin.h \
-		/usr/include/qt5/QtGui/QColor \
-		/usr/include/qt5/QtGui/QFont \
-		/usr/include/qt5/QtWebKit/qwebpluginfactory.h \
-		/usr/include/qt5/QtWebKit/qwebsecurityorigin.h \
-		/usr/include/qt5/QtWebKit/qtwebkitversion.h
+		/usr/include/qt5/QtGui/QTextDocument \
+		/usr/include/qt5/QtGui/QTextCursor \
+		/usr/include/qt5/QtWidgets/QVBoxLayout \
+		/usr/include/qt5/QtWidgets/qboxlayout.h \
+		/usr/include/qt5/QtWidgets/qlayout.h \
+		/usr/include/qt5/QtWidgets/qlayoutitem.h \
+		/usr/include/qt5/QtWidgets/qgridlayout.h \
+		/usr/include/qt5/QtWidgets/QLineEdit \
+		/usr/include/qt5/QtWidgets/qlineedit.h \
+		/usr/include/qt5/QtWidgets/QShortcut \
+		/usr/include/qt5/QtWidgets/qshortcut.h \
+		/usr/include/qt5/QtWidgets/QListView \
+		/usr/include/qt5/QtWidgets/qlistview.h \
+		/usr/include/qt5/QtWidgets/qabstractitemview.h \
+		/usr/include/qt5/QtWidgets/qabstractscrollarea.h \
+		/usr/include/qt5/QtWidgets/qabstractitemdelegate.h \
+		/usr/include/qt5/QtWidgets/qstyleoption.h \
+		/usr/include/qt5/QtWidgets/qabstractspinbox.h \
+		/usr/include/qt5/QtWidgets/qslider.h \
+		/usr/include/qt5/QtWidgets/qabstractslider.h \
+		/usr/include/qt5/QtWidgets/qstyle.h \
+		/usr/include/qt5/QtWidgets/qtabbar.h \
+		/usr/include/qt5/QtWidgets/qtabwidget.h \
+		/usr/include/qt5/QtWidgets/qrubberband.h \
+		/usr/include/qt5/QtWidgets/QTextEdit \
+		/usr/include/qt5/QtWidgets/qtextedit.h \
+		/usr/include/qt5/QtCore/QTime \
+		../libcommuni/include/IrcModel/IrcUser \
+		../libcommuni/include/IrcModel/ircuser.h \
+		../libcommuni/include/IrcModel/IrcBuffer \
+		../libcommuni/include/IrcModel/ircbuffer.h \
+		../libcommuni/include/IrcCore/IrcCommand \
+		../libcommuni/include/IrcCore/irccommand.h \
+		../libcommuni/include/IrcModel/IrcUserModel \
+		../libcommuni/include/IrcModel/ircusermodel.h \
+		../libcommuni/include/IrcUtil/IrcCompleter \
+		../libcommuni/include/IrcUtil/irccompleter.h \
+		../libcommuni/include/IrcCore/IrcConnection \
+		../libcommuni/include/IrcCore/ircconnection.h \
+		../libcommuni/include/IrcCore/IrcNetwork \
+		../libcommuni/include/IrcCore/ircnetwork.h \
+		/usr/include/qt5/QtNetwork/qabstractsocket.h \
+		../libcommuni/include/IrcModel/IrcBufferModel \
+		../libcommuni/include/IrcModel/ircbuffermodel.h \
+		../libcommuni/include/IrcUtil/IrcCommandParser \
+		../libcommuni/include/IrcUtil/irccommandparser.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/rotochatpage.o src/qt/rotochatpage.cpp
+
+build/ircmessageformatter.o: src/qt/ircmessageformatter.cpp src/qt/ircmessageformatter.h \
+		../libcommuni/include/IrcCore/IrcMessage \
+		../libcommuni/include/IrcCore/ircmessage.h \
+		../libcommuni/include/IrcCore/Irc \
+		../libcommuni/include/IrcCore/irc.h \
+		../libcommuni/include/IrcCore/IrcGlobal \
+		../libcommuni/include/IrcCore/ircglobal.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		/usr/include/qt5/QtCore/qdatetime.h \
+		/usr/include/qt5/QtCore/qsharedpointer.h \
+		/usr/include/qt5/QtCore/qsharedpointer_impl.h \
+		../libcommuni/include/IrcUtil/IrcTextFormat \
+		../libcommuni/include/IrcUtil/irctextformat.h \
+		../libcommuni/include/IrcCore/IrcConnection \
+		../libcommuni/include/IrcCore/ircconnection.h \
+		../libcommuni/include/IrcCore/IrcNetwork \
+		../libcommuni/include/IrcCore/ircnetwork.h \
+		/usr/include/qt5/QtNetwork/qabstractsocket.h \
+		/usr/include/qt5/QtCore/QTime
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/ircmessageformatter.o src/qt/ircmessageformatter.cpp
 
 build/qrc_rotocoin.o: qrc_rotocoin.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/qrc_rotocoin.o qrc_rotocoin.cpp

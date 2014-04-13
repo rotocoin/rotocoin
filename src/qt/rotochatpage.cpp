@@ -1,77 +1,313 @@
 #include "rotochatpage.h"
+#include "ircmessageformatter.h"
 #include "ui_rotochatpage.h"
 #include "walletmodel.h"
 
-#include <QtWebKitWidgets>
-#include <QtWidgets>
 #include <QtGui>
 
-#define ROTOCHAT_URL "https://kiwiirc.com/client/irc.freenode.org:6697/?nick=rotocoin?#therotocoinproject"
-//#define ROTOCHAT_URL "https://kiwiirc.com/client/irc.freenode.org:6697/?nick=rotocoin?#therotocoinproject"
+#include <QTextDocument>
+#include <QTextCursor>
+#include <QVBoxLayout>
+#include <QLineEdit>
+#include <QShortcut>
+#include <QListView>
+#include <QTextEdit>
+#include <QTime>
+
+#include <Irc>
+#include <IrcUser>
+#include <IrcBuffer>
+#include <IrcCommand>
+#include <IrcMessage>
+#include <IrcUserModel>
+#include <IrcCompleter>
+#include <IrcConnection>
+#include <IrcBufferModel>
+#include <IrcCommandParser>
+
+static const char* CHANNEL = "#therotocoinproject";
+static const char* SERVER = "irc.freenode.net";
+
 
 RotoChatPage::RotoChatPage(QWidget *parent) 
     : QWidget(parent),    ui(new Ui::RotoChatPage),    walletModel(0)
 {
     ui->setupUi(this);
-    ui->webView->setVisible(false);
-    ui->webView->setUrl((QUrl(ROTOCHAT_URL)));
-    ui->webView->setContextMenuPolicy(Qt::PreventContextMenu);
-    
-    connect(ui->webView, SIGNAL(loadFinished(bool)), SLOT(hideElements(bool)));
-}
+    createParser();
+    createConnection();
+    createCompleter();
+    createUserList();
+    //createLayout();
+    createBufferList();    
 
-void RotoChatPage::onPageLoadFinished()
-{
-    if (true)
-    {
-        QWebFrame* frame = ui->webView->page()->currentFrame();
-        //QTimer::singleShot(2000, this, SLOT(hideElements(ok))); // WE CALL TWICE TO ENSURE
-        if(frame!=NULL)
-        {
-            //frame->mainFrame()->documentElement().findFirst("input:([type=text])").setAttribute("display", "none");
-            //get collection of the input elements with name "nick"
-            //function introduced in Qt 4.6
-            //QWebElementCollection collection = frame->findAllElements("input[id=\"server_select_nick\"]");
-            //foreach (QWebElement element, collection)
-                //element.setAttribute("value","rotoworldchange");
-            ui->webView->setZoomFactor(1);
-            ui->webView->setVisible(true);
-        }
-    }
-        //ui->webView->page()->mainFrame()->documentElement().findFirst("#server_select_show_pass").setAttribute("checked", "true");
-        //ui->webView->page()->mainFrame()->documentElement().findFirst("input:([type=text])").setAttribute("display", "none");
-        //return;
-}
+    // queue a command to automatically join the channel when connected
+    connection->sendCommand(IrcCommand::createJoin(CHANNEL));
+    connection->open();
 
-void RotoChatPage::hideElements(bool ok)
-{
-    if (ok)
-    {
-        //QWebFrame* frame = ui->webView->page()->currentFrame();// pasar por parametro
-        QWebElement dom = ui->webView->page()->mainFrame()->documentElement();
-        dom.findFirst("tr.channel").setStyleProperty("display","none");
-        dom.findFirst("a.show_more").setStyleProperty("display","none");
-        dom.findFirst("a.kiwi_logo").setStyleProperty("display","none");
-        dom.findFirst("i.icon-upload-alt").setStyleProperty("display","none");
-        dom.findFirst("div.app_tools").setStyleProperty("display","none");
-        dom.findFirst("i.icon-signout.channel_part").setStyleProperty("display","none");
-        //dom.findFirst("li.active").setStyleProperty("display","none");
-
-        /*do
-        {
-
-        
-        }
-        while(frame->documentElement().findFirst("tr.channel").attribute("display")!="none");*/
-        QTimer::singleShot(2000, this, SLOT(onPageLoadFinished()));
-        //onPageLoadFinished();
-        
-    }
+    textEdit->append(IrcMessageFormatter::formatMessage(tr("! Welcome to the Communi %1 example client.").arg(IRC_VERSION_STR)));
+    textEdit->append(IrcMessageFormatter::formatMessage(tr("! This example connects %1 and joins %2.").arg(SERVER, CHANNEL)));
+    textEdit->append(IrcMessageFormatter::formatMessage(tr("! PS. Available commands: JOIN, ME, NICK, PART")));   
 
 }
+
 
 RotoChatPage::~RotoChatPage()
 {
+    if (connection->isActive()) {
+        connection->quit(connection->realName());
+        connection->close();
+    }
+
     delete ui;
 }
 
+void RotoChatPage::onConnected()
+{
+    textEdit->append(IrcMessageFormatter::formatMessage("! Connected to %1.").arg(SERVER));
+    textEdit->append(IrcMessageFormatter::formatMessage("! Joining %1...").arg(CHANNEL));
+}
+
+void RotoChatPage::onConnecting()
+{
+    textEdit->append(IrcMessageFormatter::formatMessage("! Connecting %1...").arg(SERVER));
+}
+
+void RotoChatPage::onDisconnected()
+{
+    textEdit->append(IrcMessageFormatter::formatMessage("! Disconnected from %1.").arg(SERVER));
+}
+
+void RotoChatPage::onTextEdited()
+{
+    // clear the possible error indication
+    lineEdit->setStyleSheet(QString());
+}
+
+void RotoChatPage::onTextEntered()
+{
+    QString input = lineEdit->text();
+    IrcCommand* command = parser->parse(input);
+    if (command) {
+        connection->sendCommand(command);
+
+        // echo own messages (servers do not send our own messages back)
+        if (command->type() == IrcCommand::Message || command->type() == IrcCommand::CtcpAction) {
+            IrcMessage* msg = command->toMessage(connection->nickName(), connection);
+            receiveMessage(msg);
+            delete msg;
+        }
+
+        lineEdit->clear();
+    } else if (input.length() > 1) {
+        QString error;
+        QString command = lineEdit->text().mid(1).split(" ", QString::SkipEmptyParts).value(0).toUpper();
+        if (parser->commands().contains(command))
+            error = tr("[ERROR] Syntax: %1").arg(parser->syntax(command).replace("<", "&lt;").replace(">", "&gt;"));
+        else
+            error = tr("[ERROR] Unknown command: %1").arg(command);
+        textEdit->append(IrcMessageFormatter::formatMessage(error));
+        lineEdit->setStyleSheet("background: salmon");
+    }
+}
+
+void RotoChatPage::onCompletion()
+{
+    completer->complete(lineEdit->text(), lineEdit->cursorPosition());
+}
+
+void RotoChatPage::onCompleted(const QString& text, int cursor)
+{
+    lineEdit->setText(text);
+    lineEdit->setCursorPosition(cursor);
+}
+
+void RotoChatPage::onBufferAdded(IrcBuffer* buffer)
+{
+    // joined a buffer - start listening to buffer specific messages
+    connect(buffer, SIGNAL(messageReceived(IrcMessage*)), this, SLOT(receiveMessage(IrcMessage*)));
+
+    // create a document for storing the buffer specific messages
+    QTextDocument* document = new QTextDocument(buffer);
+    documents.insert(buffer, document);
+
+    // create a sorted model for buffer users
+    IrcUserModel* userModel = new IrcUserModel(buffer);
+    userModel->setSortMethod(Irc::SortByTitle);
+    userModels.insert(buffer, userModel);
+
+    // activate the new buffer
+    int idx = bufferModel->buffers().indexOf(buffer);
+    if (idx != -1)
+        bufferList->setCurrentIndex(bufferModel->index(idx));
+}
+
+void RotoChatPage::onBufferRemoved(IrcBuffer* buffer)
+{
+    // the buffer specific models and documents are no longer needed
+    delete userModels.take(buffer);
+    delete documents.take(buffer);
+}
+
+void RotoChatPage::onBufferActivated(const QModelIndex& index)
+{
+    IrcBuffer* buffer = index.data(Irc::BufferRole).value<IrcBuffer*>();
+
+    // document, user list and nick completion for the current buffer
+    textEdit->setDocument(documents.value(buffer));
+    userList->setModel(userModels.value(buffer));
+    completer->setBuffer(buffer);
+
+    // keep the command parser aware of the context
+    if (buffer)
+        parser->setTarget(buffer->title());
+}
+
+void RotoChatPage::onUserActivated(const QModelIndex& index)
+{
+    IrcUser* user = index.data(Irc::UserRole).value<IrcUser*>();
+
+    if (user) {
+        IrcBuffer* buffer = bufferModel->add(user->name());
+
+        // activate the new query
+        int idx = bufferModel->buffers().indexOf(buffer);
+        if (idx != -1)
+            bufferList->setCurrentIndex(bufferModel->index(idx));
+    }
+}
+
+static void appendHtml(QTextDocument* document, const QString& html)
+{
+    QTextCursor cursor(document);
+    cursor.beginEditBlock();
+    cursor.movePosition(QTextCursor::End);
+    if (!document->isEmpty())
+        cursor.insertBlock();
+    cursor.insertHtml(html);
+    cursor.endEditBlock();
+}
+
+void RotoChatPage::receiveMessage(IrcMessage* message)
+{
+    IrcBuffer* buffer = qobject_cast<IrcBuffer*>(sender());
+    if (!buffer)
+        buffer = bufferList->currentIndex().data(Irc::BufferRole).value<IrcBuffer*>();
+
+    QTextDocument* document = documents.value(buffer);
+    if (document) {
+        QString html = IrcMessageFormatter::formatMessage(message);
+        if (!html.isEmpty())
+            appendHtml(document, html);
+    }
+}
+
+/*void RotoChatPage::createLayout()
+{
+    setWindowTitle(tr("Communi %1 example client").arg(IRC_VERSION_STR));
+
+    // a read-only text editor for showing the messages
+    textEdit = new QTextEdit(this);
+    textEdit->setReadOnly(true);
+
+    // a line editor for entering commands
+    lineEdit = new QLineEdit(this);
+    lineEdit->setAttribute(Qt::WA_MacShowFocusRect, false);
+    textEdit->setFocusProxy(lineEdit);
+    connect(lineEdit, SIGNAL(returnPressed()), this, SLOT(onTextEntered()));
+    connect(lineEdit, SIGNAL(textEdited(QString)), this, SLOT(onTextEdited()));
+
+    // the rest is just setting up the UI layout...
+    QSplitter* splitter = new QSplitter(this);
+    splitter->setHandleWidth(1);
+    splitter->addWidget(textEdit);
+    splitter->addWidget(userList);
+    splitter->setStretchFactor(0, 5);
+    splitter->setStretchFactor(1, 1);
+
+    QWidget* container = new QWidget(this);
+    QVBoxLayout* layout = new QVBoxLayout(container);
+    layout->setSpacing(0);
+    layout->setMargin(0);
+    layout->addWidget(splitter);
+    layout->addWidget(lineEdit);
+
+    layout->addWidget(container);
+}*/
+
+void RotoChatPage::createCompleter()
+{
+    // nick name completion
+    completer = new IrcCompleter(this);
+    completer->setParser(parser);
+    connect(completer, SIGNAL(completed(QString,int)), this, SLOT(onCompleted(QString,int)));
+
+    QShortcut* shortcut = new QShortcut(Qt::Key_Tab, this);
+    connect(shortcut, SIGNAL(activated()), this, SLOT(onCompletion()));
+}
+
+void RotoChatPage::createParser()
+{
+    // create a command parser and teach it some commands. notice also
+    // that we must keep the command parser aware of the context in
+    // createUi() and onBufferActivated()
+
+    parser = new IrcCommandParser(this);
+    parser->setTolerant(true);
+    parser->setTriggers(QStringList("/"));
+    parser->addCommand(IrcCommand::Join, "JOIN <#channel> (<key>)");
+    parser->addCommand(IrcCommand::CtcpAction, "ME [target] <message...>");
+    parser->addCommand(IrcCommand::Mode, "MODE (<channel/user>) (<mode>) (<arg>)");
+    parser->addCommand(IrcCommand::Nick, "NICK <nick>");
+    parser->addCommand(IrcCommand::Part, "PART (<#channel>) (<message...>)");
+}
+
+void RotoChatPage::createUserList()
+{
+    // a list of channel users
+    userList = new QListView(this);
+    userList->setFocusPolicy(Qt::NoFocus);
+
+    // open a private query when double clicking a user
+    connect(userList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onUserActivated(QModelIndex)));
+}
+
+void RotoChatPage::createBufferList()
+{
+    bufferModel = new IrcBufferModel(connection);
+    connect(bufferModel, SIGNAL(added(IrcBuffer*)), this, SLOT(onBufferAdded(IrcBuffer*)));
+    connect(bufferModel, SIGNAL(removed(IrcBuffer*)), this, SLOT(onBufferRemoved(IrcBuffer*)));
+
+    bufferList = new QListView(this);
+    bufferList->setFocusPolicy(Qt::NoFocus);
+    bufferList->setModel(bufferModel);
+
+    // keep the command parser aware of the context
+    connect(bufferModel, SIGNAL(channelsChanged(QStringList)), parser, SLOT(setChannels(QStringList)));
+
+    // keep track of the current buffer, see also onBufferActivated()
+    connect(bufferList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onBufferActivated(QModelIndex)));
+
+    // create a server buffer for non-targeted messages...
+    IrcBuffer* serverBuffer = bufferModel->add(connection->host());
+
+    // ...and connect it to IrcBufferModel::messageIgnored()
+    connect(bufferModel, SIGNAL(messageIgnored(IrcMessage*)), serverBuffer, SLOT(receiveMessage(IrcMessage*)));
+
+//    layout->addWidget(0, bufferList);
+
+}
+
+void RotoChatPage::createConnection()
+{
+    connection = new IrcConnection(this);
+    connect(connection, SIGNAL(connected()), this, SLOT(onConnected()));
+    connect(connection, SIGNAL(connecting()), this, SLOT(onConnecting()));
+    connect(connection, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
+
+    qsrand(QTime::currentTime().msec());
+
+    connection->setHost(SERVER);
+    connection->setUserName("communi");
+    connection->setNickName(tr("Client%1").arg(qrand() % 9999));
+    connection->setRealName(tr("Communi %1 example client").arg(IRC_VERSION_STR));
+}

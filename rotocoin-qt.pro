@@ -3,7 +3,7 @@ TARGET = rotocoin-qt
 macx:TARGET = "Rotocoin-Qt"
 VERSION = 0.8.6.2
 INCLUDEPATH += src src/json src/qt
-QT += core gui network webkitwidgets
+QT += core gui network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE
 win32:DEFINES += _MT WIN32 _WINDOWS
@@ -11,6 +11,9 @@ DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE
 CONFIG += no_include_pwd
 CONFIG += thread
 CONFIG += exceptions
+CONFIG += communi
+COMMUNI += core model util
+include(../../git/libcommuni/src/src.pri)
 
 # for boost 1.37, add -mt to the boost libraries
 # use: qmake BOOST_LIB_SUFFIX=-mt
@@ -243,7 +246,8 @@ HEADERS += src/qt/rotocoingui.h \
     src/limitedmap.h \
     src/qt/macnotificationhandler.h \
     src/qt/splashscreen.h \
-    src/qt/rotochatpage.h
+    src/qt/rotochatpage.h \
+    src/qt/ircmessageformatter.h
 
 SOURCES += src/qt/rotocoin.cpp \
     src/qt/rotocoingui.cpp \
@@ -315,7 +319,8 @@ SOURCES += src/qt/rotocoin.cpp \
     src/leveldb.cpp \
     src/txdb.cpp \
     src/qt/splashscreen.cpp \
-    src/qt/rotochatpage.cpp
+    src/qt/rotochatpage.cpp \
+    src/qt/ircmessageformatter.cpp
 
 RESOURCES += src/qt/rotocoin.qrc
 
