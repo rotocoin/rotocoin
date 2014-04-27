@@ -2,6 +2,10 @@
 #define OVERVIEWPAGE_H
 
 #include <QWidget>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QByteArray>
+#include <QTimer>
 
 namespace Ui {
     class OverviewPage;
@@ -45,10 +49,20 @@ private:
     TxViewDelegate *txdelegate;
     TransactionFilterProxy *filter;
 
+
+//añadido news
+
+    QNetworkAccessManager *nam;
+    QNetworkAccessManager *nam2;
+    
 private slots:
     void updateDisplayUnit();
     void handleTransactionClicked(const QModelIndex &index);
     void updateAlerts(const QString &warnings);
+//news
+
+    void finished(QNetworkReply *reply);
+    void DoHttpGet();
 };
 
 #endif // OVERVIEWPAGE_H
