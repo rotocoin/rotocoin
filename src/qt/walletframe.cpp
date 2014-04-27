@@ -105,11 +105,6 @@ void WalletFrame::gotoSendCoinsPage(QString addr)
     walletStack->gotoSendCoinsPage(addr);
 }
 
-void WalletFrame::gotoRotoChatPage()
-{
-    walletStack->gotoRotoChatPage();
-}
-
 void WalletFrame::gotoSignMessageTab(QString addr)
 {
     WalletView *walletView = currentWalletView();

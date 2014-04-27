@@ -7,6 +7,7 @@ src/rotocoin-cli
 src/test/test_rotocoin
 src/qt/test/test_rotocoin-qt
 
+Makefile
 Makefile.in
 aclocal.m4
 autom4te.cache/

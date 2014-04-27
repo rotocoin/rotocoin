@@ -3,7 +3,7 @@ TARGET = rotocoin-qt
 macx:TARGET = "Rotocoin-Qt"
 VERSION = 0.8.6.2
 INCLUDEPATH += src src/json src/qt
-QT += core gui network webkitwidgets
+QT += core gui network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE
 win32:DEFINES += _MT WIN32 _WINDOWS
@@ -242,8 +242,7 @@ HEADERS += src/qt/rotocoingui.h \
     src/threadsafety.h \
     src/limitedmap.h \
     src/qt/macnotificationhandler.h \
-    src/qt/splashscreen.h \
-    src/qt/rotochatpage.h
+    src/qt/splashscreen.h
 
 SOURCES += src/qt/rotocoin.cpp \
     src/qt/rotocoingui.cpp \
@@ -314,8 +313,7 @@ SOURCES += src/qt/rotocoin.cpp \
     src/noui.cpp \
     src/leveldb.cpp \
     src/txdb.cpp \
-    src/qt/splashscreen.cpp \
-    src/qt/rotochatpage.cpp
+    src/qt/splashscreen.cpp
 
 RESOURCES += src/qt/rotocoin.qrc
 
@@ -331,7 +329,6 @@ FORMS += src/qt/forms/sendcoinsdialog.ui \
     src/qt/forms/askpassphrasedialog.ui \
     src/qt/forms/rpcconsole.ui \
     src/qt/forms/optionsdialog.ui \
-    src/qt/forms/rotochatpage.ui
 
 contains(USE_QRCODE, 1) {
 HEADERS += src/qt/qrcodedialog.h
