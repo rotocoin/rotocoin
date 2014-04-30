@@ -1,6 +1,10 @@
 *.tar.gz
 
 *.exe
+*.zip
+*.Debug
+*.Release
+rotocoin-qt_plugin_import.cpp
 src/rotocoin
 src/rotocoind
 src/rotocoin-cli
