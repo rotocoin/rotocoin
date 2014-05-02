@@ -25,6 +25,8 @@
 #include <QMenu>
 #include <QLabel>
 #include <QDateTimeEdit>
+#include <QDesktopServices>
+#include <QUrl>
 
 TransactionView::TransactionView(QWidget *parent) :
     QWidget(parent), model(0), transactionProxyModel(0),
@@ -126,14 +128,22 @@ TransactionView::TransactionView(QWidget *parent) :
     QAction *copyTxIDAction = new QAction(tr("Copy transaction ID"), this);
     QAction *editLabelAction = new QAction(tr("Edit label"), this);
     QAction *showDetailsAction = new QAction(tr("Show transaction details"), this);
+    QAction *viewOnExplorerinoAction = new QAction(tr("View on Explorerino"), this);
+    QAction *viewOnCryptExplorerAction = new QAction(tr("View on CryptExplorer"), this);
+
 
     contextMenu = new QMenu();
     contextMenu->addAction(copyAddressAction);
     contextMenu->addAction(copyLabelAction);
     contextMenu->addAction(copyAmountAction);
     contextMenu->addAction(copyTxIDAction);
+    contextMenu->addSeparator();
     contextMenu->addAction(editLabelAction);
     contextMenu->addAction(showDetailsAction);
+    contextMenu->addSeparator();
+    contextMenu->addAction(viewOnExplorerinoAction);
+    contextMenu->addAction(viewOnCryptExplorerAction);
+
 
     // Connect actions
     connect(dateWidget, SIGNAL(activated(int)), this, SLOT(chooseDate(int)));
@@ -150,6 +160,8 @@ TransactionView::TransactionView(QWidget *parent) :
     connect(copyTxIDAction, SIGNAL(triggered()), this, SLOT(copyTxID()));
     connect(editLabelAction, SIGNAL(triggered()), this, SLOT(editLabel()));
     connect(showDetailsAction, SIGNAL(triggered()), this, SLOT(showDetails()));
+    connect(viewOnExplorerinoAction, SIGNAL(triggered()), this, SLOT(viewOnExplorerino()));
+    connect(viewOnCryptExplorerAction, SIGNAL(triggered()), this, SLOT(viewOnCryptExplorer()));
 }
 
 void TransactionView::setModel(WalletModel *model)
@@ -376,6 +388,37 @@ void TransactionView::showDetails()
     {
         TransactionDescDialog dlg(selection.at(0));
         dlg.exec();
+    }
+}
+
+void TransactionView::viewOnExplorerino()
+{
+    if(!transactionView->selectionModel())
+        return;
+    QModelIndexList selection = transactionView->selectionModel()->selectedRows();
+    if(!selection.isEmpty())
+    {
+        QString format("http://explorerino.com/tx/");
+        QString rawtxid = selection.at(0).data(TransactionTableModel::TxIDRole).toString();
+        format += rawtxid.left(rawtxid.lastIndexOf("-"));
+
+        QDesktopServices::openUrl(QUrl(format));
+    }
+}
+
+void TransactionView::viewOnCryptExplorer()
+{
+    if(!transactionView->selectionModel())
+        return;    
+    QModelIndexList selection = transactionView->selectionModel()->selectedRows();
+    if(!selection.isEmpty())
+    {
+        QString format("http://cryptexplorer.com/tx/");
+        QString rawtxid = selection.at(0).data(TransactionTableModel::TxIDRole).toString();
+        format += rawtxid.left(rawtxid.lastIndexOf("-"));
+
+
+        QDesktopServices::openUrl(QUrl(format));
     }
 }
 

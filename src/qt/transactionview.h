@@ -67,6 +67,8 @@ private slots:
     void copyLabel();
     void copyAmount();
     void copyTxID();
+    void viewOnExplorerino();
+    void viewOnCryptExplorer();    
 
 signals:
     void doubleClicked(const QModelIndex&);
