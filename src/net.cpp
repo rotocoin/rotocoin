@@ -1186,6 +1186,16 @@ void MapPort(bool)
 // The first name is used as information source for addrman.
 // The second name should resolve to a list of seed addresses.
 static const char *strMainNetDNSSeed[][2] = {
+    {"embi.zapto.org", "embi.zapto.org"},
+    {"rt2.poolerino.com", "rt2.poolerino.com"},
+    {"91.126.200.76", "91.126.200.76"},
+    {"81.202.207.165", "81.202.207.165"},
+    {"193.242.149.63", "193.242.149.63"},
+    {"75.80.57.254", "75.80.57.254"},
+    {"188.122.8.155", "188.122.8.155"},
+    {"119.125.74.66", "119.125.74.66"},
+    {"79.136.49.122", "79.136.49.122"},
+    {"2.138.254.61", "2.138.254.61"},
     {NULL, NULL} //,
 };
 
