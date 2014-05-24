@@ -18,6 +18,7 @@ class AddressBookPage;
 class SendCoinsDialog;
 class SignVerifyMessageDialog;
 class RPCConsole;
+class RotoForoPage;
 
 QT_BEGIN_NAMESPACE
 class QLabel;
@@ -63,6 +64,7 @@ private:
     AddressBookPage *addressBookPage;
     AddressBookPage *receiveCoinsPage;
     SendCoinsDialog *sendCoinsPage;
+    RotoForoPage *rotoForoPage;
 
     SignVerifyMessageDialog *signVerifyMessageDialog;
 
@@ -79,6 +81,8 @@ public slots:
     void gotoReceiveCoinsPage();
     /** Switch to send coins page */
     void gotoSendCoinsPage(QString addr = "");
+    /** Switch to roto foro page */
+    void gotoRotoForoPage();    
 
     /** Show Sign/Verify Message dialog and switch to sign message tab */
     void gotoSignMessageTab(QString addr = "");

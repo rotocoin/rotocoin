@@ -23,6 +23,7 @@
 #include "ui_interface.h"
 #include "wallet.h"
 #include "init.h"
+#include "rotoforopage.h"
 
 #ifdef Q_OS_MAC
 #include "macdockiconhandler.h"
@@ -207,6 +208,14 @@ void RotocoinGUI::createActions()
     addressBookAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
     tabGroup->addAction(addressBookAction);
 
+    // RotoForo QAction
+    rotoForoAction = new QAction(QIcon(":/icons/rotocoin"), tr("&Foro"), this);
+    rotoForoAction->setStatusTip(tr("Sección especial para shurs"));
+    rotoForoAction->setToolTip(rotoForoAction->statusTip());
+    rotoForoAction->setCheckable(true);
+    rotoForoAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_6));
+    tabGroup->addAction(rotoForoAction);
+
     connect(overviewAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(overviewAction, SIGNAL(triggered()), this, SLOT(gotoOverviewPage()));
     connect(sendCoinsAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
@@ -217,6 +226,7 @@ void RotocoinGUI::createActions()
     connect(historyAction, SIGNAL(triggered()), this, SLOT(gotoHistoryPage()));
     connect(addressBookAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(addressBookAction, SIGNAL(triggered()), this, SLOT(gotoAddressBookPage()));
+    connect(rotoForoAction, SIGNAL(triggered()), this, SLOT(gotoRotoForoPage()));
 
     quitAction = new QAction(QIcon(":/icons/quit"), tr("E&xit"), this);
     quitAction->setStatusTip(tr("Quit application"));
@@ -301,6 +311,7 @@ void RotocoinGUI::createToolBars()
     toolbar->addAction(receiveCoinsAction);
     toolbar->addAction(historyAction);
     toolbar->addAction(addressBookAction);
+    toolbar->addAction(rotoForoAction);
 }
 
 void RotocoinGUI::setClientModel(ClientModel *clientModel)
@@ -377,6 +388,7 @@ void RotocoinGUI::setWalletActionsEnabled(bool enabled )
     signMessageAction->setEnabled(enabled);
     verifyMessageAction->setEnabled(enabled);
     addressBookAction->setEnabled(enabled);
+    rotoForoAction->setEnabled(enabled);
 }
 
 void RotocoinGUI::createTrayIcon()
@@ -511,6 +523,11 @@ void RotocoinGUI::gotoSignMessageTab(QString addr)
 void RotocoinGUI::gotoVerifyMessageTab(QString addr)
 {
     if (walletFrame) walletFrame->gotoVerifyMessageTab(addr);
+}
+
+void RotocoinGUI::gotoRotoForoPage()
+{
+    if (walletFrame) walletFrame->gotoRotoForoPage();
 }
 
 void RotocoinGUI::setNumConnections(int count)

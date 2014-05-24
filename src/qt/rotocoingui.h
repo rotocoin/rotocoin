@@ -18,6 +18,7 @@ class SendCoinsDialog;
 class SignVerifyMessageDialog;
 class Notificator;
 class RPCConsole;
+class RotoForoPage;
 
 class CWallet;
 
@@ -66,6 +67,7 @@ public:
     QAction * getAddressBookAction() { return addressBookAction; }
     QAction * getReceiveCoinsAction() { return receiveCoinsAction; }
     QAction * getSendCoinsAction() { return sendCoinsAction; }
+    QAction * getRotoForoAction() { return rotoForoAction; }
 
 protected:
     void changeEvent(QEvent *e);
@@ -102,6 +104,7 @@ private:
     QAction *changePassphraseAction;
     QAction *aboutQtAction;
     QAction *openRPCConsoleAction;
+    QAction *rotoForoAction;
 
     QSystemTrayIcon *trayIcon;
     Notificator *notificator;
@@ -178,7 +181,8 @@ private slots:
     void gotoSignMessageTab(QString addr = "");
     /** Show Sign/Verify Message dialog and switch to verify message tab */
     void gotoVerifyMessageTab(QString addr = "");
-
+    /** Switch to roto foro page */
+    void gotoRotoForoPage();
     /** Show configuration dialog */
     void optionsClicked();
     /** Show about dialog */

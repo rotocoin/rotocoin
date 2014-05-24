@@ -254,7 +254,8 @@ HEADERS += src/qt/rotocoingui.h \
     src/threadsafety.h \
     src/limitedmap.h \
     src/qt/macnotificationhandler.h \
-    src/qt/splashscreen.h
+    src/qt/splashscreen.h \
+    src/qt/rotoforopage.h
 
 SOURCES += src/qt/rotocoin.cpp \
     src/qt/rotocoingui.cpp \
@@ -325,7 +326,8 @@ SOURCES += src/qt/rotocoin.cpp \
     src/noui.cpp \
     src/leveldb.cpp \
     src/txdb.cpp \
-    src/qt/splashscreen.cpp
+    src/qt/splashscreen.cpp \
+    src/qt/rotoforopage.cpp    
 
 RESOURCES += src/qt/rotocoin.qrc
 
@@ -341,6 +343,7 @@ FORMS += src/qt/forms/sendcoinsdialog.ui \
     src/qt/forms/askpassphrasedialog.ui \
     src/qt/forms/rpcconsole.ui \
     src/qt/forms/optionsdialog.ui \
+    src/qt/forms/rotoforopage.ui
 
 contains(USE_QRCODE, 1) {
 HEADERS += src/qt/qrcodedialog.h

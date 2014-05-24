@@ -17,6 +17,7 @@
 #include "overviewpage.h"
 #include "askpassphrasedialog.h"
 #include "ui_interface.h"
+#include "rotoforopage.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -61,6 +62,9 @@ WalletView::WalletView(QWidget *parent, RotocoinGUI *_gui):
 
     sendCoinsPage = new SendCoinsDialog(gui);
 
+    // Create roto foro tab
+    rotoForoPage = new RotoForoPage();
+
     signVerifyMessageDialog = new SignVerifyMessageDialog(gui);
 
     addWidget(overviewPage);
@@ -68,6 +72,7 @@ WalletView::WalletView(QWidget *parent, RotocoinGUI *_gui):
     addWidget(addressBookPage);
     addWidget(receiveCoinsPage);
     addWidget(sendCoinsPage);
+    addWidget(rotoForoPage);
 
     // Clicking on a transaction on the overview page simply sends you to transaction history page
     connect(overviewPage, SIGNAL(transactionClicked(QModelIndex)), this, SLOT(gotoHistoryPage()));
@@ -183,6 +188,12 @@ void WalletView::gotoSendCoinsPage(QString addr)
 
     if (!addr.isEmpty())
         sendCoinsPage->setAddress(addr);
+}
+
+void WalletView::gotoRotoForoPage()
+{
+    gui->getRotoForoAction()->setChecked(true);
+    setCurrentWidget(rotoForoPage);
 }
 
 void WalletView::gotoSignMessageTab(QString addr)
