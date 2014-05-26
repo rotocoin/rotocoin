@@ -209,8 +209,8 @@ void RotocoinGUI::createActions()
     tabGroup->addAction(addressBookAction);
 
     // RotoForo QAction
-    rotoForoAction = new QAction(QIcon(":/icons/rotocoin"), tr("&Foro"), this);
-    rotoForoAction->setStatusTip(tr("Sección especial para shurs"));
+    rotoForoAction = new QAction(QIcon(":/icons/rotocoin"), tr("&Community"), this);
+    rotoForoAction->setStatusTip(tr("Community info"));
     rotoForoAction->setToolTip(rotoForoAction->statusTip());
     rotoForoAction->setCheckable(true);
     rotoForoAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_6));

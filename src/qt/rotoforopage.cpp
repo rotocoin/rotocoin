@@ -14,7 +14,7 @@
 #define DECORATION_SIZE 64
 #define NUM_ITEMS 3
 
-#include "rotoforopage.moc"
+
 
 RotoForoPage::RotoForoPage(QWidget *parent) :
     QWidget(parent),
@@ -61,6 +61,6 @@ void RotoForoPage::finished(QNetworkReply *reply) {
 }
 
 void RotoForoPage::DoHttpGet() {
-  QString url = "http://www.roto2.me/rotonews.php";
+  QString url = "http://www.roto2.me/bitcointalk.php";
   nam->get(QNetworkRequest(QUrl(url)));
 }
