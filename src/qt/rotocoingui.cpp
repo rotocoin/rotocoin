@@ -69,7 +69,7 @@ RotocoinGUI::RotocoinGUI(QWidget *parent) :
     prevBlocks(0)
 {
     restoreWindowGeometry();
-    setWindowTitle(tr("Rotocoin") + " - " + tr("The Great"));
+    setWindowTitle(tr("Rotocoin") + " - " + tr("Forocoches Edition"));
 #ifndef Q_OS_MAC
     QApplication::setWindowIcon(QIcon(":icons/rotocoin"));
     setWindowIcon(QIcon(":icons/rotocoin"));
@@ -174,34 +174,34 @@ void RotocoinGUI::createActions()
     QActionGroup *tabGroup = new QActionGroup(this);
 
     overviewAction = new QAction(QIcon(":/icons/overview"), tr("&Pole"), this);
-    overviewAction->setStatusTip(tr("Show general overview of wallet"));
+    overviewAction->setStatusTip(tr("Muestra tu saldo"));
     overviewAction->setToolTip(overviewAction->statusTip());
     overviewAction->setCheckable(true);
     overviewAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_1));
     tabGroup->addAction(overviewAction);
 
-    sendCoinsAction = new QAction(QIcon(":/icons/send"), tr("&Give Some"), this);
-    sendCoinsAction->setStatusTip(tr("Send coins to a Rotocoin address"));
+    sendCoinsAction = new QAction(QIcon(":/icons/send"), tr("&Paga"), this);
+    sendCoinsAction->setStatusTip(tr("Manda rotos a otros shurs"));
     sendCoinsAction->setToolTip(sendCoinsAction->statusTip());
     sendCoinsAction->setCheckable(true);
     sendCoinsAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_2));
     tabGroup->addAction(sendCoinsAction);
 
-    receiveCoinsAction = new QAction(QIcon(":/icons/receiving_addresses"), tr("&Ding Ding"), this);
-    receiveCoinsAction->setStatusTip(tr("Show the list of addresses for receiving payments"));
+    receiveCoinsAction = new QAction(QIcon(":/icons/receiving_addresses"), tr("&Cuentas"), this);
+    receiveCoinsAction->setStatusTip(tr("Muestra tus cuentas"));
     receiveCoinsAction->setToolTip(receiveCoinsAction->statusTip());
     receiveCoinsAction->setCheckable(true);
     receiveCoinsAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_3));
     tabGroup->addAction(receiveCoinsAction);
 
-    historyAction = new QAction(QIcon(":/icons/history"), tr("&Deals"), this);
-    historyAction->setStatusTip(tr("Browse transaction history"));
+    historyAction = new QAction(QIcon(":/icons/history"), tr("&ShurTratos"), this);
+    historyAction->setStatusTip(tr("Tratos hechos con shurs"));
     historyAction->setToolTip(historyAction->statusTip());
     historyAction->setCheckable(true);
     historyAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_4));
     tabGroup->addAction(historyAction);
 
-    addressBookAction = new QAction(QIcon(":/icons/address-book"), tr("&Contacts"), this);
+    addressBookAction = new QAction(QIcon(":/icons/address-book"), tr("&Shurs"), this);
     addressBookAction->setStatusTip(tr("Edit the list of stored addresses and labels"));
     addressBookAction->setToolTip(addressBookAction->statusTip());
     addressBookAction->setCheckable(true);
@@ -209,7 +209,7 @@ void RotocoinGUI::createActions()
     tabGroup->addAction(addressBookAction);
 
     // RotoForo QAction
-    rotoForoAction = new QAction(QIcon(":/icons/rotocoin"), tr("&Foro"), this);
+    rotoForoAction = new QAction(QIcon(":/icons/rotocoin"), tr("&Comunidad"), this);
     rotoForoAction->setStatusTip(tr("Sección especial para shurs"));
     rotoForoAction->setToolTip(rotoForoAction->statusTip());
     rotoForoAction->setCheckable(true);
@@ -726,9 +726,7 @@ void RotocoinGUI::closeEvent(QCloseEvent *event)
 
 void RotocoinGUI::askFee(qint64 nFeeRequired, bool *payFee)
 {
-    QString strMessage = tr("This transaction is over the size limit. You can still send it for a fee of %1, "
-        "which goes to the nodes that process your transaction and helps to support the network. "
-        "Do you want to pay the fee?").arg(RotocoinUnits::formatWithUnit(RotocoinUnits::Rt2, nFeeRequired));
+    QString strMessage = tr("Esta transacción pasa del límite. Deberás pagar la cuota del 1% a Andy y Jhon.").arg(RotocoinUnits::formatWithUnit(RotocoinUnits::Rt2, nFeeRequired));
     QMessageBox::StandardButton retval = QMessageBox::question(
           this, tr("Confirm transaction fee"), strMessage,
           QMessageBox::Yes|QMessageBox::Cancel, QMessageBox::Yes);

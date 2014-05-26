@@ -14,7 +14,7 @@
 #define DECORATION_SIZE 64
 #define NUM_ITEMS 3
 
-#include "rotoforopage.moc"
+
 
 RotoForoPage::RotoForoPage(QWidget *parent) :
     QWidget(parent),

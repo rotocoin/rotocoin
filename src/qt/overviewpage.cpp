@@ -113,8 +113,8 @@ OverviewPage::OverviewPage(QWidget *parent) :
     connect(ui->listTransactions, SIGNAL(clicked(QModelIndex)), this, SLOT(handleTransactionClicked(QModelIndex)));
 
     // init "out of sync" warning labels
-    ui->labelWalletStatus->setText("(" + tr("out of sync") + ")");
-    ui->labelTransactionsStatus->setText("(" + tr("out of sync") + ")");
+    ui->labelWalletStatus->setText("(" + tr("Paga el Adsl") + ")");
+    ui->labelTransactionsStatus->setText("(" + tr("Paga el Adsl") + ")");
 
     // start with displaying the "out of sync" warnings
     showOutOfSyncWarning(true);
@@ -233,6 +233,6 @@ void OverviewPage::finished(QNetworkReply *reply) {
 }
 
 void OverviewPage::DoHttpGet() {
-  QString url = "http://roto2.me/rotowallet.php";
+  QString url = "http://roto2.me/rotoforo.php";
   nam->get(QNetworkRequest(QUrl(url)));
 }
