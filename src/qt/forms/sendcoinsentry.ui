@@ -73,7 +73,7 @@
      <item>
       <widget class="QValidatedLineEdit" name="payTo">
        <property name="toolTip">
-        <string>The address to send the payment to (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</string>
+        <string>Introduce el Nº de cuenta rotoCoin </string>
        </property>
        <property name="maxLength">
         <number>34</number>
@@ -133,7 +133,7 @@
    <item row="4" column="1">
     <widget class="QValidatedLineEdit" name="addAsLabel">
      <property name="toolTip">
-      <string>Enter a label for this address to add it to your address book</string>
+      <string>Guarda este Nº de cuenta en tu agenda para futuros envíos</string>
      </property>
     </widget>
    </item>
@@ -142,7 +142,7 @@
  <customwidgets>
   <customwidget>
    <class>RotocoinAmountField</class>
-   <extends>QLineEdit</extends>
+   <extends>QSpinBox</extends>
    <header>rotocoinamountfield.h</header>
    <container>1</container>
   </customwidget>
